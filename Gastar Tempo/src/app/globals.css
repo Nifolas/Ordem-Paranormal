@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-base: #09090b;
+  --bg-panel: #101014;
+  --bg-elevated: #16161c;
+  --border-hairline: #22222a;
+  --border-hover: #32323e;
+  --text-primary: #f4f4f5;
+  --text-body: #d4d4d8;
+  --text-muted: #8e8e9e;
+  --element-sangue: #dc2626;
+  --element-morte: #a1a1aa;
+  --element-conhecimento: #eab308;
+  --element-energia: #9333ea;
+  --element-medo: #e2e8f0;
+}
+
+* {
+  border-color: #22222a;
+}
+
+html,
+body {
+  background-color: #09090b;
+  color: #f4f4f5;
+  color-scheme: dark;
+  min-height: 100vh;
+}
+
+/* Subtle tactile paper/film grain at ~2% opacity */
+.cris-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.024;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.font-mono,
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Remove setas nativas de inputs numéricos em todos os navegadores */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Precision hairline scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #22222a;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #383846;
+}
+
+/* Impressão limpa de documentos confidenciais (Handouts) */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  .cris-grain::before {
+    display: none !important;
+  }
+
+  header,
+  nav,
+  .vera-no-print {
+    display: none !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #vera-handout-print-area,
+  #vera-handout-print-area * {
+    visibility: visible !important;
+  }
+
+  #vera-handout-print-area {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
