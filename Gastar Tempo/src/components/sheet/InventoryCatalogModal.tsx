@@ -22,6 +22,7 @@ import {
   ITEM_CATEGORY_META,
 } from "@/data/equipment";
 import { normalizeItemCategoryType } from "@/lib/ordem-rules";
+import { SOURCE_LABELS } from "@/lib/sources";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
 import {
@@ -41,13 +42,6 @@ const ROMAN_CAT: Record<ItemCategory, string> = {
   2: "II",
   3: "III",
   4: "IV",
-};
-
-const SOURCE_LABELS: Record<ContentSource, string> = {
-  livro_basico: "Livro Básico",
-  sobrevivendo_ao_horror: "SaH",
-  arquivos_secretos: "Arq. Secretos",
-  homebrew: "Homebrew",
 };
 
 const ELEMENTS: ParanormalElement[] = [

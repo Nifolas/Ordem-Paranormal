@@ -23,6 +23,7 @@ import { getOriginById } from "@/data/origins";
 import { getClassById } from "@/data/classes";
 import { BASE_TRAILS } from "@/data/trails";
 import { COMMUNITY_TRAILS } from "@/data/supplements";
+import { SOURCE_UPPER_LABELS as BOOK_SOURCE_LABEL } from "@/lib/sources";
 import { SKILLS_BY_KEY } from "@/data/skills";
 import {
   getAgentEffectiveVitals,
@@ -41,13 +42,6 @@ type SubFilter =
   | "trilha"
   | "gerais"
   | "paranormais";
-
-const BOOK_SOURCE_LABEL: Record<ContentSource, string> = {
-  livro_basico: "LIVRO BÁSICO",
-  sobrevivendo_ao_horror: "SOBREVIVENDO AO HORROR",
-  arquivos_secretos: "ARQUIVOS SECRETOS",
-  homebrew: "HOMEBREW",
-};
 
 function getClassBaseScalingTag(agent: Agent): string {
   if (agent.classId === "combatente") {

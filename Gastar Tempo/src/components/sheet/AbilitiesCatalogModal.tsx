@@ -20,7 +20,7 @@ import { BASE_CLASS_POWERS } from "@/data/classPowers";
 import { BASE_GENERAL_POWERS } from "@/data/generalPowers";
 import { BASE_PARANORMAL_POWERS } from "@/data/paranormalPowers";
 import { COMMUNITY_POWERS } from "@/data/supplements";
-import { filterByEnabledSources } from "@/data/sources";
+import { SOURCE_LABELS, filterByEnabledSources } from "@/lib/sources";
 import { SourceBadge } from "@/components/SourceToggles";
 import { checkPowerPrerequisites } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
@@ -41,13 +41,6 @@ type CatalogTab =
   | "versatilidade"
   | "homebrew"
   | "custom";
-
-const SOURCE_LABELS: Record<ContentSource, string> = {
-  livro_basico: "Livro Básico",
-  sobrevivendo_ao_horror: "SaH",
-  arquivos_secretos: "Arq. Secretos",
-  homebrew: "Homebrew",
-};
 
 const PARANORMAL_ELEMENTS: ParanormalElement[] = [
   "Sangue",

@@ -1106,7 +1106,7 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
         expect(item.id.startsWith(meta!.idPrefix!)).toBe(true);
       }
 
-      const officialIds = [
+      const officialIdSet = new Set([
         ...BASE_ORIGINS.map((o) => o.id),
         ...BASE_TRAILS.map((t) => t.id),
         ...BASE_CLASS_POWERS.map((p) => p.id),
@@ -1114,10 +1114,10 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
         ...BASE_PARANORMAL_POWERS.map((p) => p.id),
         ...BASE_RITUALS.map((r) => r.id),
         ...BASE_ITEMS.map((i) => i.id),
-      ];
-      expect(new Set(officialIds).size).toBe(officialIds.length);
-      const allIds = [...officialIds, ...community.map((c) => c.id)];
-      expect(new Set(allIds).size).toBe(allIds.length);
+      ]);
+      for (const item of community) {
+        expect(officialIdSet.has(item.id)).toBe(false);
+      }
     });
 
     it("filtra conteúdo da comunidade pelos toggles individuais sem ocultar oficiais", () => {

@@ -7,9 +7,10 @@ import {
   COMMUNITY_SOURCES,
   DEFAULT_ENABLED_SOURCES,
   OFFICIAL_SOURCES,
+  SOURCE_BADGE_STYLES,
   getSourceMeta,
   isCommunitySource,
-} from "@/data/sources";
+} from "@/lib/sources";
 import { cn } from "@/lib/utils";
 
 /** Badge discreto da fonte — exibido apenas para suplementos não oficiais. */
@@ -20,13 +21,14 @@ export function SourceBadge({
   source: ContentSource | undefined;
   className?: string;
 }) {
-  if (!isCommunitySource(source)) return null;
+  if (!source || !isCommunitySource(source)) return null;
   const meta = getSourceMeta(source);
   return (
     <span
       title={`${meta.label}${meta.author ? ` — ${meta.author}` : ""} (não oficial)`}
       className={cn(
-        "inline-flex items-center rounded-sm border border-[#32323E] bg-[#141419] px-1 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-[#8E8E9E]",
+        "inline-flex items-center rounded-sm border px-1 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider",
+        SOURCE_BADGE_STYLES[source],
         className
       )}
     >
