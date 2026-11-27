@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -12,9 +13,12 @@ import {
   Footprints,
   Lock,
   Minus,
+  MoreHorizontal,
   Plus,
   RotateCcw,
   Settings2,
+  SlidersHorizontal,
+  Sparkles,
   Unlock,
   Upload,
   X,
@@ -108,110 +112,267 @@ function HeaderResourceBar({
   onSetMaxOverride: (val: number) => void;
 }) {
   const pct = max > 0 ? clamp((current / max) * 100, 0, 100) : 0;
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [showTempInput, setShowTempInput] = useState(false);
+  const [popoverCoords, setPopoverCoords] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const portalPopoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!popoverOpen) return;
+    const updatePosition = () => {
+      if (!popoverRef.current) return;
+      const rect = popoverRef.current.getBoundingClientRect();
+      setPopoverCoords({
+        top: rect.bottom + 6,
+        left: Math.max(8, Math.min(rect.left, window.innerWidth - Math.max(rect.width, 250) - 8)),
+        width: Math.max(rect.width, 250),
+      });
+    };
+    updatePosition();
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(target) &&
+        (!portalPopoverRef.current || !portalPopoverRef.current.contains(target))
+      ) {
+        setPopoverOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [popoverOpen]);
+
+  const hasTemp = (temp ?? 0) > 0;
 
   return (
-    <div className="rounded-sm border border-[#22222A] bg-[#09090B] px-3 py-2.5 space-y-2">
+    <div
+      ref={popoverRef}
+      className="relative rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3.5 py-2.5 space-y-2"
+    >
+      {/* Top Row: Label + Alert Badge + Clean [-] [current / max] [+] + [+TMP] */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 min-w-0">
           <span
             className={cn(
-              "font-mono text-[11px] font-bold uppercase tracking-wider",
+              "font-display text-xs font-bold uppercase tracking-wider",
               accentClass
             )}
           >
             {label}
           </span>
           {alertBadge && (
-            <span className="rounded-sm border border-amber-500/35 bg-amber-500/10 px-1.5 py-0.2 font-mono text-[9px] uppercase text-amber-300">
+            <span className="rounded-sm border border-amber-500/35 bg-amber-500/10 px-1.5 py-0.5 font-mono text-[9px] uppercase text-amber-300">
               {alertBadge}
             </span>
           )}
         </div>
 
-        <div className="flex items-center gap-1 font-mono text-xs shrink-0 tabular-nums">
-          <NumericInput
-            value={current}
-            onValueChange={(val) => onSetCurrent(Math.max(0, val))}
-            aria-label={`${label} atual`}
-            className="w-11 rounded-sm bg-[#101014] border border-[#22222A] px-1 py-0.5 text-right font-bold text-[#F4F4F5] focus:outline-none focus:border-[#525266]"
-          />
-          <span className="text-[#6E6E7E]">/</span>
-          {autoCalc ? (
-            <span className="min-w-[24px] text-left font-semibold text-[#D4D4D8]">
-              {max}
-            </span>
-          ) : (
-            <NumericInput
-              min={1}
-              fallback={1}
-              value={max}
-              onValueChange={(val) => onSetMaxOverride(Math.max(1, val))}
-              aria-label={`${label} máximo manual`}
-              className="w-11 rounded-sm bg-[#101014] border border-[#525266] px-1 py-0.5 text-left font-bold text-[#F4F4F5] focus:outline-none"
-            />
+        {/* Clean Controls: [-] [Current / Max] [+] and discreet [+TMP] */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <div className="inline-flex items-center rounded-md border border-white/10 bg-[#121218] p-0.5">
+            <button
+              type="button"
+              onClick={() => onAdjust(-1)}
+              className="flex h-6 w-6 items-center justify-center rounded text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
+              title={`Diminuir 1 ${label}`}
+              aria-label={`Diminuir 1 ${label}`}
+            >
+              <Minus className="h-3 w-3" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setPopoverOpen((v) => !v)}
+              title="Clique para ajustes rápidos (-5 / +5) ou editar máximo"
+              className="px-2 py-0.5 font-mono text-sm font-bold text-zinc-100 hover:text-white tabular-nums transition-colors"
+            >
+              <span>{current}</span>
+              <span className="mx-1 text-zinc-500 font-normal">/</span>
+              <span className="text-zinc-300 font-semibold">{max}</span>
+              {hasTemp && (
+                <span className="ml-1 text-xs font-semibold text-emerald-400">
+                  +{temp}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onAdjust(1)}
+              className="flex h-6 w-6 items-center justify-center rounded text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
+              title={`Aumentar 1 ${label}`}
+              aria-label={`Aumentar 1 ${label}`}
+            >
+              <Plus className="h-3 w-3" />
+            </button>
+          </div>
+
+          {onSetTemp && (
+            <button
+              type="button"
+              onClick={() => setShowTempInput((v) => !v)}
+              title="Pontos temporários"
+              className={cn(
+                "h-7 rounded-md border px-1.5 font-mono text-[10px] font-medium transition-colors",
+                hasTemp || showTempInput
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                  : "border-white/10 bg-[#121218] text-zinc-400 hover:text-zinc-200"
+              )}
+            >
+              {hasTemp ? `TMP +${temp}` : "+TMP"}
+            </button>
           )}
-          <button
-            type="button"
-            onClick={onToggleAuto}
-            title={
-              autoCalc
-                ? "Auto-cálculo ativo (clique para editar máximo manualmente)"
-                : "Manual ativo (clique para voltar ao auto-cálculo)"
-            }
-            className={cn(
-              "rounded-sm p-1 border transition-colors",
-              autoCalc
-                ? "border-[#22222A] text-[#6E6E7E] hover:text-[#F4F4F5]"
-                : "border-[#525266] bg-[#16161C] text-[#F4F4F5]"
-            )}
-          >
-            {autoCalc ? (
-              <Lock className="h-2.5 w-2.5" />
-            ) : (
-              <Unlock className="h-2.5 w-2.5" />
-            )}
-          </button>
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className="h-1.5 w-full bg-[#1A1A22] overflow-hidden">
+      {/* Progress bar with harmonious colors */}
+      <div className="h-2 w-full rounded-full bg-zinc-900 overflow-hidden">
         <div
-          className={cn("h-full transition-all duration-200", barColor)}
+          className={cn("h-full rounded-full transition-all duration-200", barColor)}
           style={{ width: `${pct}%` }}
         />
       </div>
 
-      {/* Quick deltas + Temp */}
-      <div className="flex items-center gap-1">
-        <div className="grid grid-cols-4 gap-1 flex-1">
-          {[-5, -1, 1, 5].map((delta) => (
-            <button
-              key={delta}
-              type="button"
-              onClick={() => onAdjust(delta)}
-              className="rounded-sm border border-[#22222A] bg-[#101014] py-0.5 font-mono text-[10px] text-[#A1A1AA] hover:border-[#32323E] hover:bg-[#16161C] hover:text-[#F4F4F5] transition-colors"
-            >
-              {delta > 0 ? `+${delta}` : delta}
-            </button>
-          ))}
-        </div>
-        {onSetTemp && (
-          <div
-            className="flex items-center gap-1 rounded-sm border border-[#22222A] bg-[#101014] px-1.5 py-0.5"
-            title="Pontos temporários"
-          >
-            <span className="font-mono text-[9px] text-[#6E6E7E]">TMP</span>
+      {/* Inline Temp editor when toggled */}
+      {onSetTemp && showTempInput && (
+        <div className="flex items-center justify-between gap-2 pt-0.5 text-xs">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+            {label} Temporário
+          </span>
+          <div className="flex items-center gap-1">
             <NumericInput
               min={0}
               value={temp ?? 0}
               onValueChange={(val) => onSetTemp(Math.max(0, val))}
               aria-label={`${label} temporário`}
-              className="w-7 bg-transparent font-mono text-[10px] font-semibold text-emerald-400 text-center focus:outline-none tabular-nums"
+              className="h-6 w-14 rounded bg-zinc-950 border border-white/15 px-1.5 font-mono text-xs font-semibold text-emerald-300 text-center focus:outline-none tabular-nums"
             />
+            {(temp ?? 0) > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSetTemp(0);
+                  setShowTempInput(false);
+                }}
+                className="rounded px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 hover:text-red-300"
+              >
+                Zerar
+              </button>
+            )}
           </div>
+        </div>
+      )}
+
+      {/* Popover via Portal for Quick Adjustments (-5 / +5), Direct Value Input & Auto/Manual Max */}
+      {popoverOpen &&
+        popoverCoords &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={portalPopoverRef}
+            style={{
+              top: popoverCoords.top,
+              left: popoverCoords.left,
+              width: popoverCoords.width,
+            }}
+            className="fixed z-50 rounded-lg border border-white/20 bg-[#121218] p-3 shadow-2xl space-y-2.5 text-[#F4F4F5]"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                Ajuste Rápido de {label}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPopoverOpen(false)}
+                className="text-zinc-400 hover:text-zinc-100"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-4 gap-1.5">
+              {[-5, -1, 1, 5].map((delta) => (
+                <button
+                  key={delta}
+                  type="button"
+                  onClick={() => onAdjust(delta)}
+                  className="rounded border border-white/10 bg-zinc-950 py-1 font-mono text-xs font-semibold text-zinc-200 hover:border-white/25 hover:bg-zinc-900 transition-colors"
+                >
+                  {delta > 0 ? `+${delta}` : delta}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10 text-xs">
+              <div>
+                <label className="font-mono text-[10px] text-zinc-400 block mb-1">
+                  Valor Atual
+                </label>
+                <NumericInput
+                  value={current}
+                  onValueChange={(val) => onSetCurrent(Math.max(0, val))}
+                  aria-label={`${label} atual`}
+                  className="h-7 w-full rounded bg-zinc-950 border border-white/15 px-2 font-mono text-xs font-bold text-zinc-100 text-center"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-mono text-[10px] text-zinc-400">
+                    Máximo
+                  </label>
+                  <button
+                    type="button"
+                    onClick={onToggleAuto}
+                    className="inline-flex items-center gap-0.5 font-mono text-[9px] text-zinc-400 hover:text-zinc-100"
+                    title={
+                      autoCalc
+                        ? "Cálculo automático ativo — clique para editar manualmente"
+                        : "Máximo manual — clique para voltar ao automático"
+                    }
+                  >
+                    {autoCalc ? (
+                      <>
+                        <Lock className="h-2.5 w-2.5" /> Auto
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="h-2.5 w-2.5 text-amber-300" /> Manual
+                      </>
+                    )}
+                  </button>
+                </div>
+                {autoCalc ? (
+                  <div className="h-7 flex items-center justify-center rounded border border-white/10 bg-zinc-950/60 font-mono text-xs font-semibold text-zinc-400">
+                    {max}
+                  </div>
+                ) : (
+                  <NumericInput
+                    min={1}
+                    fallback={1}
+                    value={max}
+                    onValueChange={(val) => onSetMaxOverride(Math.max(1, val))}
+                    aria-label={`${label} máximo manual`}
+                    className="h-7 w-full rounded bg-zinc-950 border border-amber-500/40 px-2 font-mono text-xs font-bold text-zinc-100 text-center"
+                  />
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body
         )}
-      </div>
     </div>
   );
 }
@@ -226,6 +387,45 @@ export function SheetTacticalHeader({
   const { homebrew, quickDiceMod, setQuickDiceMod, pushRoll } = useAppStore();
   const [configOpen, setConfigOpen] = useState(false);
   const [interludeOpen, setInterludeOpen] = useState(false);
+  const [optionsMenuOpen, setOptionsMenuOpen] = useState(false);
+  const [optionsCoords, setOptionsCoords] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
+  const optionsMenuRef = useRef<HTMLDivElement>(null);
+  const optionsPortalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!optionsMenuOpen) return;
+    const updatePosition = () => {
+      if (!optionsMenuRef.current) return;
+      const rect = optionsMenuRef.current.getBoundingClientRect();
+      const menuWidth = 256;
+      setOptionsCoords({
+        top: rect.bottom + 6,
+        left: Math.max(8, Math.min(rect.right - menuWidth, window.innerWidth - menuWidth - 8)),
+      });
+    };
+    updatePosition();
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        optionsMenuRef.current &&
+        !optionsMenuRef.current.contains(target) &&
+        (!optionsPortalRef.current || !optionsPortalRef.current.contains(target))
+      ) {
+        setOptionsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [optionsMenuOpen]);
 
   const handleSpendBonusDie = (die: InterludeBonusDie) => {
     const res = rollDiceFormula({ formula: die.dieFormula });
@@ -457,105 +657,23 @@ export function SheetTacticalHeader({
     <>
       <div
         className={cn(
-          "rounded-md border border-[#22222A] bg-[#101014] border-l-[3px] overflow-hidden",
-          elemStyle ? elemStyle.borderLeft : "border-l-[#525266]"
+          "relative z-30 rounded-lg border border-white/10 bg-zinc-950/85 backdrop-blur-sm border-l-[3px] shadow-sm",
+          elemStyle ? elemStyle.borderLeft : "border-l-zinc-500"
         )}
       >
-        {/* Top Utility Hairline */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#22222A] bg-[#0C0C10] px-4 py-2">
-          <div className="flex items-center gap-2 font-mono text-[11px] text-[#8E8E9E]">
+        {/* Unified Clean Top Bar: ← Agentes + Avatar & Identity + NEX Selector + Interlúdio + ⋯ Opções */}
+        <div className="px-4 py-3.5 sm:px-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-center gap-3.5 min-w-0">
             <Link
               href="/agentes"
-              className="inline-flex items-center gap-1 hover:text-[#F4F4F5] transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-[#121218] px-2.5 py-1.5 text-xs font-medium text-zinc-300 hover:bg-white/10 hover:text-white transition-colors shrink-0"
+              title="Voltar para lista de agentes"
             >
-              <ArrowLeft className="h-3 w-3" /> AGENTES
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Agentes</span>
             </Link>
-            <span>/</span>
-            <span className="uppercase tracking-wider text-[#D4D4D8]">
-              DOSSIÊ #{agent.id.slice(-6).toUpperCase()}
-            </span>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            {/* ±1d20 Global Mod */}
-            <div className="flex items-center gap-1 rounded-sm border border-[#22222A] bg-[#09090B] px-2 py-0.5 font-mono text-[11px]">
-              <span className="text-[10px] uppercase text-[#8E8E9E] mr-1">
-                MOD d20
-              </span>
-              <button
-                type="button"
-                onClick={() => setQuickDiceMod(quickDiceMod - 1)}
-                className="rounded-sm p-0.5 text-[#8E8E9E] hover:bg-[#16161C] hover:text-[#F4F4F5]"
-                title="Desvantagem (-1d20)"
-              >
-                <Minus className="h-3 w-3" />
-              </button>
-              <span
-                className={cn(
-                  "min-w-[36px] text-center font-bold tabular-nums",
-                  quickDiceMod > 0
-                    ? "text-emerald-400"
-                    : quickDiceMod < 0
-                    ? "text-red-400"
-                    : "text-[#D4D4D8]"
-                )}
-              >
-                {quickDiceMod === 0 ? "0" : `${formatSigned(quickDiceMod)}d`}
-              </span>
-              <button
-                type="button"
-                onClick={() => setQuickDiceMod(quickDiceMod + 1)}
-                className="rounded-sm p-0.5 text-[#8E8E9E] hover:bg-[#16161C] hover:text-[#F4F4F5]"
-                title="Vantagem (+1d20)"
-              >
-                <Plus className="h-3 w-3" />
-              </button>
-            </div>
-
-            <Button
-              variant="default"
-              size="xs"
-              onClick={() => setInterludeOpen(true)}
-              className="font-mono"
-              title="Abrir Assistente de Cena de Interlúdio (Dormir, Relaxar, Alimentar-se, Exercitar, Ler...)"
-            >
-              <Coffee className="h-3 w-3 text-amber-400" /> Interlúdio
-            </Button>
-
-            <Button
-              variant="outline"
-              size="xs"
-              onClick={handleTogglePdRule}
-              className="font-mono"
-              title="Alternar regra opcional Pontos de Determinação (SaH)"
-            >
-              {vitals.usingPd ? "MODO PD" : "SAN / PE"}
-            </Button>
-
-            <Button
-              variant="outline"
-              size="xs"
-              onClick={() => setConfigOpen(true)}
-              className="font-mono"
-            >
-              <Settings2 className="h-3 w-3" /> Configurar
-            </Button>
-
-            <Button
-              variant="outline"
-              size="xs"
-              onClick={() => exportAgentToJson(agent)}
-              className="font-mono"
-            >
-              <Download className="h-3 w-3" /> JSON
-            </Button>
-          </div>
-        </div>
-
-        {/* Row 1: Identity Strip */}
-        <div className="px-4 py-3.5 sm:px-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3.5 min-w-0">
-            <label className="group relative h-14 w-14 shrink-0 cursor-pointer overflow-hidden rounded-sm border border-[#2C2C38] bg-[#09090B]">
+            <label className="group relative h-12 w-12 shrink-0 cursor-pointer overflow-hidden rounded-md border border-white/15 bg-[#09090B]">
               {agent.avatar ? (
                 <img
                   src={agent.avatar}
@@ -563,12 +681,12 @@ export function SheetTacticalHeader({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="flex h-full w-full items-center justify-center font-mono text-base font-bold text-[#D4D4D8]">
+                <div className="flex h-full w-full items-center justify-center font-mono text-sm font-bold text-zinc-300">
                   {agent.name.slice(0, 2).toUpperCase()}
                 </div>
               )}
               <div className="absolute inset-0 flex items-center justify-center bg-black/70 opacity-0 transition-opacity group-hover:opacity-100">
-                <Upload className="h-4 w-4 text-[#F4F4F5]" />
+                <Upload className="h-3.5 w-3.5 text-zinc-100" />
               </div>
               <input
                 type="file"
@@ -578,18 +696,18 @@ export function SheetTacticalHeader({
               />
             </label>
 
-            <div className="min-w-0 flex-1 space-y-1">
-              <div className="flex flex-wrap items-center gap-2.5">
+            <div className="min-w-0 flex-1 space-y-0.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <input
                   value={agent.name}
                   onChange={(e) =>
                     onUpdate((prev) => ({ ...prev, name: e.target.value }))
                   }
                   aria-label="Nome do agente"
-                  className="bg-transparent font-display text-xl sm:text-2xl font-bold tracking-tight text-[#F4F4F5] border-b border-transparent hover:border-[#32323E] focus:border-[#F4F4F5] focus:outline-none max-w-full"
+                  className="bg-transparent font-display text-lg sm:text-xl font-bold tracking-tight text-zinc-50 border-b border-transparent hover:border-white/20 focus:border-zinc-200 focus:outline-none max-w-full"
                 />
                 {agent.player && (
-                  <span className="font-mono text-[11px] text-[#6E6E7E]">
+                  <span className="text-xs text-zinc-500">
                     · {agent.player}
                   </span>
                 )}
@@ -600,52 +718,69 @@ export function SheetTacticalHeader({
                       elemStyle.badge
                     )}
                   >
-                    <span className={cn("h-1.5 w-1.5", elemStyle.dot)} />
-                    AFINIDADE {agent.affinityElement}
+                    <span className={cn("h-1.5 w-1.5 rounded-full", elemStyle.dot)} />
+                    Afinidade {agent.affinityElement}
+                  </span>
+                )}
+                {quickDiceMod !== 0 && (
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 font-mono text-[10px] font-semibold",
+                      quickDiceMod > 0
+                        ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                        : "border-red-500/40 bg-red-500/10 text-red-300"
+                    )}
+                    title="Modificador global de d20 ativo"
+                  >
+                    Mod d20: {formatSigned(quickDiceMod)}d
                   </span>
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[11px] uppercase tracking-wider text-[#8E8E9E]">
-                <span className="text-[#D4D4D8]">
+              {/* 1 Clean Line of Subtitle: Origem · Classe · Trilha · Patente · Limite de PE */}
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-zinc-400">
+                <span className="text-zinc-200 font-medium">
                   {origin?.name ?? "Origem"}
                 </span>
                 {professionSpec && (
                   <>
-                    <span>·</span>
-                    <span className="text-[#D4D4D8]">{professionSpec}</span>
+                    <span className="text-zinc-600">·</span>
+                    <span className="text-zinc-300">{professionSpec}</span>
                   </>
                 )}
-                <span>·</span>
-                <span className="text-[#D4D4D8]">{cls.name}</span>
+                <span className="text-zinc-600">·</span>
+                <span className="text-zinc-200 font-medium">{cls.name}</span>
                 {trail && (
                   <>
-                    <span>·</span>
-                    <span className="text-[#D4D4D8]">{trail.name}</span>
+                    <span className="text-zinc-600">·</span>
+                    <span className="text-zinc-300">{trail.name}</span>
                   </>
                 )}
-                <span>·</span>
+                <span className="text-zinc-600">·</span>
                 <span>{agent.patente}</span>
-                <span>·</span>
-                <span>
-                  LIM {vitals.usingPd ? "PD" : "PE"} {vitals.peLimit}
+                <span className="text-zinc-600">·</span>
+                <span
+                  className="font-mono text-[11px] text-zinc-300"
+                  title={`Máximo de ${vitals.usingPd ? "PD" : "PE"} que pode gastar por turno`}
+                >
+                  Limite de {vitals.usingPd ? "PD" : "PE"}: {vitals.peLimit}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* NEX / Stage Selector */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* Right Controls: NEX Selector + Interlúdio + ⋯ Opções */}
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             {agent.classId === "sobrevivente" ? (
               <select
                 value={agent.stage ?? 1}
                 onChange={(e) => handleStageChange(Number(e.target.value))}
                 aria-label="Seletor de Estágio"
-                className="h-9 rounded-sm border border-[#32323E] bg-[#09090B] px-3 font-mono text-xs font-bold text-[#F4F4F5] focus:outline-none focus:border-[#F4F4F5]"
+                className="h-8 rounded-md border border-white/15 bg-[#121218] px-2.5 font-mono text-xs font-bold text-zinc-100 focus:outline-none focus:border-zinc-300"
               >
                 {SURVIVOR_STAGES.map((st) => (
-                  <option key={st} value={st}>
-                    ESTÁGIO {st} (NEX 0%)
+                  <option key={st} value={st} className="bg-zinc-950">
+                    Estágio {st} (NEX 0%)
                   </option>
                 ))}
               </select>
@@ -654,25 +789,158 @@ export function SheetTacticalHeader({
                 value={agent.nex}
                 onChange={(e) => handleNexChange(Number(e.target.value))}
                 aria-label="Seletor de NEX"
-                className="h-9 rounded-sm border border-[#32323E] bg-[#09090B] px-3 font-mono text-xs font-bold text-[#F4F4F5] focus:outline-none focus:border-[#F4F4F5]"
+                className="h-8 rounded-md border border-white/15 bg-[#121218] px-2.5 font-mono text-xs font-bold text-zinc-100 focus:outline-none focus:border-zinc-300"
               >
                 {NEX_STEPS.map((n) => (
-                  <option key={n} value={n}>
+                  <option key={n} value={n} className="bg-zinc-950">
                     NEX {n}%
                   </option>
                 ))}
               </select>
             )}
+
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => setInterludeOpen(true)}
+              className="h-8 rounded-md"
+              title="Abrir Assistente de Cena de Interlúdio (Dormir, Relaxar, Alimentar-se, Exercitar, Ler...)"
+            >
+              <Coffee className="h-3.5 w-3.5 text-amber-400" />
+              <span>Interlúdio</span>
+            </Button>
+
+            {/* Dropdown Menu: ⋯ Opções (renderizado via Portal com z-50 para nunca ficar atrás de outros cards) */}
+            <div ref={optionsMenuRef} className="relative">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setOptionsMenuOpen((v) => !v)}
+                className="h-8 rounded-md px-2.5"
+                aria-label="Opções da ficha"
+              >
+                <MoreHorizontal className="h-4 w-4" />
+                <span>Opções</span>
+              </Button>
+
+              {optionsMenuOpen &&
+                optionsCoords &&
+                typeof document !== "undefined" &&
+                createPortal(
+                  <div
+                    ref={optionsPortalRef}
+                    style={{
+                      top: optionsCoords.top,
+                      left: optionsCoords.left,
+                    }}
+                    className="fixed z-50 w-64 rounded-lg border border-white/20 bg-[#121218] p-2 shadow-2xl space-y-1 text-xs text-[#F4F4F5]"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOptionsMenuOpen(false);
+                        setConfigOpen(true);
+                      }}
+                      className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-zinc-200 hover:bg-white/10 transition-colors"
+                    >
+                      <Settings2 className="h-3.5 w-3.5 text-zinc-400" />
+                      <span>Configurar Dossiê</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleTogglePdRule();
+                        setOptionsMenuOpen(false);
+                      }}
+                      className="flex w-full items-center justify-between gap-2 rounded-md px-2.5 py-2 text-left text-zinc-200 hover:bg-white/10 transition-colors"
+                    >
+                      <span className="inline-flex items-center gap-2.5">
+                        <Sparkles className="h-3.5 w-3.5 text-purple-400" />
+                        <span>Alternar SAN/PE (Modo PD)</span>
+                      </span>
+                      <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300">
+                        {vitals.usingPd ? "PD" : "SAN/PE"}
+                      </span>
+                    </button>
+
+                    <div className="rounded-md border border-white/10 bg-zinc-950/60 px-2.5 py-2 space-y-1.5">
+                      <div className="flex items-center justify-between text-zinc-300">
+                        <span className="inline-flex items-center gap-1.5">
+                          <SlidersHorizontal className="h-3.5 w-3.5 text-zinc-400" />
+                          <span>Modificador Global d20</span>
+                        </span>
+                        {quickDiceMod !== 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setQuickDiceMod(0)}
+                            className="font-mono text-[10px] text-zinc-400 hover:text-white underline"
+                          >
+                            Zerar
+                          </button>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between rounded border border-white/10 bg-zinc-950 px-2 py-1 font-mono">
+                        <button
+                          type="button"
+                          onClick={() => setQuickDiceMod(quickDiceMod - 1)}
+                          className="rounded px-2 py-0.5 text-zinc-300 hover:bg-white/10"
+                          title="Desvantagem (-1d20)"
+                        >
+                          -1d
+                        </button>
+                        <span
+                          className={cn(
+                            "font-bold tabular-nums",
+                            quickDiceMod > 0
+                              ? "text-emerald-400"
+                              : quickDiceMod < 0
+                              ? "text-red-400"
+                              : "text-zinc-300"
+                          )}
+                        >
+                          {quickDiceMod === 0
+                            ? "0d20"
+                            : `${formatSigned(quickDiceMod)}d20`}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setQuickDiceMod(quickDiceMod + 1)}
+                          className="rounded px-2 py-0.5 text-zinc-300 hover:bg-white/10"
+                          title="Vantagem (+1d20)"
+                        >
+                          +1d
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-white/10 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setOptionsMenuOpen(false);
+                          exportAgentToJson(agent);
+                        }}
+                        className="flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-zinc-200 hover:bg-white/10 transition-colors"
+                      >
+                        <Download className="h-3.5 w-3.5 text-zinc-400" />
+                        <span>Exportar JSON</span>
+                      </button>
+                    </div>
+                  </div>,
+                  document.body
+                )}
+            </div>
           </div>
         </div>
 
         {/* Row 2: Dedicated Status & Combat Strip (PV, SAN, PE/PD + Defesa, Esquiva, Bloqueio, Deslocamento) */}
-        <div className="border-t border-[#22222A] bg-[#0B0B0F] px-4 py-3 sm:px-5">
+        <div className="border-t border-white/10 bg-[#0B0B0F]/75 px-4 py-3.5 sm:px-5">
           <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_auto] items-stretch">
-            {/* Resource Bars */}
+            {/* Resource Bars with more harmonious, less saturated colors */}
             <div
               className={cn(
-                "grid gap-2.5",
+                "grid gap-3",
                 vitals.usingPd
                   ? "grid-cols-1 sm:grid-cols-2"
                   : "grid-cols-1 sm:grid-cols-3"
@@ -680,8 +948,8 @@ export function SheetTacticalHeader({
             >
               <HeaderResourceBar
                 label="PV"
-                accentClass="text-red-400"
-                barColor="bg-[#DC2626]"
+                accentClass="text-rose-300"
+                barColor="bg-rose-500/80"
                 current={agent.status.pv.current}
                 temp={agent.status.pv.temp ?? 0}
                 max={vitals.maxPv}
@@ -748,8 +1016,8 @@ export function SheetTacticalHeader({
               {vitals.usingPd ? (
                 <HeaderResourceBar
                   label="PD"
-                  accentClass="text-purple-400"
-                  barColor="bg-[#9333EA]"
+                  accentClass="text-violet-300"
+                  barColor="bg-violet-500/80"
                   current={pdPool.current}
                   temp={pdPool.temp ?? 0}
                   max={vitals.maxPd}
@@ -831,8 +1099,8 @@ export function SheetTacticalHeader({
                 <>
                   <HeaderResourceBar
                     label="SAN"
-                    accentClass="text-sky-400"
-                    barColor="bg-sky-500"
+                    accentClass="text-sky-300"
+                    barColor="bg-sky-500/80"
                     current={agent.status.san.current}
                     max={vitals.maxSan}
                     autoCalc={agent.status.san.autoCalc}
@@ -895,8 +1163,8 @@ export function SheetTacticalHeader({
 
                   <HeaderResourceBar
                     label="PE"
-                    accentClass="text-amber-400"
-                    barColor="bg-amber-500"
+                    accentClass="text-amber-300"
+                    barColor="bg-amber-500/80"
                     current={agent.status.pe.current}
                     temp={agent.status.pe.temp ?? 0}
                     max={vitals.maxPe}
@@ -962,74 +1230,80 @@ export function SheetTacticalHeader({
               )}
             </div>
 
-            {/* Compact Defense / Esquiva / Bloqueio / Deslocamento Quartet */}
-            <div className="grid grid-cols-4 divide-x divide-[#22222A] rounded-sm border border-[#22222A] bg-[#09090B] font-mono text-center lg:min-w-[296px]">
-              <div className="flex flex-col justify-center px-2.5 py-2">
-                <span className="text-[9px] uppercase tracking-wider text-[#8E8E9E]">
-                  DEFESA
+            {/* Clean Defense / Esquiva / Bloqueio / Deslocamento Quartet with Beginner Tooltips */}
+            <div className="grid grid-cols-4 gap-2 lg:min-w-[320px]">
+              <div
+                className="flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center"
+                title={`Defesa = 10 + AGI (${Number(agent.attributes.AGI) || 0}) + Proteção (${combat.protectionBonus}) + Escudo/Bônus (${combat.shieldBonus + combat.accessoryBonus + (Number(agent.defense.abilityBonus) || 0) + (Number(agent.defense.otherBonus) || 0)}) = ${combat.defense}`}
+              >
+                <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+                  Defesa
                 </span>
-                <span className="text-xl font-bold text-[#F4F4F5] tabular-nums">
-                  {combat.defense}
+                <span className="font-mono text-xl font-bold text-zinc-100 tabular-nums mt-0.5">
+                  {Number(combat.defense)}
                 </span>
               </div>
+
               <div
                 className={cn(
-                  "flex flex-col justify-center px-2.5 py-2",
-                  !combat.canDodge && "opacity-45"
+                  "flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center",
+                  !combat.canDodge && "opacity-50"
                 )}
                 title={
                   combat.canDodge
-                    ? "Esquiva (Defesa + Reflexos)"
-                    : "Requer Reflexos treinado"
+                    ? `Esquiva = Defesa (${combat.defense}) + Bônus de Reflexos (${combat.dodge - combat.defense}) = ${combat.dodge}`
+                    : "Esquiva: Requer ser treinado na perícia Reflexos (soma Reflexos à sua Defesa como reação)"
                 }
               >
-                <span className="text-[9px] uppercase tracking-wider text-[#8E8E9E]">
-                  ESQUIVA
+                <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+                  Esquiva
                 </span>
-                <span className="text-xl font-bold text-[#D4D4D8] tabular-nums">
+                <span className="font-mono text-xl font-bold text-zinc-200 tabular-nums mt-0.5">
                   {combat.canDodge ? combat.dodge : "—"}
                 </span>
               </div>
+
               <div
                 className={cn(
-                  "flex flex-col justify-center px-2.5 py-2",
-                  !combat.canBlock && "opacity-45"
+                  "flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center",
+                  !combat.canBlock && "opacity-50"
                 )}
                 title={
                   combat.canBlock
-                    ? "Bloqueio (RD igual a Fortitude)"
-                    : "Requer Fortitude treinado"
+                    ? `Bloqueio: Reduz o dano de um ataque corpo a corpo em RD ${combat.blockRd} (igual ao seu bônus de Fortitude)`
+                    : "Bloqueio: Requer ser treinado na perícia Fortitude (concede RD igual à sua Fortitude como reação)"
                 }
               >
-                <span className="text-[9px] uppercase tracking-wider text-[#8E8E9E]">
-                  BLOQ. RD
+                <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+                  Bloqueio
                 </span>
-                <span className="text-xl font-bold text-[#D4D4D8] tabular-nums">
-                  {combat.canBlock ? combat.blockRd : "—"}
+                <span className="font-mono text-xl font-bold text-zinc-200 tabular-nums mt-0.5">
+                  {combat.canBlock ? `RD ${combat.blockRd}` : "—"}
                 </span>
               </div>
+
               <div
-                className="flex flex-col justify-center px-2.5 py-2"
+                className="flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center"
                 title={
                   load.isOverloaded
-                    ? `Deslocamento reduzido (-3m por Sobrecarga)`
-                    : "Deslocamento base por rodada"
+                    ? `Deslocamento reduzido em -3m por Sobrecarga (Base ${agent.defense.displacement}m)`
+                    : `Deslocamento por ação de movimento: ${effectiveDisplacement}m (${Math.floor(effectiveDisplacement / 1.5)} quadrados)`
                 }
               >
-                <span className="inline-flex items-center justify-center gap-0.5 text-[9px] uppercase tracking-wider text-[#8E8E9E]">
-                  <Footprints className="h-2.5 w-2.5" /> DESL.
+                <span className="inline-flex items-center justify-center gap-1 text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+                  <Footprints className="h-2.5 w-2.5" /> Desl.
                 </span>
                 <span
                   className={cn(
-                    "text-xl font-bold tabular-nums",
-                    load.isOverloaded ? "text-amber-300" : "text-[#D4D4D8]"
+                    "font-mono text-xl font-bold tabular-nums mt-0.5",
+                    load.isOverloaded ? "text-amber-300" : "text-zinc-200"
                   )}
                 >
                   {effectiveDisplacement}m
                 </span>
                 {load.isOverloaded && (
-                  <span className="inline-flex items-center justify-center gap-0.5 text-[8px] text-amber-400">
-                    <AlertTriangle className="h-2 w-2" /> -3m
+                  <span className="inline-flex items-center justify-center gap-0.5 font-mono text-[9px] text-amber-400">
+                    <AlertTriangle className="h-2.5 w-2.5" /> -3m
                   </span>
                 )}
               </div>

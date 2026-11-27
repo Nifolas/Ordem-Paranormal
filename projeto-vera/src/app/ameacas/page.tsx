@@ -5,6 +5,7 @@ import {
   Crown,
   Dices,
   Edit3,
+  Eye,
   Heart,
   Plus,
   Search,
@@ -133,6 +134,7 @@ export default function AmeacasPage() {
   const [form, setForm] = useState<Threat>(createEmptyThreat());
 
   const [sendModalThreat, setSendModalThreat] = useState<Threat | null>(null);
+  const [detailThreatId, setDetailThreatId] = useState<string | null>(null);
   const [targetCampaignId, setTargetCampaignId] = useState(
     campaigns[0]?.id ?? ""
   );
@@ -148,6 +150,11 @@ export default function AmeacasPage() {
       enabledSources
     );
   }, [threats, enabledSources]);
+
+  const detailThreat = useMemo(
+    () => combinedThreats.find((t) => t.id === detailThreatId) ?? null,
+    [combinedThreats, detailThreatId]
+  );
 
   const variantCount = useMemo(
     () => combinedThreats.filter((t) => Boolean(t.isVariant)).length,
@@ -646,9 +653,13 @@ export default function AmeacasPage() {
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <Skull className={cn("h-4 w-4", st.text)} />
-                    <h2 className="text-lg font-bold text-zinc-50">
+                    <button
+                      type="button"
+                      onClick={() => setDetailThreatId(threat.id)}
+                      className="text-left text-lg font-bold text-zinc-50 hover:text-zinc-200 underline-offset-4 hover:underline"
+                    >
                       {threat.name}
-                    </h2>
+                    </button>
                     <SourceBadge source={threat.source} />
                     {threat.isVariant && (
                       <Badge variant="warning" className="font-mono text-[10px]">
@@ -685,6 +696,14 @@ export default function AmeacasPage() {
                 </div>
 
                 <div className="flex items-center gap-1 shrink-0">
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    onClick={() => setDetailThreatId(threat.id)}
+                    title="Abrir modal completo da criatura"
+                  >
+                    <Eye className="h-3 w-3" /> Ficha
+                  </Button>
                   <Button
                     size="xs"
                     variant="secondary"
@@ -778,17 +797,71 @@ export default function AmeacasPage() {
                 ))}
               </div>
 
-              {/* Resistances */}
-              <div className="text-[11px] text-zinc-400 space-y-0.5">
+              {/* Resistances, Senses, Saves & Immunities */}
+              <div className="text-[11px] text-zinc-400 space-y-1 rounded-md border border-white/10 bg-[#0D0D11]/80 p-2.5">
+                {threat.senses && (
+                  <p>
+                    <strong className="text-zinc-200">Sentidos:</strong>{" "}
+                    {[
+                      threat.senses.percepcao
+                        ? `Percepção ${threat.senses.percepcao}`
+                        : null,
+                      threat.senses.iniciativa
+                        ? `Iniciativa ${threat.senses.iniciativa}`
+                        : null,
+                      ...(threat.senses.especiais ?? []),
+                    ]
+                      .filter(Boolean)
+                      .join(" • ")}
+                  </p>
+                )}
+                <p>
+                  <strong className="text-zinc-200">Testes de Resistência:</strong>{" "}
+                  {threat.saveFormulas ? (
+                    <>
+                      Fort {threat.saveFormulas.fortitude ?? `+${threat.saves.fortitude}`} •{" "}
+                      Ref {threat.saveFormulas.reflexos ?? `+${threat.saves.reflexos}`} •{" "}
+                      Von {threat.saveFormulas.vontade ?? `+${threat.saves.vontade}`}
+                    </>
+                  ) : (
+                    <>
+                      Fort +{threat.saves.fortitude} • Ref +{threat.saves.reflexos} • Von +
+                      {threat.saves.vontade}
+                    </>
+                  )}
+                </p>
+                {threat.skills.length > 0 && (
+                  <p>
+                    <strong className="text-zinc-200">Perícias:</strong>{" "}
+                    {threat.skills
+                      .map(
+                        (sk) =>
+                          `${sk.name} ${sk.dice}d20${
+                            sk.bonus > 0
+                              ? `+${sk.bonus}`
+                              : sk.bonus < 0
+                              ? `${sk.bonus}`
+                              : ""
+                          }`
+                      )
+                      .join(" • ")}
+                  </p>
+                )}
+                {threat.immunities && (
+                  <p>
+                    <strong className="text-amber-300">Imunidades:</strong>{" "}
+                    {threat.immunities}
+                  </p>
+                )}
                 {threat.resistances && (
                   <p>
-                    <strong className="text-zinc-300">Resistências:</strong>{" "}
+                    <strong className="text-zinc-200">Resistências a Dano:</strong>{" "}
                     {threat.resistances}
                   </p>
                 )}
                 {threat.vulnerabilities && (
                   <p>
-                    <strong className="text-red-300">Vulnerabilidades:</strong>{" "}
+                    <strong className="text-rose-300">Vulnerabilidades:</strong>{" "}
                     {threat.vulnerabilities}
                   </p>
                 )}
@@ -838,10 +911,22 @@ export default function AmeacasPage() {
                       key={atk.id}
                       className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#242432] bg-[#0D0D14] p-2.5"
                     >
-                      <div>
-                        <p className="text-xs font-semibold text-zinc-100">
-                          {atk.name}
-                        </p>
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <p className="text-xs font-semibold text-zinc-100">
+                            {atk.name}
+                          </p>
+                          {atk.actionType && (
+                            <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.2 font-mono text-[9px] uppercase text-zinc-300">
+                              {atk.actionType}
+                            </span>
+                          )}
+                          {atk.range && (
+                            <span className="font-mono text-[10px] text-zinc-400">
+                              • {atk.range}
+                            </span>
+                          )}
+                        </div>
                         <p className="font-mono text-[11px] text-zinc-400">
                           {atk.diceCount}d20+{atk.testBonus} • {atk.damageFormula}{" "}
                           ({atk.damageType}) • Crít {atk.threatRange}/x
@@ -880,16 +965,28 @@ export default function AmeacasPage() {
                 </div>
               )}
 
-              {/* Abilities */}
+              {/* Abilities with Action Type Badges */}
               {threat.abilities.length > 0 && (
-                <div className="space-y-1.5 border-t border-[#20202C] pt-3">
+                <div className="space-y-2 border-t border-[#20202C] pt-3">
                   <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
-                    Habilidades
+                    Habilidades ({threat.abilities.length})
                   </span>
                   {threat.abilities.map((ab) => (
-                    <div key={ab.id} className="text-xs text-zinc-400">
-                      <strong className="text-zinc-200">{ab.name}:</strong>{" "}
-                      {ab.description}
+                    <div
+                      key={ab.id}
+                      className="rounded-md border border-white/10 bg-[#0D0D14]/70 p-2.5 text-xs text-zinc-300 space-y-1"
+                    >
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <strong className="text-zinc-100">{ab.name}</strong>
+                        {ab.actionType && (
+                          <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-zinc-300">
+                            {ab.actionType}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-zinc-400 leading-relaxed">
+                        {ab.description}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -1215,6 +1312,303 @@ export default function AmeacasPage() {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Modal: Ficha Completa da Criatura */}
+      <Modal
+        open={Boolean(detailThreat)}
+        onClose={() => setDetailThreatId(null)}
+        title={
+          detailThreat
+            ? `${detailThreat.name} — VD ${detailThreat.vd} (${detailThreat.element})`
+            : "Ficha da Criatura"
+        }
+        description={
+          detailThreat
+            ? `${detailThreat.type} • ${detailThreat.size} • Deslocamento ${detailThreat.displacement}`
+            : undefined
+        }
+        maxWidth="max-w-3xl"
+      >
+        {detailThreat && (
+          <div className="space-y-4 text-xs">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <SourceBadge source={detailThreat.source} />
+                <span
+                  className={cn(
+                    "rounded border px-2 py-0.5 text-[11px] font-semibold uppercase",
+                    ELEMENT_STYLES[detailThreat.element].badge
+                  )}
+                >
+                  {detailThreat.element}
+                </span>
+                {detailThreat.secondaryElements?.map((sec) => (
+                  <span
+                    key={sec}
+                    className={cn(
+                      "rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase",
+                      ELEMENT_STYLES[sec].badge
+                    )}
+                  >
+                    + {sec}
+                  </span>
+                ))}
+                <Badge variant="default" className="font-mono">
+                  VD {detailThreat.vd}
+                </Badge>
+              </div>
+              <Button
+                size="xs"
+                variant="secondary"
+                onClick={() => {
+                  setTargetCampaignId(campaigns[0]?.id ?? "");
+                  setSendModalThreat(detailThreat);
+                }}
+              >
+                <Send className="h-3 w-3 text-purple-400" /> Enviar para Iniciativa
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2.5 font-mono">
+              <div className="rounded-md border border-white/10 bg-[#0D0D14] p-3">
+                <span className="text-[10px] text-rose-400 flex items-center gap-1">
+                  <Heart className="h-3 w-3" /> PV
+                </span>
+                <span className="text-xl font-bold text-zinc-100 tabular-nums">
+                  {detailThreat.pv}
+                </span>
+              </div>
+              <div className="rounded-md border border-white/10 bg-[#0D0D14] p-3">
+                <span className="text-[10px] text-zinc-400 flex items-center gap-1">
+                  <Shield className="h-3 w-3" /> DEFESA
+                </span>
+                <span className="text-xl font-bold text-zinc-100 tabular-nums">
+                  {detailThreat.defense}
+                </span>
+              </div>
+              <div className="rounded-md border border-white/10 bg-[#0D0D14] p-3">
+                <span className="text-[10px] text-amber-400 block">
+                  PRESENÇA PERTURBADORA
+                </span>
+                <span className="text-xs font-bold text-zinc-100 block mt-1 tabular-nums">
+                  DT {detailThreat.disturbingPresence.dt} •{" "}
+                  {detailThreat.disturbingPresence.damage}
+                  {detailThreat.disturbingPresence.nexImmunity
+                    ? ` (Imune NEX ${detailThreat.disturbingPresence.nexImmunity}%+)`
+                    : ""}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-5 gap-2 text-center font-mono">
+              {(["AGI", "FOR", "INT", "PRE", "VIG"] as const).map((k) => (
+                <div
+                  key={k}
+                  className="rounded-md border border-white/10 bg-[#0D0D14] py-2"
+                >
+                  <span className="text-[10px] text-zinc-500 block">{k}</span>
+                  <span className="text-base font-bold text-zinc-100 tabular-nums">
+                    {detailThreat.attributes[k]}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-md border border-white/10 bg-[#0D0D14] p-3 space-y-1.5 text-zinc-300">
+              {detailThreat.senses && (
+                <p>
+                  <strong className="text-zinc-100">Sentidos:</strong>{" "}
+                  {[
+                    detailThreat.senses.percepcao
+                      ? `Percepção ${detailThreat.senses.percepcao}`
+                      : null,
+                    detailThreat.senses.iniciativa
+                      ? `Iniciativa ${detailThreat.senses.iniciativa}`
+                      : null,
+                    ...(detailThreat.senses.especiais ?? []),
+                  ]
+                    .filter(Boolean)
+                    .join(" • ")}
+                </p>
+              )}
+              <p>
+                <strong className="text-zinc-100">
+                  Testes de Resistência:
+                </strong>{" "}
+                {detailThreat.saveFormulas
+                  ? `Fortitude ${detailThreat.saveFormulas.fortitude ?? `+${detailThreat.saves.fortitude}`} • Reflexos ${detailThreat.saveFormulas.reflexos ?? `+${detailThreat.saves.reflexos}`} • Vontade ${detailThreat.saveFormulas.vontade ?? `+${detailThreat.saves.vontade}`}`
+                  : `Fortitude +${detailThreat.saves.fortitude} • Reflexos +${detailThreat.saves.reflexos} • Vontade +${detailThreat.saves.vontade}`}
+              </p>
+              {detailThreat.skills.length > 0 && (
+                <p>
+                  <strong className="text-zinc-100">Perícias:</strong>{" "}
+                  {detailThreat.skills
+                    .map(
+                      (sk) =>
+                        `${sk.name} ${sk.dice}d20${
+                          sk.bonus > 0
+                            ? `+${sk.bonus}`
+                            : sk.bonus < 0
+                            ? `${sk.bonus}`
+                            : ""
+                        }`
+                    )
+                    .join(" • ")}
+                </p>
+              )}
+              {detailThreat.immunities && (
+                <p>
+                  <strong className="text-amber-300">Imunidades:</strong>{" "}
+                  {detailThreat.immunities}
+                </p>
+              )}
+              {detailThreat.resistances && (
+                <p>
+                  <strong className="text-zinc-100">
+                    Resistências a Dano:
+                  </strong>{" "}
+                  {detailThreat.resistances}
+                </p>
+              )}
+              {detailThreat.vulnerabilities && (
+                <p>
+                  <strong className="text-rose-300">Vulnerabilidades:</strong>{" "}
+                  {detailThreat.vulnerabilities}
+                </p>
+              )}
+            </div>
+
+            {detailThreat.enigmaOfFear && (
+              <div
+                className={cn(
+                  "rounded-lg border p-3 space-y-1.5",
+                  detailThreat.enigmaResolved
+                    ? "border-emerald-500/40 bg-emerald-500/10"
+                    : "border-sky-400/40 bg-sky-500/10"
+                )}
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-sky-200">
+                    Enigma de Medo
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleEnigma(detailThreat)}
+                    className={cn(
+                      "rounded border px-2 py-0.5 font-mono text-[10px] font-semibold transition-colors",
+                      detailThreat.enigmaResolved
+                        ? "border-emerald-400 bg-emerald-600/30 text-emerald-100"
+                        : "border-sky-400/50 bg-[#0D0D14] text-sky-200 hover:bg-sky-500/20"
+                    )}
+                  >
+                    {detailThreat.enigmaResolved
+                      ? "✓ Resolvido"
+                      : "Marcar Resolvido"}
+                  </button>
+                </div>
+                <p className="text-zinc-200 leading-relaxed">
+                  {detailThreat.enigmaOfFear}
+                </p>
+              </div>
+            )}
+
+            {detailThreat.attacks.length > 0 && (
+              <div className="space-y-2 border-t border-white/10 pt-3">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
+                  Ataques ({detailThreat.attacks.length}) — Clique para rolar
+                </span>
+                {detailThreat.attacks.map((atk) => (
+                  <div
+                    key={atk.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-white/10 bg-[#0D0D14] p-3"
+                  >
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-sm font-semibold text-zinc-100">
+                          {atk.name}
+                        </span>
+                        {atk.actionType && (
+                          <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase text-zinc-300">
+                            {atk.actionType}
+                          </span>
+                        )}
+                        {atk.range && (
+                          <span className="font-mono text-[10px] text-zinc-400">
+                            • {atk.range}
+                          </span>
+                        )}
+                      </div>
+                      <p className="font-mono text-[11px] text-zinc-400">
+                        {atk.diceCount}d20+{atk.testBonus} • {atk.damageFormula}{" "}
+                        ({atk.damageType}) • Crít {atk.threatRange}/x
+                        {atk.critMultiplier}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        size="xs"
+                        variant="primary"
+                        onClick={() =>
+                          handleRollThreatAttack(detailThreat, atk)
+                        }
+                      >
+                        <Dices className="h-3 w-3" /> Rolar Ataque
+                      </Button>
+                      <Button
+                        size="xs"
+                        variant="default"
+                        onClick={() =>
+                          handleRollThreatDamage(detailThreat, atk, false)
+                        }
+                      >
+                        <Swords className="h-3 w-3 text-rose-400" /> Rolar Dano
+                      </Button>
+                      <Button
+                        size="xs"
+                        variant="danger"
+                        onClick={() =>
+                          handleRollThreatDamage(detailThreat, atk, true)
+                        }
+                      >
+                        <Sparkles className="h-3 w-3" /> Crítico x
+                        {atk.critMultiplier}
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {detailThreat.abilities.length > 0 && (
+              <div className="space-y-2 border-t border-white/10 pt-3">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
+                  Habilidades ({detailThreat.abilities.length})
+                </span>
+                {detailThreat.abilities.map((ab) => (
+                  <div
+                    key={ab.id}
+                    className="rounded-lg border border-white/10 bg-[#0D0D14] p-3 space-y-1"
+                  >
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <strong className="text-sm text-zinc-100">
+                        {ab.name}
+                      </strong>
+                      {ab.actionType && (
+                        <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-wider text-zinc-300">
+                          {ab.actionType}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-zinc-300 leading-relaxed">
+                      {ab.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </Modal>
     </div>
   );

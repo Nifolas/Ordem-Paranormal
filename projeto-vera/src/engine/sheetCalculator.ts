@@ -496,12 +496,18 @@ export function normalizeCatalogId(id: string | null | undefined): string {
 export function getAgentEffectiveAttributes(
   agent: Agent
 ): Record<AttributeKey, number> {
-  const attrs = { ...agent.attributes };
+  const attrs: Record<AttributeKey, number> = {
+    AGI: Number(agent.attributes?.AGI) || 0,
+    FOR: Number(agent.attributes?.FOR) || 0,
+    INT: Number(agent.attributes?.INT) || 0,
+    PRE: Number(agent.attributes?.PRE) || 0,
+    VIG: Number(agent.attributes?.VIG) || 0,
+  };
   const trail = normalizeCatalogId(agent.trilhaId);
   if (
     agent.classId === "especialista" &&
     trail === "bibliotecario" &&
-    agent.nex >= 99
+    Number(agent.nex) >= 99
   ) {
     attrs.INT += 1;
   }
@@ -943,30 +949,38 @@ export function calculateCombatStats(agent: Agent) {
       item.equipped &&
       normalizeItemCategoryType(item) === "protecao" &&
       !isShieldItem(item) &&
-      item.defenseBonus
+      Number(item.defenseBonus) > 0
   );
   const highestProtection = equippedProtections.reduce(
-    (max, i) => Math.max(max, i.defenseBonus ?? 0),
+    (max, i) => Math.max(max, Number(i.defenseBonus) || 0),
     0
   );
 
   const equippedShield = agent.inventory
-    .filter((item) => item.equipped && isShieldItem(item) && item.defenseBonus)
-    .reduce((max, i) => Math.max(max, i.defenseBonus ?? 0), 0);
+    .filter(
+      (item) =>
+        item.equipped && isShieldItem(item) && Number(item.defenseBonus) > 0
+    )
+    .reduce((max, i) => Math.max(max, Number(i.defenseBonus) || 0), 0);
 
   const equippedParanormalAccessory = agent.inventory
     .filter((item) => {
-      if (!item.equipped || !item.defenseBonus) return false;
+      if (!item.equipped || !(Number(item.defenseBonus) > 0)) return false;
       const cat = normalizeItemCategoryType(item);
       return cat === "paranormal" || cat === "amaldicoado" || cat === "acessorio";
     })
-    .reduce((max, i) => Math.max(max, i.defenseBonus ?? 0), 0);
+    .reduce((max, i) => Math.max(max, Number(i.defenseBonus) || 0), 0);
 
-  const protectionBonus = highestProtection + agent.defense.protectionBonus;
-  const shieldBonus = equippedShield + (agent.defense.shieldBonus ?? 0);
+  const protectionBonus =
+    Number(highestProtection) + (Number(agent.defense?.protectionBonus) || 0);
+  const shieldBonus =
+    Number(equippedShield) + (Number(agent.defense?.shieldBonus) || 0);
   const accessoryBonus =
-    equippedParanormalAccessory + (agent.defense.paranormalAccessoryBonus ?? 0);
-  const abilityBonus = (agent.defense.abilityBonus ?? 0) + originDefenseBonus;
+    Number(equippedParanormalAccessory) +
+    (Number(agent.defense?.paranormalAccessoryBonus) || 0);
+  const abilityBonus =
+    (Number(agent.defense?.abilityBonus) || 0) + (Number(originDefenseBonus) || 0);
+  const otherBonus = Number(agent.defense?.otherBonus) || 0;
 
   const vulnerableDefensePenalty = agent.status?.vulneravel ? -2 : 0;
   const disorientedDefensePenalty = agent.status?.desorientado ? -3 : 0;
@@ -974,38 +988,40 @@ export function calculateCombatStats(agent: Agent) {
   const defense = Math.max(
     0,
     10 +
-      effAttrs.AGI +
+      Number(effAttrs.AGI) +
       protectionBonus +
       shieldBonus +
       accessoryBonus +
       abilityBonus +
-      agent.defense.otherBonus +
-      load.overloadDefensePenalty +
+      otherBonus +
+      Number(load.overloadDefensePenalty) +
       vulnerableDefensePenalty +
       disorientedDefensePenalty
   );
 
   const reflexosSkill = agent.skills.reflexos;
-  const canDodge = (reflexosSkill?.training ?? 0) >= 5;
+  const canDodge = (Number(reflexosSkill?.training) || 0) >= 5;
   const reflexosBonus = reflexosSkill
-    ? reflexosSkill.training + reflexosSkill.bonus
+    ? (Number(reflexosSkill.training) || 0) + (Number(reflexosSkill.bonus) || 0)
     : 0;
   const dodge = defense + reflexosBonus;
 
   const fortitudeSkill = agent.skills.fortitude;
-  const canBlock = (fortitudeSkill?.training ?? 0) >= 5;
+  const canBlock = (Number(fortitudeSkill?.training) || 0) >= 5;
   const cascaGrossaBlockBonus =
     agent.classId === "combatente" &&
     trail === "tropa_de_choque" &&
-    agent.nex >= 10
-      ? effAttrs.VIG
+    Number(agent.nex) >= 10
+      ? Number(effAttrs.VIG)
       : 0;
   const blockRd =
-    (fortitudeSkill ? fortitudeSkill.training + fortitudeSkill.bonus : 0) +
-    cascaGrossaBlockBonus;
+    (fortitudeSkill
+      ? (Number(fortitudeSkill.training) || 0) +
+        (Number(fortitudeSkill.bonus) || 0)
+      : 0) + cascaGrossaBlockBonus;
 
   const lutaSkill = agent.skills.luta;
-  const canCounterAttack = (lutaSkill?.training ?? 0) >= 5;
+  const canCounterAttack = (Number(lutaSkill?.training) || 0) >= 5;
 
   // Note: Universitário +1 PE limit does NOT affect Ritual DT
   const basePeLimit = calculatePeLimit(agent.classId, agent.nex, agent.stage, {

@@ -18,7 +18,10 @@ import type {
   Threat,
   TrailDefinition,
 } from "@/types/ordem";
-import { BASE_THREATS } from "@/data/threats";
+import {
+  BASE_THREATS,
+  mergePersistedThreatsWithBase,
+} from "@/data/threats";
 import { createSeedAgents } from "@/data/seed-agents";
 import { migrateAgentSkillList } from "@/data/skills";
 import { localStorageRepository, STORAGE_KEY } from "@/services/storage";
@@ -542,11 +545,7 @@ export const useAppStore = create<AppStoreState>()(
       merge: (persistedState, currentState) => {
         const persisted = (persistedState as Partial<AppStoreState>) ?? {};
         const persistedThreats = persisted.threats ?? [];
-        const existingIds = new Set(persistedThreats.map((t) => t.id));
-        const mergedThreats = [
-          ...persistedThreats,
-          ...BASE_THREATS.filter((bt) => !existingIds.has(bt.id)),
-        ];
+        const mergedThreats = mergePersistedThreatsWithBase(persistedThreats);
         return {
           ...currentState,
           ...persisted,

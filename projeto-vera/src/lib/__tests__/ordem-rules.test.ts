@@ -608,7 +608,13 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
       expect(BASE_ITEMS).toHaveLength(105);
       expect(BASE_MODIFICATIONS).toHaveLength(24);
       expect(BASE_CURSES).toHaveLength(24);
-      expect(BASE_THREATS).toHaveLength(29);
+      expect(BASE_THREATS).toHaveLength(42);
+      expect(
+        BASE_THREATS.filter((t) => t.element === "Sangue")
+      ).toHaveLength(12);
+      expect(
+        BASE_THREATS.filter((t) => t.element === "Morte")
+      ).toHaveLength(12);
       expect(OPTIONAL_RULES_LIST).toHaveLength(18);
     });
 

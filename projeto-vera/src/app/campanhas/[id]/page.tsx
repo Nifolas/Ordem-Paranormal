@@ -30,6 +30,7 @@ import { useAppStore } from "@/store/useAppStore";
 import {
   calculateCombatStats,
   getAgentEffectiveVitals,
+  rollDiceFormula,
   rollOrdemTest,
 } from "@/lib/ordem-rules";
 import { OPTIONAL_RULES_LIST } from "@/data/optionalRules";
@@ -94,6 +95,7 @@ export default function EscudoDoMestrePage({
 
   const [manageAgentsOpen, setManageAgentsOpen] = useState(false);
   const [addCombatantOpen, setAddCombatantOpen] = useState(false);
+  const [inspectThreat, setInspectThreat] = useState<Threat | null>(null);
   const [sceneTab, setSceneTab] = useState<CampaignSceneTab>("combate");
   const [selectedThreatId, setSelectedThreatId] = useState(threats[0]?.id ?? "");
   const [customName, setCustomName] = useState("");
@@ -951,6 +953,21 @@ export default function EscudoDoMestrePage({
                                   DEF {entry.defense}
                                 </span>
                               )}
+                              {entry.type === "threat" && entry.refId && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const found = threats.find(
+                                      (t) => t.id === entry.refId
+                                    );
+                                    if (found) setInspectThreat(found);
+                                  }}
+                                  className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[10px] text-zinc-200 hover:bg-white/10"
+                                  title="Ver ficha completa da criatura (ataques, habilidades, sentidos e resistências)"
+                                >
+                                  Ficha
+                                </button>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -1353,6 +1370,15 @@ export default function EscudoDoMestrePage({
                   ))}
                 </Select>
                 <Button
+                  variant="outline"
+                  onClick={() => {
+                    const th = threats.find((t) => t.id === selectedThreatId);
+                    if (th) setInspectThreat(th);
+                  }}
+                >
+                  Ver Ficha
+                </Button>
+                <Button
                   variant="primary"
                   onClick={() => {
                     const th = threats.find((t) => t.id === selectedThreatId);
@@ -1425,6 +1451,241 @@ export default function EscudoDoMestrePage({
             </div>
           </form>
         </div>
+      </Modal>
+
+      {/* Modal: Ficha Completa da Criatura no Escudo do Mestre */}
+      <Modal
+        open={Boolean(inspectThreat)}
+        onClose={() => setInspectThreat(null)}
+        title={
+          inspectThreat
+            ? `${inspectThreat.name} (VD ${inspectThreat.vd} • ${inspectThreat.element})`
+            : "Ficha da Ameaça"
+        }
+        description={
+          inspectThreat
+            ? `${inspectThreat.type} • ${inspectThreat.size} • Deslocamento ${inspectThreat.displacement}`
+            : undefined
+        }
+        maxWidth="max-w-2xl"
+      >
+        {inspectThreat && (
+          <div className="space-y-4 text-xs">
+            <div className="grid grid-cols-3 gap-2 font-mono">
+              <div className="rounded border border-white/10 bg-[#0D0D14] p-2.5">
+                <span className="text-[10px] text-rose-400 block">PV</span>
+                <span className="text-base font-bold text-zinc-100">
+                  {inspectThreat.pv}
+                </span>
+              </div>
+              <div className="rounded border border-white/10 bg-[#0D0D14] p-2.5">
+                <span className="text-[10px] text-zinc-400 block">DEFESA</span>
+                <span className="text-base font-bold text-zinc-100">
+                  {inspectThreat.defense}
+                </span>
+              </div>
+              <div className="rounded border border-white/10 bg-[#0D0D14] p-2.5">
+                <span className="text-[10px] text-amber-400 block">
+                  PRES. PERTURB.
+                </span>
+                <span className="text-xs font-bold text-zinc-100">
+                  DT {inspectThreat.disturbingPresence.dt} (
+                  {inspectThreat.disturbingPresence.damage})
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-5 gap-1.5 text-center font-mono">
+              {(["AGI", "FOR", "INT", "PRE", "VIG"] as const).map((k) => (
+                <div
+                  key={k}
+                  className="rounded border border-white/10 bg-[#0D0D14] py-1.5"
+                >
+                  <span className="text-[10px] text-zinc-500 block">{k}</span>
+                  <span className="text-sm font-bold text-zinc-100">
+                    {inspectThreat.attributes[k]}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded border border-white/10 bg-[#0D0D14] p-2.5 space-y-1 text-[11px] text-zinc-300">
+              {inspectThreat.senses && (
+                <p>
+                  <strong className="text-zinc-100">Sentidos:</strong>{" "}
+                  {[
+                    inspectThreat.senses.percepcao
+                      ? `Percepção ${inspectThreat.senses.percepcao}`
+                      : null,
+                    inspectThreat.senses.iniciativa
+                      ? `Iniciativa ${inspectThreat.senses.iniciativa}`
+                      : null,
+                    ...(inspectThreat.senses.especiais ?? []),
+                  ]
+                    .filter(Boolean)
+                    .join(" • ")}
+                </p>
+              )}
+              <p>
+                <strong className="text-zinc-100">
+                  Testes de Resistência:
+                </strong>{" "}
+                {inspectThreat.saveFormulas
+                  ? `Fort ${inspectThreat.saveFormulas.fortitude} • Ref ${inspectThreat.saveFormulas.reflexos} • Von ${inspectThreat.saveFormulas.vontade}`
+                  : `Fort +${inspectThreat.saves.fortitude} • Ref +${inspectThreat.saves.reflexos} • Von +${inspectThreat.saves.vontade}`}
+              </p>
+              {inspectThreat.immunities && (
+                <p>
+                  <strong className="text-amber-300">Imunidades:</strong>{" "}
+                  {inspectThreat.immunities}
+                </p>
+              )}
+              {inspectThreat.resistances && (
+                <p>
+                  <strong className="text-zinc-100">
+                    Resistências a Dano:
+                  </strong>{" "}
+                  {inspectThreat.resistances}
+                </p>
+              )}
+              {inspectThreat.vulnerabilities && (
+                <p>
+                  <strong className="text-rose-300">Vulnerabilidades:</strong>{" "}
+                  {inspectThreat.vulnerabilities}
+                </p>
+              )}
+            </div>
+
+            {inspectThreat.enigmaOfFear && (
+              <div className="rounded border border-sky-500/40 bg-sky-500/10 p-2.5 space-y-1">
+                <span className="font-mono text-[10px] font-bold uppercase text-sky-300 block">
+                  Enigma de Medo
+                </span>
+                <p className="text-zinc-200">{inspectThreat.enigmaOfFear}</p>
+              </div>
+            )}
+
+            {inspectThreat.attacks.length > 0 && (
+              <div className="space-y-2">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
+                  Ataques (clique para rolar)
+                </span>
+                {inspectThreat.attacks.map((atk) => (
+                  <div
+                    key={atk.id}
+                    className="flex flex-wrap items-center justify-between gap-2 rounded border border-white/10 bg-[#0D0D14] p-2.5"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-semibold text-zinc-100">
+                          {atk.name}
+                        </span>
+                        {atk.actionType && (
+                          <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.2 font-mono text-[9px] uppercase text-zinc-300">
+                            {atk.actionType}
+                          </span>
+                        )}
+                        {atk.range && (
+                          <span className="font-mono text-[10px] text-zinc-400">
+                            • {atk.range}
+                          </span>
+                        )}
+                      </div>
+                      <p className="font-mono text-[11px] text-zinc-400">
+                        {atk.diceCount}d20+{atk.testBonus} • {atk.damageFormula}{" "}
+                        ({atk.damageType}) • Crít {atk.threatRange}/x
+                        {atk.critMultiplier}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        size="xs"
+                        variant="primary"
+                        onClick={() => {
+                          const res = rollOrdemTest({
+                            attributeValue: atk.diceCount,
+                            bonus: atk.testBonus,
+                            threatRange: atk.threatRange,
+                          });
+                          pushRoll({
+                            actorName: inspectThreat.name,
+                            campaignId: campaign.id,
+                            label: `Ataque: ${atk.name}`,
+                            kind: "threat",
+                            element: inspectThreat.element,
+                            formula: res.formula,
+                            diceRolled: res.diceRolled,
+                            chosenDie: res.chosenDie,
+                            mode: res.mode,
+                            bonus: res.bonus,
+                            total: res.total,
+                            isNat20: res.isNat20,
+                            isNat1: res.isNat1,
+                            isCriticalThreat: res.isCriticalThreat,
+                          });
+                        }}
+                      >
+                        <Dices className="h-3 w-3" /> Teste
+                      </Button>
+                      <Button
+                        size="xs"
+                        variant="default"
+                        onClick={() => {
+                          const res = rollDiceFormula({
+                            formula: atk.damageFormula,
+                            isCritical: false,
+                            critMultiplier: atk.critMultiplier,
+                          });
+                          pushRoll({
+                            actorName: inspectThreat.name,
+                            campaignId: campaign.id,
+                            label: `Dano: ${atk.name} (${atk.damageType})`,
+                            kind: "damage",
+                            element: inspectThreat.element,
+                            formula: res.effectiveFormula,
+                            diceRolled: res.diceRolled,
+                            mode: "sum",
+                            bonus: res.bonus,
+                            total: res.total,
+                            details: res.breakdown,
+                          });
+                        }}
+                      >
+                        <Swords className="h-3 w-3 text-rose-400" /> Dano
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {inspectThreat.abilities.length > 0 && (
+              <div className="space-y-1.5">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-zinc-400 block">
+                  Habilidades ({inspectThreat.abilities.length})
+                </span>
+                {inspectThreat.abilities.map((ab) => (
+                  <div
+                    key={ab.id}
+                    className="rounded border border-white/10 bg-[#0D0D14] p-2.5 space-y-1"
+                  >
+                    <div className="flex items-center gap-2">
+                      <strong className="text-zinc-100">{ab.name}</strong>
+                      {ab.actionType && (
+                        <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 font-mono text-[9px] uppercase text-zinc-300">
+                          {ab.actionType}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-zinc-400 leading-relaxed">
+                      {ab.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </Modal>
     </div>
   );

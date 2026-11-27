@@ -271,17 +271,14 @@ export function AlliesTab({
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#22222A] pb-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-[#6E6E7E]">
-            01 //
-          </span>
-          <h3 className="font-display text-xs font-bold uppercase tracking-[0.14em] text-[#F4F4F5]">
+          <h3 className="font-display text-sm font-bold tracking-tight text-zinc-100">
             Aliados & Pets
           </h3>
-          <span className="font-mono text-[10px] text-[#8E8E9E] tabular-nums">
-            ({allies.length} · {activeHelpingCount} ativo
-            {activeHelpingCount === 1 ? "" : "s"})
+          <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 tabular-nums">
+            {allies.length} · {activeHelpingCount} ativo
+            {activeHelpingCount === 1 ? "" : "s"}
           </span>
         </div>
         <Button

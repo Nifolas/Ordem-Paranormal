@@ -12,12 +12,15 @@ interface AttributeNode {
   y: number;
 }
 
+/**
+ * Coordenadas do pentagrama regular em viewBox 320x300 (centro em 160, 156, raio 104)
+ */
 const NODES: AttributeNode[] = [
-  { key: "AGI", label: "AGILIDADE", x: 140, y: 40 },
-  { key: "INT", label: "INTELECTO", x: 232, y: 106 },
-  { key: "VIG", label: "VIGOR", x: 198, y: 212 },
-  { key: "PRE", label: "PRESENÇA", x: 82, y: 212 },
-  { key: "FOR", label: "FORÇA", x: 48, y: 106 },
+  { key: "AGI", label: "AGILIDADE", x: 160, y: 50 },
+  { key: "INT", label: "INTELECTO", x: 260, y: 123 },
+  { key: "VIG", label: "VIGOR", x: 222, y: 242 },
+  { key: "PRE", label: "PRESENÇA", x: 98, y: 242 },
+  { key: "FOR", label: "FORÇA", x: 60, y: 123 },
 ];
 
 export function AttributePentagram({
@@ -38,24 +41,29 @@ export function AttributePentagram({
   const outerPolygon = NODES.map((n) => `${n.x},${n.y}`).join(" ");
 
   return (
-    <div className="rounded-md border border-[#22222A] bg-[#101014] p-4">
-      <div className="flex items-center justify-between border-b border-[#22222A] pb-2.5 mb-2">
-        <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-[#8E8E9E]">
-          ATRIBUTOS // PENTAGRAMA
-        </span>
+    <div className="rounded-lg border border-white/10 bg-zinc-950/85 backdrop-blur-sm p-4 shadow-sm">
+      <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-2">
+        <div className="flex items-center gap-2">
+          <span className="font-display text-xs font-bold uppercase tracking-wider text-zinc-100">
+            Atributos
+          </span>
+          <span className="text-[11px] text-zinc-400">
+            {editing ? "Modo edição" : "Clique no atributo para rolar"}
+          </span>
+        </div>
         <button
           type="button"
           onClick={() => setEditing((v) => !v)}
           className={cn(
-            "inline-flex items-center gap-1 rounded-sm px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors border",
+            "inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-colors border",
             editing
-              ? "border-emerald-600/40 bg-emerald-600/10 text-emerald-300"
-              : "border-[#22222A] bg-[#16161C] text-[#8E8E9E] hover:text-[#F4F4F5] hover:border-[#32323E]"
+              ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+              : "border-white/10 bg-[#14141A] text-zinc-400 hover:text-zinc-100 hover:border-white/25"
           )}
         >
           {editing ? (
             <>
-              <Check className="h-3 w-3" /> Salvar
+              <Check className="h-3 w-3" /> Concluir
             </>
           ) : (
             <>
@@ -65,50 +73,68 @@ export function AttributePentagram({
         </button>
       </div>
 
-      <div className="relative mx-auto w-full max-w-[260px] aspect-[280/254]">
+      {/* Pentagrama Grande e Legível (estilo C.R.I.S.) */}
+      <div className="relative mx-auto w-full max-w-[308px] aspect-[320/300]">
         <svg
-          viewBox="0 0 280 254"
+          viewBox="0 0 320 300"
           className="h-full w-full select-none"
           aria-label="Pentagrama de Atributos"
         >
-          {/* Minimalist hairline geometry — zero neon glow */}
+          {/* Círculos guia e geometria do pentagrama */}
           <circle
-            cx="140"
-            cy="132"
+            cx="160"
+            cy="156"
+            r="106"
+            fill="none"
+            stroke="rgba(255,255,255,0.16)"
+            strokeWidth="1.5"
+          />
+          <circle
+            cx="160"
+            cy="156"
             r="96"
             fill="none"
-            stroke="#22222A"
+            stroke="rgba(255,255,255,0.08)"
             strokeWidth="1"
             strokeDasharray="3 4"
           />
           <polygon
             points={outerPolygon}
             fill="none"
-            stroke="#2E2E3A"
-            strokeWidth="1"
+            stroke="rgba(255,255,255,0.22)"
+            strokeWidth="1.25"
           />
           <polygon
             points={starPoints}
             fill="none"
-            stroke="#2E2E3A"
-            strokeWidth="1"
-            strokeLinejoin="miter"
+            stroke="rgba(255,255,255,0.20)"
+            strokeWidth="1.25"
+            strokeLinejoin="round"
           />
-          <circle cx="140" cy="132" r="2" fill="#3A3A48" />
+
+          {/* Rótulo central "ATRIBUTOS" no miolo do pentagrama */}
+          <circle
+            cx="160"
+            cy="156"
+            r="34"
+            fill="#09090B"
+            stroke="rgba(255,255,255,0.18)"
+            strokeWidth="1.2"
+          />
           <text
-            x="140"
-            y="148"
+            x="160"
+            y="159"
             textAnchor="middle"
-            className="fill-[#6E6E7E] font-mono text-[8px] tracking-[0.18em]"
+            className="fill-zinc-300 font-display text-[9px] font-bold tracking-[0.2em]"
           >
-            {editing ? "EDIÇÃO" : "1-CLIQUE ROLA"}
+            ATRIBUTOS
           </text>
         </svg>
 
         {NODES.map((node) => {
           const val = attributes[node.key];
-          const leftPct = (node.x / 280) * 100;
-          const topPct = (node.y / 254) * 100;
+          const leftPct = (node.x / 320) * 100;
+          const topPct = (node.y / 300) * 100;
 
           return (
             <div
@@ -117,21 +143,22 @@ export function AttributePentagram({
               className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center"
             >
               {editing ? (
-                <div className="flex flex-col items-center rounded-sm border border-[#525266] bg-[#09090B] px-1.5 py-1">
-                  <span className="font-mono text-[9px] font-semibold tracking-widest text-[#8E8E9E]">
+                <div className="flex h-[78px] w-[78px] flex-col items-center justify-center rounded-full border-2 border-zinc-200 bg-[#09090B] shadow-[0_0_18px_rgba(255,255,255,0.14)]">
+                  <span className="font-mono text-[10px] font-bold tracking-wider text-zinc-300">
                     {node.key}
                   </span>
-                  <div className="flex items-center gap-1 mt-0.5">
+                  <div className="flex items-center gap-1 my-0.5">
                     <button
                       type="button"
                       onClick={() =>
                         onChangeAttribute(node.key, Math.max(0, val - 1))
                       }
-                      className="h-5 w-5 rounded-sm bg-[#16161C] border border-[#22222A] text-xs font-mono text-[#D4D4D8] hover:border-[#525266]"
+                      className="h-5 w-5 rounded-full bg-zinc-900 border border-white/25 text-xs font-mono font-bold text-zinc-100 hover:bg-zinc-800 hover:border-white"
+                      aria-label={`Diminuir ${node.label}`}
                     >
                       -
                     </button>
-                    <span className="font-mono text-sm font-bold text-[#F4F4F5] w-4 text-center">
+                    <span className="font-mono text-xl font-bold text-white w-5 text-center tabular-nums">
                       {val}
                     </span>
                     <button
@@ -139,26 +166,36 @@ export function AttributePentagram({
                       onClick={() =>
                         onChangeAttribute(node.key, Math.min(10, val + 1))
                       }
-                      className="h-5 w-5 rounded-sm bg-[#16161C] border border-[#22222A] text-xs font-mono text-[#D4D4D8] hover:border-[#525266]"
+                      className="h-5 w-5 rounded-full bg-zinc-900 border border-white/25 text-xs font-mono font-bold text-zinc-100 hover:bg-zinc-800 hover:border-white"
+                      aria-label={`Aumentar ${node.label}`}
                     >
                       +
                     </button>
                   </div>
+                  <span className="text-[7px] font-semibold uppercase tracking-wider text-zinc-400">
+                    {node.label}
+                  </span>
                 </div>
               ) : (
                 <button
                   type="button"
                   onClick={() => onRollAttribute(node.key)}
-                  title={`Rolar teste de ${node.label} (${
+                  title={`Clique para rolar ${node.label} (${
                     val > 0 ? `${val}d20 maior` : `${2 + Math.abs(val)}d20 menor`
                   })`}
-                  className="group flex h-12 w-12 flex-col items-center justify-center rounded-sm border border-[#2E2E3A] bg-[#09090B] transition-colors duration-150 hover:border-[#F4F4F5] hover:bg-[#16161C] focus:outline-none focus:ring-1 focus:ring-zinc-400"
+                  className="group flex h-[78px] w-[78px] flex-col items-center justify-center rounded-full border-2 border-zinc-300/85 bg-[#09090B] shadow-[0_4px_16px_rgba(0,0,0,0.75)] transition-all duration-150 hover:border-white hover:bg-[#121218] hover:shadow-[0_0_20px_rgba(255,255,255,0.22)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/60"
                 >
-                  <span className="font-mono text-[9px] font-semibold tracking-[0.14em] text-[#8E8E9E] group-hover:text-[#F4F4F5]">
-                    {node.key}
-                  </span>
-                  <span className="font-mono text-lg font-bold leading-none text-[#F4F4F5] mt-0.5">
+                  {/* Número grande em destaque */}
+                  <span className="font-mono text-2xl sm:text-3xl font-extrabold leading-none text-white tabular-nums tracking-tight">
                     {val}
+                  </span>
+                  {/* Nome completo discreto */}
+                  <span className="mt-1 text-[7.5px] font-medium uppercase tracking-[0.12em] text-zinc-400 group-hover:text-zinc-300 leading-none">
+                    {node.label}
+                  </span>
+                  {/* Sigla em destaque */}
+                  <span className="mt-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-200 group-hover:text-white leading-none">
+                    {node.key}
                   </span>
                 </button>
               )}

@@ -41,6 +41,51 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+@keyframes paranormalFloatSlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(8px, -14px, 0) scale(1.03);
+  }
+}
+
+@keyframes paranormalFloatMed {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-10px, 12px, 0) scale(0.975);
+  }
+}
+
+@keyframes paranormalFloatAlt {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6px, 10px, 0) scale(1.02);
+  }
+  66% {
+    transform: translate3d(-8px, -8px, 0) scale(0.985);
+  }
+}
+
+.animate-paranormal-float-slow {
+  animation: paranormalFloatSlow 32s ease-in-out infinite;
+}
+
+.animate-paranormal-float-med {
+  animation: paranormalFloatMed 26s ease-in-out infinite;
+}
+
+.animate-paranormal-float-alt {
+  animation: paranormalFloatAlt 22s ease-in-out infinite;
+}
+
 .font-mono,
 .tabular-nums {
   font-variant-numeric: tabular-nums;

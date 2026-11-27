@@ -1,0 +1,858 @@
+{
+  "meta": {
+    "bloco": "Bestiário 2 — Livro Básico (Morte)",
+    "source": "livro_basico",
+    "elemento": "Morte",
+    "total": 12
+  },
+  "ameacas": [
+    {
+      "id": "lb_aracnasita",
+      "nome": "Aracnasita",
+      "vd": 80,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 20,
+        "dano": "4d6 mental",
+        "imuneNex": 40
+      },
+      "sentidos": {
+        "percepcao": "1d20+10",
+        "iniciativa": "3d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 23,
+      "resistenciasTestes": {
+        "fortitude": "2d20+5",
+        "reflexos": "3d20+10",
+        "vontade": "1d20+5"
+      },
+      "pv": 140,
+      "imunidades": "Dano (até sofrer dano de fogo)",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 2,
+        "INT": 1,
+        "PRE": 1,
+        "VIG": 2
+      },
+      "pericias": [
+        "Furtividade 3d20+8"
+      ],
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "2d20+15",
+          "dano": "2d10+10 perfuração"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Percepção Tátil",
+          "tipoAcao": "Passiva",
+          "descricao": "Percebe tudo em contato com sua teia ignorando penalidades de visão ou sentidos."
+        },
+        {
+          "nome": "Estacar",
+          "tipoAcao": "Livre",
+          "descricao": "Ao causar dano com Mordida, causa +1d10 Morte e deixa o alvo Agarrado (Atletismo DT 20 solta)."
+        },
+        {
+          "nome": "Desovar Aranhas",
+          "tipoAcao": "Reação",
+          "descricao": "1x/cena ao ficar Machucada: 1º turno (curto: 2d6 mental/turno, Von DT 15 metade); 2º turno (curto: +2d8 Morte/turno, Fort DT 15 metade); 3º turno em diante (ambos os efeitos expandem para alcance médio)."
+        }
+      ],
+      "enigmaDeMedo": "Sofrer dano de fogo faz o Lodo recuar, removendo a imunidade a dano da Aracnasita até o início do próximo turno dela."
+    },
+    {
+      "id": "lb_carnical_preto_da_morte",
+      "nome": "Carniçal Preto da Morte",
+      "vd": 200,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Conhecimento"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 30,
+        "dano": "6d6 mental",
+        "imuneNex": 65
+      },
+      "sentidos": {
+        "percepcao": "3d20+15",
+        "iniciativa": "4d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 38,
+      "resistenciasTestes": {
+        "fortitude": "3d20+15",
+        "reflexos": "4d20+15",
+        "vontade": "3d20+15"
+      },
+      "pv": 400,
+      "imunidades": "Dano balístico",
+      "resistenciasDano": "Corte, impacto e perfuração 10; Morte 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 4,
+        "INT": 3,
+        "PRE": 3,
+        "VIG": 3
+      },
+      "pericias": [
+        "Atletismo 4d20+15"
+      ],
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Garra da Morte",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "4d20+25",
+          "dano": "4d10+20 Morte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Físico Paranormal",
+          "tipoAcao": "Passiva",
+          "descricao": "Ignora terreno difícil e possui movimentação/saltos sobre-humanos."
+        },
+        {
+          "nome": "Pancada Poderosa",
+          "tipoAcao": "Reação",
+          "descricao": "Em acerto crítico com Garra da Morte, empurra o alvo 6m; colidir com parede ou outro ser causa 4d6 dano de impacto (em ambos se for outro ser)."
+        },
+        {
+          "nome": "Comando",
+          "tipoAcao": "Movimento",
+          "descricao": "Dá uma ordem a 1 ser em alcance curto como o ritual Perturbação básico (Vontade DT 29 evita)."
+        },
+        {
+          "nome": "Reanimar Corpos",
+          "tipoAcao": "Completa",
+          "descricao": "1x/cena: reanima até 2d4+2 cadáveres em alcance médio como Esqueletos de Lodo."
+        }
+      ]
+    },
+    {
+      "id": "lb_ceifador_espiral",
+      "nome": "Ceifador Espiral",
+      "vd": 380,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 45,
+        "dano": "9d8 mental"
+      },
+      "sentidos": {
+        "percepcao": "5d20+20",
+        "iniciativa": "5d20+20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 58,
+      "resistenciasTestes": {
+        "fortitude": "5d20+25",
+        "reflexos": "5d20+25",
+        "vontade": "5d20+25"
+      },
+      "pv": 999,
+      "imunidades": "Paralisia, lento, efeitos e dano de Morte",
+      "resistenciasDano": "Dano 50",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 5,
+        "FOR": 5,
+        "INT": 5,
+        "PRE": 5,
+        "VIG": 5
+      },
+      "deslocamento": "15m",
+      "ataques": [
+        {
+          "nome": "Foice da Morte",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "5d20+40",
+          "dano": "5d10+20 Morte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Decepar",
+          "tipoAcao": "Passiva",
+          "descricao": "Acerto crítico com Foice da Morte reduz o alvo a 25 PV (ou morte imediata se tinha <= 25 PV) e remove 1 ponto permanente aleatório de FOR, AGI ou VIG. Matar uma criatura concede 50 PV temporários e +1d10 cumulativo no dano da Foice na cena."
+        },
+        {
+          "nome": "Transporte pelo Pó",
+          "tipoAcao": "Movimento",
+          "descricao": "Dentro das Terras Desoladas, teleporta para outro espaço da área e desfere 1 ataque livre com a Foice da Morte."
+        },
+        {
+          "nome": "Contemplar a Espiral",
+          "tipoAcao": "Completa",
+          "descricao": "Seres em alcance médio que o vejam sofrem 10d10+30 dano mental (Vontade DT 43 metade; imune depois na cena)."
+        },
+        {
+          "nome": "Cinzas das Terras Desoladas",
+          "tipoAcao": "Completa",
+          "descricao": "Alcance longo vira área de cinzas: 10d10+20 Morte e Enjoado (Fortitude DT 43 metade/evita); terminar turno na área causa 20 dano de Morte."
+        }
+      ],
+      "enigmaDeMedo": "Quando resolvido, o Ceifador Espiral perde sua resistência a dano (RD 50) e as Terras Desoladas voltam ao normal no fim do próximo turno."
+    },
+    {
+      "id": "lb_enraizado",
+      "nome": "Enraizado",
+      "vd": 120,
+      "elemento": "Morte",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 20,
+        "dano": "4d6 mental",
+        "imuneNex": 50
+      },
+      "sentidos": {
+        "percepcao": "1d20+10",
+        "iniciativa": "3d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 28,
+      "resistenciasTestes": {
+        "fortitude": "3d20+10",
+        "reflexos": "3d20+10",
+        "vontade": "1d20+5"
+      },
+      "pv": 140,
+      "resistenciasDano": "Corte, impacto e perfuração 10; Morte 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 3,
+        "INT": 1,
+        "PRE": 1,
+        "VIG": 3
+      },
+      "pericias": [
+        "Atletismo 3d20+10"
+      ],
+      "deslocamento": "9m",
+      "ataques": [
+        {
+          "nome": "Punho Espinhento",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+15",
+          "dano": "2d8+8 impacto + 2d12 Morte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Imortalidade",
+          "tipoAcao": "Passiva",
+          "descricao": "Ao morrer vira poça de Lodo e raízes e retorna após 1d2 rodadas com 70 PV. Sofrer 20 pontos somados de dano de fogo ou Energia enquanto poça o destrói permanentemente."
+        },
+        {
+          "nome": "Veneno Pútrido",
+          "tipoAcao": "Passiva",
+          "descricao": "Na 1ª vez que sofrer dano de Punho Espinhento na cena, fica Envenenado: início de turno Fortitude (DT 23) ou sofre 4d12 dano de Morte (passar cura o veneno)."
+        }
+      ]
+    },
+    {
+      "id": "lb_escutado",
+      "nome": "Escutado",
+      "vd": 160,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Energia",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 25,
+        "dano": "4d8 mental",
+        "imuneNex": 55
+      },
+      "sentidos": {
+        "percepcao": "2d20+10",
+        "iniciativa": "4d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 29,
+      "resistenciasTestes": {
+        "fortitude": "3d20+10",
+        "reflexos": "4d20+10",
+        "vontade": "2d20+5"
+      },
+      "pv": 290,
+      "imunidades": "Dano (até Enigma de Medo)",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 3,
+        "INT": 1,
+        "PRE": 2,
+        "VIG": 3
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+20",
+          "dano": "3d6+10 perfuração"
+        },
+        {
+          "nome": "Cabeça Arremessada",
+          "acao": "Padrão",
+          "alcance": "Curto x2",
+          "teste": "4d20+15",
+          "dano": "1d10+10 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Multiplicação Melódica",
+          "tipoAcao": "Passiva",
+          "descricao": "No início do turno, se estiver ouvindo a Spiralem Melodiam, cria uma cópia (145 PV, sem imunidade a dano) em alcance curto; as cópias também se multiplicam."
+        },
+        {
+          "nome": "Vomitar Lodo",
+          "tipoAcao": "Movimento",
+          "descricao": "1x/cena por cópia (na 1ª rodada): alvo em alcance curto sofre 4d10+10 Morte e fica Lento na cena (Reflexos DT 25 metade/evita)."
+        }
+      ],
+      "enigmaDeMedo": "Tocar a Spiralem Melodiam por 4 rodadas ininterruptas (Artes DT 25/rodada ou aparelho tocando a gravação) faz o Escutado perder sua imunidade a dano até o fim da cena."
+    },
+    {
+      "id": "lb_esqueleto_de_lodo",
+      "nome": "Esqueleto de Lodo",
+      "vd": 20,
+      "elemento": "Morte",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 14,
+        "dano": "2d4 mental",
+        "imuneNex": 25
+      },
+      "sentidos": {
+        "percepcao": "1d20",
+        "iniciativa": "2d20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 14,
+      "resistenciasTestes": {
+        "fortitude": "1d20",
+        "reflexos": "2d20+5",
+        "vontade": "1d20"
+      },
+      "pv": 40,
+      "resistenciasDano": "Corte, impacto e perfuração 5; Morte 10",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 2,
+        "INT": 0,
+        "PRE": 1,
+        "VIG": 1
+      },
+      "deslocamento": "6m",
+      "ataques": [
+        {
+          "nome": "Garras",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "2d20+5",
+          "dano": "2d6+2 corte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Imortalidade",
+          "tipoAcao": "Passiva",
+          "descricao": "Ao morrer vira poça de Lodo e retorna em 1d3 rodadas com 20 PV; sofrer dano de fogo ou Energia enquanto poça o destrói."
+        },
+        {
+          "nome": "Espiral de Lodo",
+          "tipoAcao": "Completa",
+          "descricao": "Percorre até 9m em linha reta como espiral de Lodo causando 2d10 dano de Morte em quem atravessar (Reflexos DT 14 metade)."
+        }
+      ]
+    },
+    {
+      "id": "lb_marionete",
+      "nome": "Marionete",
+      "vd": 280,
+      "elemento": "Morte",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 35,
+        "dano": "8d6 mental",
+        "imuneNex": 85
+      },
+      "sentidos": {
+        "percepcao": "5d20+15",
+        "iniciativa": "3d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 40,
+      "resistenciasTestes": {
+        "fortitude": "2d20+10",
+        "reflexos": "3d20+15",
+        "vontade": "5d20+20"
+      },
+      "pv": 700,
+      "resistenciasDano": "Corte, impacto, perfuração e Morte 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 5,
+        "INT": 1,
+        "PRE": 5,
+        "VIG": 2
+      },
+      "deslocamento": "6m",
+      "ataques": [
+        {
+          "nome": "Foice Óssea",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "5d20+30",
+          "dano": "10d8+10 Morte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Momento Passivo",
+          "tipoAcao": "Passiva",
+          "descricao": "Não pode ter deslocamento reduzido, ignora terreno difícil e não sofre efeitos que dependam de tocar o chão."
+        },
+        {
+          "nome": "Reflexos Guiados por Corda",
+          "tipoAcao": "Reação",
+          "descricao": "1x/rodada, quando um ser entra em espaço adjacente, faz 1 ataque de Foice Óssea contra ele."
+        },
+        {
+          "nome": "Ironia do Destino",
+          "tipoAcao": "Completa",
+          "descricao": "Faz 2 ataques de Foice Óssea em alvo adjacente; se o 2º acertar, agarra a vítima e move 6m carregando-a. Todo dano sofrido pela Marionete enquanto agarra alguém é dividido igualmente com o alvo agarrado."
+        }
+      ]
+    },
+    {
+      "id": "lb_mumia_xipofaga",
+      "nome": "Múmia Xipófaga",
+      "vd": 240,
+      "elemento": "Morte",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 30,
+        "dano": "6d8 mental",
+        "imuneNex": 75
+      },
+      "sentidos": {
+        "percepcao": "3d20+10",
+        "iniciativa": "5d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 35,
+      "resistenciasTestes": {
+        "fortitude": "4d20+15",
+        "reflexos": "5d20+15",
+        "vontade": "3d20+10"
+      },
+      "pv": 400,
+      "resistenciasDano": "Corte, impacto e perfuração 10; Morte 20",
+      "vulnerabilidades": "Energia, fogo",
+      "atributos": {
+        "AGI": 5,
+        "FOR": 4,
+        "INT": 2,
+        "PRE": 3,
+        "VIG": 4
+      },
+      "deslocamento": "9m",
+      "ataques": [
+        {
+          "nome": "Garra Enfaixada",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "4d20+30",
+          "dano": "4d8+30 corte"
+        },
+        {
+          "nome": "Vomitar Lodo",
+          "acao": "Padrão",
+          "alcance": "Curto x2",
+          "teste": "5d20+25",
+          "dano": "3d6+30 Morte + 3d8 mental"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Faixas da Permanência",
+          "tipoAcao": "Passiva",
+          "descricao": "Ao cair a 0 PV continua agindo até o fim do seu próximo turno; se não terminar com >= 1 PV, morre."
+        },
+        {
+          "nome": "Agarrada Mumificadora",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar Garra Enfaixada, agarra (4d20+30). No início do turno, o agarrado sofre 4d8+30 Morte e a múmia cura o mesmo valor; se chegar a 0 PV, vira Esqueleto de Lodo."
+        },
+        {
+          "nome": "Amalgamar",
+          "tipoAcao": "Padrão",
+          "descricao": "Com 0 PV, absorve cadáver ou criatura de Morte adjacente: recupera 200 PV, ganha +1 ataque de garra e +5 dano por ataque (pode amalgamar até 2 vezes)."
+        }
+      ]
+    },
+    {
+      "id": "lb_nidere",
+      "nome": "Nidere",
+      "vd": 320,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Sangue",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 35,
+        "dano": "8d6 mental",
+        "imuneNex": 95
+      },
+      "sentidos": {
+        "percepcao": "4d20+25",
+        "iniciativa": "5d20+25",
+        "especiais": [
+          "Faro"
+        ]
+      },
+      "defesa": 50,
+      "resistenciasTestes": {
+        "fortitude": "5d20+25",
+        "reflexos": "5d20+25",
+        "vontade": "4d20+15"
+      },
+      "pv": 800,
+      "resistenciasDano": "Corte, impacto, perfuração e Morte 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 5,
+        "FOR": 5,
+        "INT": 3,
+        "PRE": 4,
+        "VIG": 5
+      },
+      "pericias": [
+        "Furtividade 7d20+23",
+        "Sobrevivência 6d20+20"
+      ],
+      "deslocamento": "24m",
+      "ataques": [
+        {
+          "nome": "Garra Invertida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "5d20+35",
+          "dano": "4d10+40 Morte"
+        },
+        {
+          "nome": "Mordida Invertida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "5d20+35",
+          "dano": "4d12+40 Morte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Caçador Veloz",
+          "tipoAcao": "Passiva",
+          "descricao": "Move-se seu deslocamento normal sem penalidade em Furtividade."
+        },
+        {
+          "nome": "Regeneração Acelerada",
+          "tipoAcao": "Passiva",
+          "descricao": "Cura Acelerada 50 (perde se resolverem o Enigma de Medo)."
+        },
+        {
+          "nome": "Senso de Direção Perfeito",
+          "tipoAcao": "Passiva",
+          "descricao": "Nunca se perde e recebe +2d20 em Percepção e Sobrevivência (já incluídos)."
+        },
+        {
+          "nome": "Reverter",
+          "tipoAcao": "Livre",
+          "descricao": "Ser atingido por Garra Invertida fica Enjoado até o fim do próximo turno."
+        },
+        {
+          "nome": "Rastrear e Abater",
+          "tipoAcao": "Livre",
+          "descricao": "Causa +6d6 de dano extra contra seres desprevenidos."
+        }
+      ],
+      "enigmaDeMedo": "Encontrar o covil e destruir a engenhoca de ossos de suas vítimas. Resolvido: sofre -10 Defesa, -2d20 em testes de resistência e perde Regeneração Acelerada e Senso de Direção Perfeito."
+    },
+    {
+      "id": "lb_sempiternal",
+      "nome": "Sempiternal",
+      "vd": 360,
+      "elemento": "Morte",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 40,
+        "dano": "8d8 mental"
+      },
+      "sentidos": {
+        "percepcao": "5d20+20",
+        "iniciativa": "5d20+25"
+      },
+      "defesa": 53,
+      "resistenciasTestes": {
+        "fortitude": "4d20+20",
+        "reflexos": "5d20+30",
+        "vontade": "5d20+25"
+      },
+      "pv": 990,
+      "imunidades": "Lento, paralisia, efeitos e dano de Morte",
+      "resistenciasDano": "Corte, impacto e perfuração 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 5,
+        "FOR": 5,
+        "INT": 4,
+        "PRE": 5,
+        "VIG": 4
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Dedos Alongados",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x4",
+          "teste": "5d20+40",
+          "dano": "4d10 Morte + envelhecimento"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Toque Acelerador",
+          "tipoAcao": "Passiva",
+          "descricao": "Cada dano de Dedos Alongados envelhece 1d10 anos (afinidade com Morte é imune): 20+ anos Fraco na cena; 40+ anos Debilitado na cena; 60+ anos morre."
+        },
+        {
+          "nome": "Correntes de Lodo",
+          "tipoAcao": "Movimento",
+          "descricao": "Área em alcance médio sofre 20d6 Morte (Fortitude DT 40 metade); ficar Machucado aplica vulnerabilidade a Morte na cena; chegar a 0 PV transforma em Enraizado."
+        }
+      ]
+    },
+    {
+      "id": "lb_succ",
+      "nome": "Succ",
+      "vd": 40,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Energia"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 15,
+        "dano": "3d6 mental",
+        "imuneNex": 30
+      },
+      "sentidos": {
+        "percepcao": "1d20+5",
+        "iniciativa": "4d20+5",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 20,
+      "resistenciasTestes": {
+        "fortitude": "1d20",
+        "reflexos": "4d20+10",
+        "vontade": "1d20+5"
+      },
+      "pv": 65,
+      "resistenciasDano": "Corte, impacto e perfuração 5; Morte 10",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 2,
+        "INT": 0,
+        "PRE": 1,
+        "VIG": 1
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "4d20+10",
+          "dano": "2d8+2 perfuração"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Sucção",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar Mordida, prende-se ao rosto da vítima (Fortitude DT 17 solta; falha deixa Inconsciente e reduz a 0 PV/Morrendo no início do próximo turno do Succ). Enquanto preso, deslocamento cai para 3m e só faz reações; sofrer 10+ dano na mesma rodada solta a vítima."
+        }
+      ]
+    },
+    {
+      "id": "lb_o_deus_da_morte",
+      "nome": "O Deus da Morte",
+      "vd": 400,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Conhecimento",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 45,
+        "dano": "10d8 mental"
+      },
+      "sentidos": {
+        "percepcao": "5d20+30",
+        "iniciativa": "6d20+30",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 60,
+      "resistenciasTestes": {
+        "fortitude": "7d20+35",
+        "reflexos": "6d20+35",
+        "vontade": "5d20+35"
+      },
+      "pv": 2000,
+      "imunidades": "Atordoamento, paralisia, dano e efeitos de Morte",
+      "resistenciasDano": "Corte, impacto e perfuração 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 6,
+        "FOR": 6,
+        "INT": 5,
+        "PRE": 5,
+        "VIG": 7
+      },
+      "deslocamento": "15m",
+      "ataques": [
+        {
+          "nome": "Soco Espiral",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "6d20+45",
+          "dano": "5d10+50 Morte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Ciclo Infinito",
+          "tipoAcao": "Passiva",
+          "descricao": "Recupera 50 PV no início de cada turno. Ao cair a 0 PV, vira poça de Lodo e renasce no próximo turno com 100% PV no cadáver mais próximo (perde ambos quando o Enigma de Medo for resolvido)."
+        },
+        {
+          "nome": "Destruir o Diabo",
+          "tipoAcao": "Passiva",
+          "descricao": "É a única entidade capaz de resolver o Enigma de Medo do Diabo."
+        },
+        {
+          "nome": "Potência de Morte",
+          "tipoAcao": "Passiva",
+          "descricao": "Modificador +35 em perícias de FOR, VIG e PRE e +25 nos demais atributos."
+        },
+        {
+          "nome": "Senhor do Tempo",
+          "tipoAcao": "Passiva",
+          "descricao": "No início de cada rodada rola 1d20 e recebe um turno adicional nessa iniciativa."
+        },
+        {
+          "nome": "Agarrão",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar Soco Espiral em ser Médio ou menor, pode agarrar (6d20+47)."
+        },
+        {
+          "nome": "Controlar Relógio Interno",
+          "tipoAcao": "Livre",
+          "descricao": "No início de cada turno, encerra até 2 condições que o estejam afetando."
+        },
+        {
+          "nome": "Controlar Mortos",
+          "tipoAcao": "Movimento",
+          "descricao": "Todas as criaturas de Morte em alcance longo percorrem seu deslocamento e fazem 1 ataque."
+        },
+        {
+          "nome": "Espiral Descendente",
+          "tipoAcao": "Movimento",
+          "descricao": "Um ser agarrado envelhece 3d20 anos e sofre 1 ponto de dano mental por ano envelhecido."
+        },
+        {
+          "nome": "Espiral Destrutiva",
+          "tipoAcao": "Padrão",
+          "descricao": "Área de 12m de raio em alcance longo sofre 10d10+50 Morte (Fortitude DT 45 metade)."
+        }
+      ],
+      "enigmaDeMedo": "Apenas o caos ilógico da Relíquia de Energia (O Anfitrião) é capaz de resolver seu Enigma de Medo, fazendo-o perder Ciclo Infinito."
+    }
+  ]
+}

@@ -717,6 +717,8 @@ export type ThreatKind =
 export interface ThreatAttack {
   id: string;
   name: string;
+  actionType?: string;
+  range?: string;
   testBonus: number;
   diceCount: number;
   damageFormula: string;
@@ -729,6 +731,7 @@ export interface ThreatAttack {
 export interface ThreatAbility {
   id: string;
   name: string;
+  actionType?: string;
   description: string;
 }
 
@@ -744,6 +747,17 @@ export interface Threat {
   pv: number;
   defense: number;
   displacement: string;
+  senses?: {
+    percepcao?: string;
+    iniciativa?: string;
+    especiais?: string[];
+  };
+  saveFormulas?: {
+    fortitude?: string;
+    reflexos?: string;
+    vontade?: string;
+  };
+  immunities?: string;
   disturbingPresence: {
     dt: number;
     damage: string;

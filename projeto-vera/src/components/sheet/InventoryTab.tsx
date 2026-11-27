@@ -583,25 +583,22 @@ export function InventoryTab({
         <div className="space-y-6">
           {groupedInventory.map(({ meta, items }) => (
             <div key={meta.key}>
-              <div className="flex items-center justify-between gap-2 border-b border-[#22222A] pb-2 mb-3">
+              <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2 mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-[#6E6E7E]">
-                    {meta.index} //
-                  </span>
-                  <h3 className="font-display text-xs font-bold uppercase tracking-[0.14em] text-[#F4F4F5]">
+                  <h3 className="font-display text-sm font-bold tracking-tight text-zinc-100">
                     {meta.label}
                   </h3>
-                  <span className="font-mono text-[10px] text-[#8E8E9E] tabular-nums">
-                    ({items.length})
+                  <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 tabular-nums">
+                    {items.length}
                   </span>
                 </div>
-                <span className="hidden sm:inline font-mono text-[10px] text-[#6E6E7E]">
+                <span className="hidden sm:inline font-mono text-[10px] text-zinc-400">
                   {Number(
                     items
                       .reduce((s, it) => s + it.spaces * Math.max(1, it.quantity), 0)
                       .toFixed(1)
                   )}{" "}
-                  ESP.
+                  esp.
                 </span>
               </div>
 

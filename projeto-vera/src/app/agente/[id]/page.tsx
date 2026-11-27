@@ -30,14 +30,13 @@ import { cn, formatSigned } from "@/lib/utils";
 import type { Agent, AgentSkill, AttributeKey, SkillKey } from "@/types/ordem";
 import { SheetTacticalHeader } from "@/components/sheet/SheetTacticalHeader";
 import { LeftColumn } from "@/components/sheet/LeftColumn";
-import { SkillsColumn } from "@/components/sheet/SkillsColumn";
 import {
   RightTabsColumn,
   type SheetWorkspaceTab,
 } from "@/components/sheet/RightTabsColumn";
 import { Button, Card } from "@/components/ui/primitives";
 
-type MobileTabId = "resumo" | "pericias" | SheetWorkspaceTab;
+type MobileTabId = "resumo" | SheetWorkspaceTab;
 
 export default function AgenteSheetPage({
   params,
@@ -50,7 +49,6 @@ export default function AgenteSheetPage({
   const [mobileTab, setMobileTab] = useState<MobileTabId>("habilidades");
   const [workspaceTab, setWorkspaceTab] =
     useState<SheetWorkspaceTab>("habilidades");
-  const [skillsCollapsed, setSkillsCollapsed] = useState(false);
 
   const agent = agents.find((a) => a.id === id);
 
@@ -75,6 +73,7 @@ export default function AgenteSheetPage({
   }
 
   const skillList = getAgentSkillList(agent);
+  const trainedSkillsCount = skillList.filter((s) => s.treinamento > 0).length;
 
   const handleUpdate = (updater: (prev: Agent) => Agent) => {
     updateAgent(agent.id, updater);
@@ -191,14 +190,14 @@ export default function AgenteSheetPage({
     id: MobileTabId;
     label: string;
     icon: React.ComponentType<{ className?: string }>;
-    count?: number;
+    count?: number | string;
   }[] = [
-    { id: "resumo", label: "Resumo & Dados", icon: Dices },
+    { id: "resumo", label: "Atributos & Status", icon: Dices },
     {
       id: "pericias",
       label: "Perícias",
       icon: SlidersHorizontal,
-      count: skillList.length,
+      count: `${trainedSkillsCount}/${skillList.length}`,
     },
     {
       id: "combate",
@@ -233,23 +232,27 @@ export default function AgenteSheetPage({
     { id: "descricao", label: "Descrição", icon: FileText },
   ];
 
-  const isMobileWorkspace =
-    mobileTab !== "resumo" && mobileTab !== "pericias";
+  const isMobileWorkspace = mobileTab !== "resumo";
 
   const handleMobileTabClick = (tabId: MobileTabId) => {
     setMobileTab(tabId);
-    if (tabId !== "resumo" && tabId !== "pericias") {
+    if (tabId !== "resumo") {
       setWorkspaceTab(tabId);
     }
   };
 
+  const handleOpenSkillsFromLeftColumn = () => {
+    setWorkspaceTab("pericias");
+    setMobileTab("pericias");
+  };
+
   return (
-    <div className="mx-auto max-w-[1680px] px-3 py-4 sm:px-6 space-y-4">
+    <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-6 space-y-4">
       {/* A. Cabeçalho Fixo no Topo (Identidade + Faixa de Status) */}
       <SheetTacticalHeader agent={agent} onUpdate={handleUpdate} />
 
-      {/* C. Navegação Mobile / Telas < 1280px (7 Abas Diretas) */}
-      <div className="sticky top-14 z-30 -mx-3 px-3 py-2 bg-[#09090B]/95 border-y border-[#22222A] xl:hidden">
+      {/* C. Navegação Mobile / Telas < 1280px */}
+      <div className="sticky top-14 z-30 -mx-3 px-3 py-2 bg-[#09090B]/95 border-y border-white/10 xl:hidden">
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5">
           {mobileTabs.map((tab) => {
             const Icon = tab.icon;
@@ -260,16 +263,16 @@ export default function AgenteSheetPage({
                 type="button"
                 onClick={() => handleMobileTabClick(tab.id)}
                 className={cn(
-                  "inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap rounded-sm border px-3 py-2 text-xs font-medium transition-colors",
+                  "inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap rounded-md border px-3 py-2 text-xs font-medium transition-colors",
                   active
                     ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
-                    : "border-[#22222A] bg-[#101014] text-[#8E8E9E] hover:text-[#D4D4D8]"
+                    : "border-white/10 bg-[#101014] text-[#8E8E9E] hover:text-[#D4D4D8]"
                 )}
               >
                 <Icon className="h-3.5 w-3.5" />
                 <span>{tab.label}</span>
                 {tab.count !== undefined && (
-                  <span className="font-mono text-[10px] text-[#6E6E7E] tabular-nums">
+                  <span className="font-mono text-[10px] text-zinc-400 tabular-nums">
                     {tab.count}
                   </span>
                 )}
@@ -279,60 +282,43 @@ export default function AgenteSheetPage({
         </div>
       </div>
 
-      {/* B. Corpo da Ficha no Desktop (>= 1280px):
-          1. Esquerda (300px): Atributos + Dados Soltos + Resistências & Condições
-          2. Centro (minmax(480px, 1fr)): Abas (Combate, Habilidades, Rituais, Inventário, Descrição)
-          3. Direita (370px): Perícias completo e fixo na direita */}
-      <div
-        className={cn(
-          "grid grid-cols-1 gap-4 items-start",
-          skillsCollapsed
-            ? "xl:grid-cols-[300px_minmax(0,1fr)]"
-            : "xl:grid-cols-[300px_minmax(480px,1fr)_370px]"
-        )}
-      >
-        {/* 1. Coluna Esquerda (300px) */}
-        <section className={cn(mobileTab !== "resumo" && "hidden xl:block")}>
+      {/* B. Corpo da Ficha no Desktop (>= 1280px) em 2 Colunas:
+          1. Esquerda (340px fixos): Pentagrama de Atributos Grande (C.R.I.S.) + Botão Perícias + Condições & RD
+          2. Direita (flex-1): Container Principal Amplo com todas as Abas (Perícias, Combate, Habilidades, Rituais, Inventário, Aliados & Pets, Descrição) */}
+      <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[340px_minmax(0,1fr)] gap-5 items-start">
+        {/* 1. Coluna Esquerda (340px) */}
+        <section
+          className={cn(
+            "relative z-20",
+            mobileTab !== "resumo" && "hidden xl:block"
+          )}
+        >
           <LeftColumn
             agent={agent}
             onUpdate={handleUpdate}
             onRollAttribute={handleRollAttribute}
+            isSkillsOpen={workspaceTab === "pericias"}
+            onOpenSkills={handleOpenSkillsFromLeftColumn}
           />
         </section>
 
-        {/* 2. Coluna Central (minmax(480px, 1fr)) */}
+        {/* 2. Coluna Direita Principal (100% da largura livre à direita) */}
         <section
           className={cn(
-            !isMobileWorkspace && "hidden xl:block",
-            "min-w-0"
+            "relative z-10 min-w-0",
+            !isMobileWorkspace && "hidden xl:block"
           )}
         >
           <RightTabsColumn
             agent={agent}
             onUpdate={handleUpdate}
+            onRollSkill={handleRollSkill}
             activeTab={workspaceTab}
             onTabChange={(next) => {
               setWorkspaceTab(next);
               if (isMobileWorkspace) setMobileTab(next);
             }}
             hideHeaderOnMobile
-            isExpanded={skillsCollapsed}
-            onToggleExpand={() => setSkillsCollapsed((v) => !v)}
-          />
-        </section>
-
-        {/* 3. Coluna Direita (370px): Perícias */}
-        <section
-          className={cn(
-            mobileTab !== "pericias" && "hidden",
-            !skillsCollapsed && "xl:block"
-          )}
-        >
-          <SkillsColumn
-            agent={agent}
-            onUpdate={handleUpdate}
-            onRollSkill={handleRollSkill}
-            onCollapse={() => setSkillsCollapsed(true)}
           />
         </section>
       </div>

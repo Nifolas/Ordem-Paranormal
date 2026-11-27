@@ -1,0 +1,911 @@
+{
+  "meta": {
+    "bloco": "Bestiário 1 — Livro Básico (Sangue)",
+    "source": "livro_basico",
+    "elemento": "Sangue",
+    "total": 12
+  },
+  "ameacas": [
+    {
+      "id": "lb_aberracao_de_carne",
+      "nome": "Aberração de Carne",
+      "vd": 40,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 15,
+        "dano": "3d6 mental",
+        "imuneNex": 30
+      },
+      "sentidos": {
+        "percepcao": "1d20+5",
+        "iniciativa": "1d20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 19,
+      "resistenciasTestes": {
+        "fortitude": "3d20+10",
+        "reflexos": "1d20",
+        "vontade": "1d20"
+      },
+      "pv": 70,
+      "resistenciasDano": "Balístico, impacto e perfuração 5; Sangue 10",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 1,
+        "FOR": 3,
+        "INT": 0,
+        "PRE": 1,
+        "VIG": 3
+      },
+      "deslocamento": "9m",
+      "ataques": [
+        {
+          "nome": "Pancada",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+10",
+          "dano": "2d6+6 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Agarrão",
+          "tipoAcao": "Reação",
+          "descricao": "Se acertar um ataque de pancada, pode tentar agarrar o alvo (teste 3d20+12). Pode manter até 2 personagens agarrados por vez."
+        },
+        {
+          "nome": "Abocanhar",
+          "tipoAcao": "Movimento",
+          "descricao": "Leva até 2 personagens agarrados para dentro de sua boca central. Ao ser abocanhado e no início de cada turno da aberração, cada vítima sofre 3d6 pontos de dano de perfuração (Fortitude DT 15 reduz à metade). Um aliado adjacente pode gastar ação padrão e passar em Atletismo (DT 20) para puxar a vítima para fora."
+        }
+      ]
+    },
+    {
+      "id": "lb_aniquilacao",
+      "nome": "Aniquilação",
+      "vd": 380,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Colossal",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 40,
+        "dano": "10d6 mental"
+      },
+      "sentidos": {
+        "percepcao": "3d20+20",
+        "iniciativa": "4d20+20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 58,
+      "resistenciasTestes": {
+        "fortitude": "5d20+30",
+        "reflexos": "4d20+25",
+        "vontade": "3d20+20"
+      },
+      "pv": 1200,
+      "resistenciasDano": "Dano 50",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 5,
+        "INT": 0,
+        "PRE": 3,
+        "VIG": 5
+      },
+      "deslocamento": "18m",
+      "ataques": [
+        {
+          "nome": "Tentáculos Espinhentos",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x4",
+          "teste": "5d20+45",
+          "dano": "4d12+30 Sangue"
+        },
+        {
+          "nome": "Disparo de Espinhos",
+          "acao": "Padrão",
+          "alcance": "Médio x3",
+          "teste": "4d20+40",
+          "dano": "2d10+20 Sangue"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Agarrão",
+          "tipoAcao": "Reação",
+          "descricao": "Ao acertar Tentáculos Espinhentos, pode tentar agarrar o alvo (teste 5d20+50). Mantém até 4 personagens agarrados por vez."
+        },
+        {
+          "nome": "Instinto Aniquilador",
+          "tipoAcao": "Reação",
+          "descricao": "Sempre que um personagem em alcance curto se movimentar mais de 3m, a Aniquilação desfere um ataque de Tentáculos Espinhentos contra ele."
+        },
+        {
+          "nome": "Apertar e Destruir",
+          "tipoAcao": "Livre",
+          "descricao": "No início de seu turno, esmaga todos os personagens agarrados com seus tentáculos, causando 40 pontos de dano de Sangue."
+        },
+        {
+          "nome": "Tempestade de Espinhos",
+          "tipoAcao": "Completa",
+          "descricao": "1x/cena: dispara todos os espinhos em alcance médio causando 20d6+20 pontos de dano de Sangue (Reflexos DT 40 reduz à metade). Após usar, perde Disparo de Espinhos até o fim da cena."
+        }
+      ],
+      "enigmaDeMedo": "Desconhecido. Quando resolvido, a Aniquilação perde sua resistência a dano (RD 50) e sua habilidade Tempestade de Espinhos."
+    },
+    {
+      "id": "lb_carente",
+      "nome": "Carente",
+      "vd": 300,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Morte"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 35,
+        "dano": "7d8 mental",
+        "imuneNex": 90
+      },
+      "sentidos": {
+        "percepcao": "3d20+20",
+        "iniciativa": "4d20+20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 45,
+      "resistenciasTestes": {
+        "fortitude": "4d20+20",
+        "reflexos": "4d20+20",
+        "vontade": "3d20+15"
+      },
+      "pv": 700,
+      "resistenciasDano": "Balístico, impacto, perfuração e Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 5,
+        "INT": 2,
+        "PRE": 3,
+        "VIG": 4
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Garras",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "5d20+35",
+          "dano": "4d10+20 corte"
+        },
+        {
+          "nome": "Ferrão de Sangue",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "5d20+35",
+          "dano": "4d12+20 perfuração"
+        },
+        {
+          "nome": "Tentáculo",
+          "acao": "Padrão",
+          "alcance": "Curto",
+          "teste": "5d20+35",
+          "dano": "4d8+20 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Rasteira de Tentáculo",
+          "tipoAcao": "Reação",
+          "descricao": "1x/rodada, quando fica adjacente a 2 ou mais seres, faz um ataque de tentáculo contra um deles; se acertar, a vítima fica Caída e é empurrada 6m para longe."
+        },
+        {
+          "nome": "Sugada Mortal",
+          "tipoAcao": "Livre",
+          "descricao": "Um ser atingido pelo Ferrão de Sangue fica Debilitado e Enjoado até o fim da cena (Fortitude DT 35 evita)."
+        },
+        {
+          "nome": "Você é Minha Mamãe?",
+          "tipoAcao": "Movimento",
+          "descricao": "Usa a parte infantil para abraçar um ser adjacente, deixando-o Paralisado até ser solto (Reflexos DT 25 evita). Mantém indefinidamente, mas solta se sofrer dano de Energia."
+        }
+      ]
+    },
+    {
+      "id": "lb_dama_de_sangue",
+      "nome": "Dama de Sangue",
+      "vd": 60,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Morte",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Enorme",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 20,
+        "dano": "3d6 mental",
+        "imuneNex": 35
+      },
+      "sentidos": {
+        "percepcao": "2d20+10",
+        "iniciativa": "2d20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 20,
+      "resistenciasTestes": {
+        "fortitude": "2d20+10",
+        "reflexos": "2d20+5",
+        "vontade": "2d20"
+      },
+      "pv": 105,
+      "resistenciasDano": "Balístico, impacto e perfuração 10; Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 3,
+        "INT": 1,
+        "PRE": 2,
+        "VIG": 2
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Tentáculos",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+10",
+          "dano": "2d6+6 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Consumir",
+          "tipoAcao": "Passiva",
+          "descricao": "Ao ser invocada, não possui as habilidades das flores. A cada cadáver consumido (ação padrão adjacente), ganha uma habilidade na ordem (até 7 corpos). Antes de consumir 7 corpos, prioriza se mover e consumir cadáveres."
+        },
+        {
+          "nome": "Arremessar (1º Corpo)",
+          "tipoAcao": "Padrão",
+          "descricao": "Arremessa um alvo adjacente com seus tentáculos, causando dano de impacto e derrubando-o."
+        },
+        {
+          "nome": "Chuva de Ácido (2º Corpo)",
+          "tipoAcao": "Padrão",
+          "descricao": "Borrifa ácido de suas flores em área ao redor causando dano químico."
+        },
+        {
+          "nome": "Grito Devastador — Flor Roxa",
+          "tipoAcao": "Movimento",
+          "descricao": "Todos em alcance curto ficam Confusos (Vontade DT 15 evita; repete no fim do turno). Contato com bulbo de bravo purpulis murcha a flor, remove a habilidade e impõe -1d20 em Vontade."
+        },
+        {
+          "nome": "Miasma Fétido — Flor Azul",
+          "tipoAcao": "Padrão",
+          "descricao": "Todos em alcance curto ficam Enjoados por 1d4+1 rodadas (Fortitude DT 15 reduz para 1 rodada). Dano de eletricidade ou Energia murcha a flor, remove a habilidade e reduz deslocamento em -6m."
+        },
+        {
+          "nome": "Prisão de Tentáculos — Flor Verde",
+          "tipoAcao": "Padrão",
+          "descricao": "Um personagem em alcance curto fica Agarrado até destruir os tentáculos (acerto automático, 20 PV). Água corrente murcha a flor, remove a habilidade e reduz Defesa em -5."
+        },
+        {
+          "nome": "Visão Macabra — Flor Laranja",
+          "tipoAcao": "Movimento",
+          "descricao": "Todos em alcance médio sofrem 1d6 dano mental (Vontade DT 15 metade). Sofrer 10+ dano de corte de um único efeito murcha a flor, remove a habilidade e reduz PV totais em -20."
+        }
+      ]
+    },
+    {
+      "id": "lb_enpap_x",
+      "nome": "Enpap-X",
+      "vd": 180,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Conhecimento"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 25,
+        "dano": "6d6 mental",
+        "imuneNex": 60
+      },
+      "sentidos": {
+        "percepcao": "2d20+10",
+        "iniciativa": "2d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 36,
+      "resistenciasTestes": {
+        "fortitude": "3d20+15",
+        "reflexos": "2d20+15",
+        "vontade": "2d20+10"
+      },
+      "pv": 360,
+      "resistenciasDano": "Balístico, impacto e perfuração 10; Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 4,
+        "INT": 1,
+        "PRE": 2,
+        "VIG": 3
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Socão",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x4",
+          "teste": "4d20+20",
+          "dano": "2d10+10 impacto"
+        },
+        {
+          "nome": "Correntes",
+          "acao": "Padrão",
+          "alcance": "Curto x3",
+          "teste": "2d20+15",
+          "dano": "2d8+10 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Transformação",
+          "tipoAcao": "Passiva",
+          "descricao": "Começa o combate como um Existido comum. Ao chegar a 0 PV, transforma-se nesta ficha com 360 PV e ativa sua Presença Perturbadora."
+        },
+        {
+          "nome": "Acorrentar",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar Correntes em ser Médio ou menor, pode agarrar à distância (2d20+17; máx. 2 agarrados). No início de seu turno, estrangula cada agarrado causando 4d6 dano de impacto."
+        },
+        {
+          "nome": "Forma Desencadeada",
+          "tipoAcao": "Reação",
+          "descricao": "Em acerto crítico com Socão ou Correntes, derruba o alvo ou empurra 3m."
+        },
+        {
+          "nome": "Crescer",
+          "tipoAcao": "Reação",
+          "descricao": "Cada Socão acertado no turno concede +1d6 cumulativo no dano dos próximos Socões naquele turno (+1d6 no 2º, +2d6 no 3º, +3d6 no 4º)."
+        },
+        {
+          "nome": "Marcas do Terror",
+          "tipoAcao": "Movimento",
+          "descricao": "Todos em alcance curto sofrem 4d6 dano mental (Vontade DT 25 metade; passar dá imunidade na cena)."
+        }
+      ]
+    },
+    {
+      "id": "lb_kerberos",
+      "nome": "Kerberos",
+      "vd": 340,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Enorme",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 35,
+        "dano": "10d6 mental",
+        "imuneNex": 99
+      },
+      "sentidos": {
+        "percepcao": "3d20+20",
+        "iniciativa": "4d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 46,
+      "resistenciasTestes": {
+        "fortitude": "5d20+25",
+        "reflexos": "4d20+20",
+        "vontade": "3d20+15"
+      },
+      "pv": 1150,
+      "resistenciasDano": "Balístico, impacto, perfuração e Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 5,
+        "INT": 0,
+        "PRE": 3,
+        "VIG": 5
+      },
+      "pericias": [
+        "Atletismo 5d20+25"
+      ],
+      "deslocamento": "18m",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "5d20+40",
+          "dano": "4d12+30 Sangue"
+        },
+        {
+          "nome": "Disparo de Espinhos",
+          "acao": "Padrão",
+          "alcance": "Médio",
+          "teste": "4d20+35",
+          "dano": "4d8+20 Sangue"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Ataque Flexível",
+          "tipoAcao": "Passiva",
+          "descricao": "Executa até 4 ataques por rodada combinando Mordida e Disparo de Espinhos (máximo de 3 ataques do mesmo tipo por rodada)."
+        },
+        {
+          "nome": "Devorar",
+          "tipoAcao": "Livre",
+          "descricao": "1x/cena, ao reduzir um personagem a 0 PV com Mordida, pode devorá-lo matando-o instantaneamente e recuperando metade dos PV totais da vítima (Fortitude DT 40 evita)."
+        },
+        {
+          "nome": "Derrubar e Devorar",
+          "tipoAcao": "Completa",
+          "descricao": "Faz manobra derrubar (5d20+45) em um personagem a até 3m; se vencer, desfere 3 ataques de Mordida com dano aumentado para 4d12+40 cada."
+        }
+      ]
+    },
+    {
+      "id": "lb_minotauro",
+      "nome": "Minotauro",
+      "vd": 280,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 35,
+        "dano": "8d6 mental",
+        "imuneNex": 80
+      },
+      "sentidos": {
+        "percepcao": "3d20+20",
+        "iniciativa": "4d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 44,
+      "resistenciasTestes": {
+        "fortitude": "5d20+20",
+        "reflexos": "4d20+15",
+        "vontade": "3d20+10"
+      },
+      "pv": 750,
+      "resistenciasDano": "Balístico, impacto, perfuração e Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 5,
+        "INT": 1,
+        "PRE": 3,
+        "VIG": 5
+      },
+      "pericias": [
+        "Atletismo 5d20+20"
+      ],
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Chifres",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "5d20+30",
+          "dano": "6d12+20 perfuração"
+        },
+        {
+          "nome": "Machado",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "5d20+32",
+          "dano": "4d12+20 corte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Cravar Chifres",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar uma investida com Chifres, deixa o alvo agarrado neles (não pode atacar com chifres enquanto agarra). No fim de cada turno da vítima presa, ela sofre 4d12+20 pontos de dano de Sangue."
+        }
+      ]
+    },
+    {
+      "id": "lb_mulher_afogada",
+      "nome": "Mulher Afogada",
+      "vd": 140,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Energia",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 25,
+        "dano": "4d8 mental",
+        "imuneNex": 50
+      },
+      "sentidos": {
+        "percepcao": "2d20+5",
+        "iniciativa": "4d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 28,
+      "resistenciasTestes": {
+        "fortitude": "3d20+10",
+        "reflexos": "4d20+10",
+        "vontade": "2d20+5"
+      },
+      "pv": 240,
+      "resistenciasDano": "Balístico, Energia, impacto e perfuração 10; Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 3,
+        "INT": 2,
+        "PRE": 2,
+        "VIG": 3
+      },
+      "deslocamento": "9m (Forma líquida 36m)",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "3d20+15",
+          "dano": "4d8+8 perfuração"
+        },
+        {
+          "nome": "Garras",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+15",
+          "dano": "4d6+6 corte"
+        },
+        {
+          "nome": "Jato de Sangue",
+          "acao": "Padrão",
+          "alcance": "Curto",
+          "teste": "4d20+10",
+          "dano": "4d8+8 Sangue"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Forma de Sangue",
+          "tipoAcao": "Passiva",
+          "descricao": "Por padrão surge em forma líquida: RD 20 a físico e Sangue, deslocamento 36m, atravessa canos e frestas e pode usar Afogar em Sangue, Arrancar Sangue e Invadir Órgãos. Perde esta forma quando seu Enigma de Medo é resolvido."
+        },
+        {
+          "nome": "Sugar Sangue",
+          "tipoAcao": "Movimento",
+          "descricao": "Devora o corpo de um personagem adjacente morto na cena, recuperando 40 PV."
+        },
+        {
+          "nome": "Afogar em Sangue (Forma Líquida)",
+          "tipoAcao": "Padrão",
+          "descricao": "Invade nariz e boca de um alvo em alcance curto deixando-o Asfixiado (Fortitude DT 24 no início do turno encerra e a expele para espaço adjacente)."
+        },
+        {
+          "nome": "Arrancar Sangue & Invadir Órgãos (Forma Líquida)",
+          "tipoAcao": "Padrão",
+          "descricao": "Manipula o sangue interno e órgãos de vítimas enquanto está na forma líquida."
+        }
+      ],
+      "enigmaDeMedo": "Bloquear todas as saídas de água, fechar o registro hidráulico do local e abrir todas as torneiras, forçando sua manifestação física sem rota de fuga."
+    },
+    {
+      "id": "lb_tita_de_sangue",
+      "nome": "Titã de Sangue",
+      "vd": 220,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Colossal",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 30,
+        "dano": "7d6 mental",
+        "imuneNex": 70
+      },
+      "sentidos": {
+        "percepcao": "1d20+15",
+        "iniciativa": "2d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 35,
+      "resistenciasTestes": {
+        "fortitude": "4d20+15",
+        "reflexos": "2d20+10",
+        "vontade": "1d20+10"
+      },
+      "pv": 550,
+      "resistenciasDano": "Balístico, impacto, perfuração e Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 5,
+        "INT": 1,
+        "PRE": 1,
+        "VIG": 4
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "5d20+25",
+          "dano": "4d12+10 perfuração"
+        },
+        {
+          "nome": "Garras",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "5d20+25",
+          "dano": "4d8+10 corte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Sede de Sangue",
+          "tipoAcao": "Passiva",
+          "descricao": "Seus ataques causam +4d6 pontos de dano de Sangue contra personagens que estejam Machucados ou Sangrando."
+        },
+        {
+          "nome": "Estraçalhar",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar Mordida, o alvo sofre +4d12+10 pontos de dano de perfuração e fica Sangrando até o fim da cena (Reflexos DT 30 reduz dano à metade e evita a condição)."
+        }
+      ]
+    },
+    {
+      "id": "lb_zumbi_de_sangue",
+      "nome": "Zumbi de Sangue",
+      "vd": 20,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 15,
+        "dano": "2d6 mental",
+        "imuneNex": 25
+      },
+      "sentidos": {
+        "percepcao": "1d20+10",
+        "iniciativa": "2d20+5",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 17,
+      "resistenciasTestes": {
+        "fortitude": "2d20+5",
+        "reflexos": "2d20+5",
+        "vontade": "1d20+5"
+      },
+      "pv": 45,
+      "resistenciasDano": "Balístico, impacto e perfuração 5; Sangue 10",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 2,
+        "INT": 0,
+        "PRE": 1,
+        "VIG": 2
+      },
+      "deslocamento": "9m",
+      "ataques": [
+        {
+          "nome": "Garras",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "2d20+5",
+          "dano": "1d6+5 corte"
+        }
+      ],
+      "habilidades": []
+    },
+    {
+      "id": "lb_zumbi_de_sangue_bestial",
+      "nome": "Zumbi de Sangue Bestial",
+      "vd": 100,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 20,
+        "dano": "4d6 mental",
+        "imuneNex": 45
+      },
+      "sentidos": {
+        "percepcao": "2d20+10",
+        "iniciativa": "2d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 23,
+      "resistenciasTestes": {
+        "fortitude": "3d20+10",
+        "reflexos": "2d20+5",
+        "vontade": "2d20+5"
+      },
+      "pv": 200,
+      "resistenciasDano": "Balístico, impacto e perfuração 5; Sangue 10",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 3,
+        "INT": 0,
+        "PRE": 2,
+        "VIG": 3
+      },
+      "pericias": [
+        "Furtividade 2d20+13"
+      ],
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Mordida de Sangue",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "3d20+15",
+          "dano": "2d10+5 perfuração"
+        },
+        {
+          "nome": "Garras de Sangue",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+15",
+          "dano": "2d6+5 corte"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Furtivo e Letal",
+          "tipoAcao": "Passiva",
+          "descricao": "Contra personagens desprevenidos, recebe +1d20 nos testes de ataque e +2 dados de dano adicional do mesmo tipo."
+        },
+        {
+          "nome": "Instinto Predatório",
+          "tipoAcao": "Passiva",
+          "descricao": "Não sofre penalidade em Furtividade por se mover seu deslocamento normal."
+        }
+      ]
+    },
+    {
+      "id": "lb_o_diabo",
+      "nome": "O Diabo",
+      "vd": 400,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Conhecimento",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "livro_basico",
+      "presencaPerturbadora": {
+        "dt": 45,
+        "dano": "10d8 mental"
+      },
+      "sentidos": {
+        "percepcao": "6d20+25",
+        "iniciativa": "6d20+35",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 66,
+      "resistenciasTestes": {
+        "fortitude": "6d20+35",
+        "reflexos": "6d20+35",
+        "vontade": "6d20+35"
+      },
+      "pv": 1666,
+      "imunidades": "Atordoamento, paralisia, dano (até Enigma de Medo) e efeitos/dano de Sangue",
+      "resistenciasDano": "Balístico, impacto e perfuração 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 6,
+        "FOR": 6,
+        "INT": 6,
+        "PRE": 6,
+        "VIG": 6
+      },
+      "deslocamento": "15m",
+      "ataques": [
+        {
+          "nome": "Arma Sangrenta (Corpo a corpo)",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo x2",
+          "teste": "6d20+45",
+          "critico": "20/x3",
+          "dano": "2d10+50 Sangue"
+        },
+        {
+          "nome": "Chifre do Diabo",
+          "acao": "Padrão",
+          "alcance": "Corpo a corpo",
+          "teste": "6d20+45",
+          "critico": "20/x3",
+          "dano": "2d8+50 Sangue"
+        },
+        {
+          "nome": "Arma Sangrenta (Distância)",
+          "acao": "Padrão",
+          "alcance": "Médio x2",
+          "teste": "6d20+45",
+          "critico": "20/x3",
+          "dano": "2d10+50 Sangue"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Explodir em Sangue",
+          "tipoAcao": "Livre",
+          "descricao": "Até 2x/turno: ao causar dano com Arma Sangrenta ou tocar ferida de um personagem, causa +10d6 pontos de dano de Sangue."
+        },
+        {
+          "nome": "Sangrar",
+          "tipoAcao": "Livre",
+          "descricao": "Ao acertar Chifre do Diabo, pode deixá-lo cravado no alvo impondo vulnerabilidade a Sangue até ser removido (ação padrão causa 8d8 Sangue). O chifre cresce novamente no início do turno do Diabo."
+        },
+        {
+          "nome": "Transportar pelo Sangue",
+          "tipoAcao": "Movimento",
+          "descricao": "Teleporta para qualquer espaço com grande quantidade de sangue ou adjacente a um personagem Machucado ou Morrendo."
+        },
+        {
+          "nome": "Senhor do Sangue",
+          "tipoAcao": "Padrão",
+          "descricao": "1x/cena: invoca e controla criaturas de Sangue cujo VD somado seja até 400 em alcance médio."
+        },
+        {
+          "nome": "Pacto",
+          "tipoAcao": "Padrão",
+          "descricao": "Oferece um pacto de Sangue (cumprido de forma distorcida); aceitar causa 10d6 dano mental (enlouquecer torna o alvo servo eterno do Diabo)."
+        },
+        {
+          "nome": "Desejos de Sangue",
+          "tipoAcao": "Completa",
+          "descricao": "Todos em alcance médio entram em fúria e atacam outro ser em alcance curto à escolha do Diabo usando maior potencial de dano sem rituais (Vontade DT 45 evita e dá imunidade na cena)."
+        }
+      ],
+      "enigmaDeMedo": "Apenas a Relíquia de Morte (O Deus da Morte) é capaz de resolver seu Enigma de Medo. Resolvido: perde a imunidade a dano e seus bônus em testes de resistência caem para +25."
+    }
+  ]
+}

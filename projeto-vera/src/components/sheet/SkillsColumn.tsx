@@ -3,10 +3,11 @@
 import React, { useMemo, useState } from "react";
 import {
   Briefcase,
+  Check,
   ChevronDown,
   ChevronUp,
   Dices,
-  PanelRightClose,
+  Edit3,
   Pencil,
   Plus,
   RotateCcw,
@@ -39,7 +40,6 @@ import { cn, formatSigned, generateId } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
 import {
   Button,
-  Card,
   Input,
   Modal,
   NumericInput,
@@ -52,27 +52,42 @@ const ATTRS: AttributeKey[] = ["AGI", "FOR", "INT", "PRE", "VIG"];
 const TRAINING_OPTIONS: {
   value: TrainingDegree;
   label: string;
+  fullLabel: string;
+  shortTag: string;
   badgeCls: string;
+  cardBorderCls: string;
 }[] = [
   {
     value: 0,
     label: "L +0",
-    badgeCls: "border-[#22222A] bg-[#09090B] text-[#7A7A8C]",
+    fullLabel: "Leigo (+0)",
+    shortTag: "L",
+    badgeCls: "border-white/10 bg-zinc-950 text-zinc-500",
+    cardBorderCls: "border-white/10 bg-[#0D0D12]",
   },
   {
     value: 5,
     label: "T +5",
-    badgeCls: "border-emerald-500/40 bg-emerald-600/10 text-emerald-300",
+    fullLabel: "Treinado (+5)",
+    shortTag: "T",
+    badgeCls: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
+    cardBorderCls: "border-emerald-500/30 bg-emerald-500/[0.04]",
   },
   {
     value: 10,
     label: "V +10",
-    badgeCls: "border-sky-500/40 bg-sky-600/10 text-sky-300",
+    fullLabel: "Veterano (+10)",
+    shortTag: "V",
+    badgeCls: "border-sky-500/40 bg-sky-500/10 text-sky-300",
+    cardBorderCls: "border-sky-500/30 bg-sky-500/[0.04]",
   },
   {
     value: 15,
     label: "E +15",
+    fullLabel: "Expert (+15)",
+    shortTag: "E",
     badgeCls: "border-amber-500/45 bg-amber-500/10 text-amber-300",
+    cardBorderCls: "border-amber-500/35 bg-amber-500/[0.05]",
   },
 ];
 
@@ -96,22 +111,25 @@ export function SkillsColumn({
   agent,
   onUpdate,
   onRollSkill,
-  onCollapse,
 }: {
   agent: Agent;
   onUpdate: (updater: (prev: Agent) => Agent) => void;
   onRollSkill: (skill: AgentSkill) => void;
-  onCollapse?: () => void;
 }) {
   const { quickDiceMod } = useAppStore();
   const [search, setSearch] = useState("");
   const [filterMode, setFilterMode] = useState<"todas" | "treinadas">("todas");
-  const [expandedDescIds, setExpandedDescIds] = useState<Record<string, boolean>>({});
+  const [isEditingSkills, setIsEditingSkills] = useState(false);
+  const [expandedDescIds, setExpandedDescIds] = useState<
+    Record<string, boolean>
+  >({});
 
   // Create / Edit Skill Modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [editingSkillId, setEditingSkillId] = useState<string | null>(null);
-  const [form, setForm] = useState<Omit<AgentSkill, "id">>(createEmptySkillForm);
+  const [form, setForm] = useState<Omit<AgentSkill, "id">>(
+    createEmptySkillForm
+  );
 
   const skillList = useMemo(() => getAgentSkillList(agent), [agent]);
   const effAttrs = getAgentEffectiveAttributes(agent);
@@ -146,10 +164,7 @@ export function SkillsColumn({
     });
   }, [search, filterMode, skillList]);
 
-  const updateSkillById = (
-    skillId: string,
-    patch: Partial<AgentSkill>
-  ) => {
+  const updateSkillById = (skillId: string, patch: Partial<AgentSkill>) => {
     onUpdate((prev) => {
       const current = getAgentSkillList(prev);
       const next = current.map((s) =>
@@ -262,110 +277,147 @@ export function SkillsColumn({
   };
 
   return (
-    <Card className="flex flex-col overflow-hidden">
-      {/* Header & Controls */}
-      <div className="border-b border-[#22222A] bg-[#0C0C10] p-3.5 space-y-2.5">
-        <div className="flex items-center justify-between gap-2">
+    <div className="space-y-4">
+      {/* Top Control & Filter Bar */}
+      <div className="space-y-3 border-b border-white/10 pb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-display text-xs font-bold uppercase tracking-[0.16em] text-[#F4F4F5]">
-              Perícias
-            </span>
-            <span className="font-mono text-[10px] text-[#8E8E9E] tabular-nums">
-              ({skillList.length})
+            <h3 className="font-display text-sm font-bold tracking-tight text-zinc-100">
+              Perícias do Agente
+            </h3>
+            <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 tabular-nums">
+              {trainedCount} treinadas de {skillList.length}
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              size="sm"
+              variant={isEditingSkills ? "primary" : "outline"}
+              onClick={() => setIsEditingSkills((v) => !v)}
+              className={cn(
+                isEditingSkills &&
+                  "border-emerald-500/50 bg-emerald-500/15 text-emerald-200 hover:bg-emerald-500/25"
+              )}
+              title={
+                isEditingSkills
+                  ? "Concluir edição de atributos, graus de treino e bônus"
+                  : "Editar graus de treino (L/T/V/E), atributos e bônus de perícias"
+              }
+            >
+              {isEditingSkills ? (
+                <>
+                  <Check className="h-3.5 w-3.5" /> Concluir Edição
+                </>
+              ) : (
+                <>
+                  <Edit3 className="h-3.5 w-3.5" /> Editar Perícias
+                </>
+              )}
+            </Button>
+
+            <Button size="sm" variant="primary" onClick={openCreateModal}>
+              <Plus className="h-3.5 w-3.5" /> + Nova
+            </Button>
+          </div>
+        </div>
+
+        {/* Search + Filter Pills */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
+          <div className="relative flex-1">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Buscar perícia, atributo (AGI, INT...) ou profissão..."
+              className="h-9 pl-9 text-xs"
+            />
+          </div>
+
+          <div className="inline-flex rounded-md border border-white/10 bg-zinc-950 p-0.5 text-xs shrink-0">
             <button
               type="button"
-              onClick={openCreateModal}
-              className="inline-flex items-center gap-1 rounded-sm border border-[#32323E] bg-[#16161C] px-2 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-[#F4F4F5] hover:border-[#F4F4F5] transition-colors"
-              title="Criar nova perícia personalizada"
+              onClick={() => setFilterMode("todas")}
+              className={cn(
+                "rounded px-3 py-1.5 transition-colors tabular-nums",
+                filterMode === "todas"
+                  ? "bg-[#1C1C24] text-zinc-100 font-semibold"
+                  : "text-zinc-400 hover:text-zinc-200"
+              )}
             >
-              <Plus className="h-3 w-3" /> Nova
+              Todas ({skillList.length})
             </button>
-
-            {onCollapse && (
-              <button
-                type="button"
-                onClick={onCollapse}
-                title="Recolher coluna de Perícias para expandir o painel central"
-                className="hidden xl:inline-flex h-6 w-6 items-center justify-center rounded-sm border border-[#22222A] bg-[#09090B] text-[#8E8E9E] hover:border-[#32323E] hover:text-[#F4F4F5] transition-colors"
-              >
-                <PanelRightClose className="h-3.5 w-3.5" />
-              </button>
-            )}
+            <button
+              type="button"
+              onClick={() => setFilterMode("treinadas")}
+              className={cn(
+                "rounded px-3 py-1.5 transition-colors tabular-nums",
+                filterMode === "treinadas"
+                  ? "bg-[#1C1C24] text-zinc-100 font-semibold"
+                  : "text-zinc-400 hover:text-zinc-200"
+              )}
+            >
+              Treinadas ({trainedCount})
+            </button>
           </div>
         </div>
 
-        {/* Search Input */}
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Filtrar perícia ou profissão..."
-            className="h-8 pl-8 text-xs"
-          />
-        </div>
+        {/* Legend with tooltips + optional Restore Standard button */}
+        <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-400">
+          <div className="flex flex-wrap items-center gap-3">
+            <span
+              className="cursor-help"
+              title="Somente Treinada: exige grau Treinado (+5) ou maior para realizar testes difíceis"
+            >
+              <strong className="text-emerald-400 font-mono">*</strong> Somente
+              Treinada
+            </span>
+            <span className="text-zinc-600">·</span>
+            <span
+              className="cursor-help"
+              title="Penalidade de Carga: sofre -5 no teste se você estiver Sobrecarregado"
+            >
+              <strong className="text-amber-400 font-mono">+</strong> Penalidade
+              de Carga
+            </span>
+            <span className="text-zinc-600">·</span>
+            <span
+              className="inline-flex items-center gap-1 cursor-help"
+              title="Requer Kit de Perícia: sofre -5 no teste se estiver sem o Kit no inventário (clique na maleta para alternar)"
+            >
+              <Briefcase className="h-3 w-3 text-zinc-400" /> Requer Kit
+            </span>
+          </div>
 
-        {/* Segmented Filter: Todas | Treinadas */}
-        <div className="grid grid-cols-2 gap-1 rounded-sm border border-[#22222A] bg-[#09090B] p-0.5 font-mono text-[10px]">
-          <button
-            type="button"
-            onClick={() => setFilterMode("todas")}
-            className={cn(
-              "rounded-sm py-1 transition-colors tabular-nums",
-              filterMode === "todas"
-                ? "bg-[#1C1C24] text-[#F4F4F5] font-semibold"
-                : "text-[#8E8E9E] hover:text-[#D4D4D8]"
-            )}
-          >
-            Todas ({skillList.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilterMode("treinadas")}
-            className={cn(
-              "rounded-sm py-1 transition-colors tabular-nums",
-              filterMode === "treinadas"
-                ? "bg-[#1C1C24] text-[#F4F4F5] font-semibold"
-                : "text-[#8E8E9E] hover:text-[#D4D4D8]"
-            )}
-          >
-            Treinadas ({trainedCount})
-          </button>
-        </div>
-
-        {/* Legend + optional Restore Standard button */}
-        <div className="flex items-center justify-between gap-2 font-mono text-[9px] text-[#6E6E7E]">
-          <span>* Treinada · + Carga · Kit</span>
           <div className="flex items-center gap-2">
             {load.isOverloaded && (
-              <span className="text-amber-400">Sobrecarga -5</span>
+              <span className="rounded border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] text-amber-300">
+                Sobrecarga Ativa (-5 em perícias de carga)
+              </span>
             )}
             {missingStandardCount > 0 && (
               <button
                 type="button"
                 onClick={restoreMissingStandardSkills}
-                className="inline-flex items-center gap-0.5 text-[#A1A1AA] hover:text-[#F4F4F5] underline"
+                className="inline-flex items-center gap-1 text-xs text-zinc-300 hover:text-white underline"
                 title="Restaurar perícias oficiais removidas"
               >
-                <RotateCcw className="h-2.5 w-2.5" /> Restaurar ({missingStandardCount})
+                <RotateCcw className="h-3 w-3" /> Restaurar (
+                {missingStandardCount})
               </button>
             )}
           </div>
         </div>
       </div>
 
-      {/* Scrollable Skills List */}
-      <div className="divide-y divide-[#1A1A22] overflow-y-auto max-h-[72vh] xl:max-h-[calc(100vh-15rem)]">
-        {filteredSkills.length === 0 ? (
-          <div className="p-8 text-center text-xs text-[#6E6E7E]">
-            Nenhuma perícia encontrada.
-          </div>
-        ) : (
-          filteredSkills.map((sk) => {
+      {/* Wide 2-Column Grid of Skills on Desktop */}
+      {filteredSkills.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-white/10 bg-[#0C0C10]/60 p-10 text-center text-xs text-zinc-500">
+          Nenhuma perícia encontrada para o filtro atual.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+          {filteredSkills.map((sk) => {
             const attrVal = effAttrs[sk.atributoBase];
             const loadPen = sk.penalidadeCarga && load.isOverloaded ? -5 : 0;
             const kitPen = sk.requerKit && sk.hasKit === false ? -5 : 0;
@@ -377,7 +429,9 @@ export function SkillsColumn({
               : { flatBonus: 0, diceModifier: 0, grantsTrained: false };
 
             const effectiveTraining =
-              sk.treinamento === 0 && allyMod.grantsTrained ? 5 : sk.treinamento;
+              sk.treinamento === 0 && allyMod.grantsTrained
+                ? 5
+                : sk.treinamento;
 
             const totalBonus =
               effectiveTraining +
@@ -407,10 +461,11 @@ export function SkillsColumn({
               isLowestMode ? "↓" : ""
             }${bonusText}`;
 
+            const isTrained = effectiveTraining > 0;
             const isUntrainedLocked =
               sk.somenteTreinada && effectiveTraining === 0;
             const trainingMeta =
-              TRAINING_OPTIONS.find((o) => o.value === sk.treinamento) ??
+              TRAINING_OPTIONS.find((o) => o.value === effectiveTraining) ??
               TRAINING_OPTIONS[0];
 
             const showSpecLine =
@@ -421,35 +476,49 @@ export function SkillsColumn({
             return (
               <div
                 key={sk.id}
-                className="px-3.5 py-2.5 hover:bg-[#14141A] transition-colors space-y-2"
+                className={cn(
+                  "rounded-lg border px-3.5 py-2.5 transition-colors flex flex-col justify-center",
+                  trainingMeta.cardBorderCls,
+                  "hover:border-white/25",
+                  isEditingSkills && "space-y-2 py-3"
+                )}
               >
-                {/* Row 1: Name + Flags + Edit/Expand + 1-Click Roll */}
+                {/* Row 1: [Perícia + Especialização + Flags] + [Atributo · Treino · Bônus] + [Botão de Rolagem] */}
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
                     <button
                       type="button"
                       onClick={() => onRollSkill(sk)}
                       className={cn(
-                        "text-left text-[13px] leading-tight hover:text-[#F4F4F5] transition-colors focus:outline-none",
+                        "text-left text-sm leading-tight transition-colors focus:outline-none truncate",
                         isUntrainedLocked
-                          ? "text-[#7A7A8C]"
-                          : sk.treinamento > 0
-                          ? "text-[#F4F4F5] font-semibold"
-                          : "text-[#D4D4D8]"
+                          ? "text-zinc-500 hover:text-zinc-300"
+                          : isTrained
+                          ? "text-zinc-50 font-semibold hover:text-white"
+                          : "text-zinc-300 hover:text-white"
                       )}
-                      title={`Rolar ${displayLabel} (${formulaDisplay})`}
+                      title={`Clique para rolar ${displayLabel} (${sk.atributoBase} • ${formulaDisplay})`}
                     >
-                      {sk.nome}
+                      <span>{sk.nome}</span>
+                      {sk.especializacao?.trim() && (
+                        <span className="ml-1 text-xs font-normal text-zinc-400">
+                          ({sk.especializacao.trim()})
+                        </span>
+                      )}
                     </button>
 
                     {sk.somenteTreinada && (
                       <span
-                        title="Somente Treinada (*)"
-                        className={cn(
-                          "font-mono text-[11px] font-bold leading-none",
+                        title={
                           isUntrainedLocked
-                            ? "text-[#6E6E7E]"
-                            : "text-emerald-400/80"
+                            ? "Somente Treinada (*): você não possui treinamento nesta perícia"
+                            : "Somente Treinada (*): requisito atendido"
+                        }
+                        className={cn(
+                          "font-mono text-xs font-bold leading-none shrink-0 cursor-help",
+                          isUntrainedLocked
+                            ? "text-zinc-600"
+                            : "text-emerald-400"
                         )}
                       >
                         *
@@ -460,14 +529,14 @@ export function SkillsColumn({
                       <span
                         title={
                           load.isOverloaded
-                            ? "Penalidade de Carga ativa (-5)"
-                            : "Sofre penalidade de Carga se Sobrecarregado (+)"
+                            ? "Penalidade de Carga ativa (-5 por Sobrecarga)"
+                            : "Penalidade de Carga (+): sofre -5 apenas se estiver Sobrecarregado"
                         }
                         className={cn(
-                          "font-mono text-[11px] font-bold leading-none",
+                          "font-mono text-xs font-bold leading-none shrink-0 cursor-help",
                           load.isOverloaded
                             ? "text-amber-400"
-                            : "text-[#6E6E7E]"
+                            : "text-zinc-500"
                         )}
                       >
                         +
@@ -487,227 +556,216 @@ export function SkillsColumn({
                             ? "Sem Kit de Perícia (-5) — clique para marcar com Kit"
                             : "Requer Kit de Perícia (ativo) — clique se estiver sem Kit"
                         }
-                        className="inline-flex items-center"
+                        className="inline-flex items-center shrink-0"
                       >
                         <Briefcase
                           className={cn(
-                            "h-3 w-3 transition-colors",
+                            "h-3.5 w-3.5 transition-colors",
                             sk.hasKit === false
-                              ? "text-red-400"
-                              : "text-[#6E6E7E] hover:text-[#D4D4D8]"
+                              ? "text-rose-400"
+                              : "text-zinc-500 hover:text-zinc-200"
                           )}
                         />
                       </button>
                     )}
-
-                    {sk.isCustom && (
-                      <span className="rounded-sm border border-[#32323E] bg-[#16161C] px-1 py-0.2 font-mono text-[8px] uppercase text-[#8E8E9E]">
-                        CUSTOM
-                      </span>
-                    )}
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0">
-                    <button
-                      type="button"
-                      onClick={() => toggleDesc(sk.id)}
-                      className="rounded-sm p-1 text-[#6E6E7E] hover:bg-[#1C1C24] hover:text-[#D4D4D8] transition-colors"
-                      title={
-                        descExpanded
-                          ? "Ocultar descrição da perícia"
-                          : "Ver descrição / anotações da perícia"
-                      }
-                      aria-label={`Descrição de ${sk.nome}`}
+                  {/* Right Side: Attribute Pill + Training Badge + Edit Controls + 1-Click Roll Button */}
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span
+                      className="rounded border border-white/10 bg-zinc-950/80 px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-400"
+                      title={`Atributo base: ${sk.atributoBase} (${attrVal})`}
                     >
-                      {descExpanded ? (
-                        <ChevronUp className="h-3 w-3" />
-                      ) : (
-                        <ChevronDown className="h-3 w-3" />
-                      )}
-                    </button>
+                      {sk.atributoBase}
+                    </span>
 
-                    <button
-                      type="button"
-                      onClick={() => openEditModal(sk)}
-                      className="rounded-sm p-1 text-[#6E6E7E] hover:bg-[#1C1C24] hover:text-[#F4F4F5] transition-colors"
-                      title={`Editar ou excluir ${sk.nome}`}
-                      aria-label={`Editar ${sk.nome}`}
-                    >
-                      <Pencil className="h-3 w-3" />
-                    </button>
+                    {isTrained && (
+                      <span
+                        title={`Grau de treinamento: ${trainingMeta.fullLabel}${
+                          allyMod.grantsTrained && sk.treinamento === 0
+                            ? " (via Aliado)"
+                            : ""
+                        }`}
+                        className={cn(
+                          "inline-flex items-center justify-center rounded border px-1.5 py-0.5 font-mono text-[10px] font-bold leading-none",
+                          trainingMeta.badgeCls
+                        )}
+                      >
+                        {trainingMeta.label}
+                      </span>
+                    )}
+
+                    {isEditingSkills && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={() => toggleDesc(sk.id)}
+                          className="rounded p-1 text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
+                          title={
+                            descExpanded
+                              ? "Ocultar descrição"
+                              : "Ver descrição da perícia"
+                          }
+                        >
+                          {descExpanded ? (
+                            <ChevronUp className="h-3.5 w-3.5" />
+                          ) : (
+                            <ChevronDown className="h-3.5 w-3.5" />
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => openEditModal(sk)}
+                          className="rounded p-1 text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
+                          title={`Configurar ou excluir ${sk.nome}`}
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                      </>
+                    )}
 
                     {/* 1-Click Formula Roll Button */}
                     <button
                       type="button"
                       onClick={() => onRollSkill(sk)}
                       className={cn(
-                        "inline-flex items-center gap-1.5 rounded-sm border px-2 py-1 font-mono text-[11px] font-bold tabular-nums transition-colors",
+                        "inline-flex items-center justify-end gap-1.5 rounded-md border px-2.5 py-1 font-mono text-xs font-bold tabular-nums transition-colors min-w-[82px]",
                         isLowestMode
-                          ? "border-red-600/40 bg-red-600/10 text-red-300 hover:border-red-500"
-                          : sk.treinamento > 0
-                          ? "border-[#32323E] bg-[#16161C] text-[#F4F4F5] hover:border-[#F4F4F5]"
-                          : "border-[#22222A] bg-[#09090B] text-[#A1A1AA] hover:border-[#525266] hover:text-[#F4F4F5]"
+                          ? "border-rose-500/40 bg-rose-500/10 text-rose-300 hover:border-rose-400"
+                          : isTrained
+                          ? "border-white/20 bg-[#181822] text-white hover:border-white/40 hover:bg-[#222230]"
+                          : "border-white/10 bg-[#0A0A0E] text-zinc-300 hover:border-white/25 hover:text-white"
                       )}
                       title={
                         isLowestMode
-                          ? `Rolar ${displayLabel}: ${diceCount}d20 pega MENOR${bonusText}`
-                          : `Rolar ${displayLabel}: ${diceCount}d20 pega MAIOR${bonusText}`
+                          ? `Rolar ${displayLabel} (${sk.atributoBase}): ${diceCount}d20 pega MENOR${bonusText}`
+                          : `Rolar ${displayLabel} (${sk.atributoBase}): ${diceCount}d20 pega MAIOR${bonusText}`
                       }
                     >
-                      <Dices className="h-3 w-3 opacity-75" />
+                      <Dices className="h-3.5 w-3.5 opacity-75 shrink-0" />
                       <span>{formulaDisplay}</span>
                     </button>
                   </div>
                 </div>
 
-                {/* Row 2 (Inline Editable Line for Profissão & Specialized Skills) */}
-                {showSpecLine && (
-                  <div>
-                    <input
-                      type="text"
-                      value={sk.especializacao ?? ""}
-                      onChange={(e) =>
-                        updateSkillById(sk.id, {
-                          especializacao: e.target.value,
-                        })
-                      }
-                      placeholder={
-                        sk.id === "profissao"
-                          ? "Escreva sua profissão (ex: Engenheiro, Psicólogo, Cozinheiro)..."
-                          : "Especialização / subtítulo..."
-                      }
-                      aria-label={
-                        sk.id === "profissao"
-                          ? "Especialização de Profissão"
-                          : `Especialização de ${sk.nome}`
-                      }
-                      className="w-full rounded-sm border border-[#22222A] bg-[#09090B] px-2 py-1 text-xs text-[#E4E4E7] placeholder:text-[#525260] focus:border-[#F4F4F5] focus:outline-none transition-colors"
-                    />
-                  </div>
-                )}
-
-                {/* Row 3: Attribute · Training Degree · Outros Bonus */}
-                <div className="flex items-center gap-1.5 font-mono text-[10px]">
-                  <select
-                    value={sk.atributoBase}
-                    aria-label={`Atributo de ${sk.nome}`}
-                    onChange={(e) =>
-                      updateSkillById(sk.id, {
-                        atributoBase: e.target.value as AttributeKey,
-                      })
-                    }
-                    className="h-6 rounded-sm bg-[#09090B] border border-[#22222A] px-1.5 text-[10px] font-semibold text-[#A1A1AA] focus:outline-none focus:border-[#525266]"
-                  >
-                    {ATTRS.map((a) => (
-                      <option key={a} value={a} className="bg-[#101014]">
-                        {a} ({effAttrs[a]})
-                      </option>
-                    ))}
-                  </select>
-
-                  <select
-                    value={sk.treinamento}
-                    aria-label={`Grau de treinamento de ${sk.nome}`}
-                    onChange={(e) =>
-                      updateSkillById(sk.id, {
-                        treinamento: Number(e.target.value) as TrainingDegree,
-                      })
-                    }
-                    className={cn(
-                      "h-6 rounded-sm border px-1.5 text-[10px] font-bold focus:outline-none",
-                      trainingMeta.badgeCls
+                {/* Edit Mode Only: Specialization Input + Attribute Selector + Training Selector + Outros Input */}
+                {isEditingSkills && (
+                  <div className="space-y-2 pt-1.5 border-t border-white/10">
+                    {showSpecLine && (
+                      <input
+                        type="text"
+                        value={sk.especializacao ?? ""}
+                        onChange={(e) =>
+                          updateSkillById(sk.id, {
+                            especializacao: e.target.value,
+                          })
+                        }
+                        placeholder={
+                          sk.id === "profissao"
+                            ? "Escreva sua profissão (ex: Engenheiro, Psicólogo, Investigador)..."
+                            : "Especialização / subtítulo..."
+                        }
+                        aria-label={
+                          sk.id === "profissao"
+                            ? "Especialização de Profissão"
+                            : `Especialização de ${sk.nome}`
+                        }
+                        className="w-full rounded border border-white/10 bg-zinc-950 px-2.5 py-1 text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-zinc-300 focus:outline-none"
+                      />
                     )}
-                  >
-                    {TRAINING_OPTIONS.map((opt) => (
-                      <option
-                        key={opt.value}
-                        value={opt.value}
-                        className="text-[#F4F4F5] bg-[#101014]"
-                      >
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
 
-                  <div
-                    className="flex items-center gap-1 rounded-sm border border-[#22222A] bg-[#09090B] px-1.5 h-6 ml-auto"
-                    title="Bônus extra (Outros)"
-                  >
-                    <span className="text-[9px] text-[#6E6E7E]">OUT</span>
-                    <NumericInput
-                      value={sk.bonusOutros}
-                      aria-label={`Bônus extra de ${sk.nome}`}
-                      onValueChange={(val) =>
-                        updateSkillById(sk.id, {
-                          bonusOutros: val,
-                        })
-                      }
-                      className="w-8 bg-transparent text-center text-[10px] font-semibold text-[#D4D4D8] focus:outline-none tabular-nums"
-                    />
-                  </div>
-
-                  {(loadPen !== 0 ||
-                    kitPen !== 0 ||
-                    passiveMod.flatBonus !== 0 ||
-                    allyMod.flatBonus !== 0 ||
-                    allyMod.diceModifier !== 0 ||
-                    (allyMod.grantsTrained && sk.treinamento === 0)) && (
-                    <span
-                      title="Modificadores passivos, aliados ou penalidades ativas"
-                      className={cn(
-                        "text-[9px] tabular-nums",
-                        loadPen + kitPen < 0
-                          ? "text-amber-400"
-                          : "text-emerald-400"
-                      )}
-                    >
-                      {loadPen + kitPen + passiveMod.flatBonus + allyMod.flatBonus !== 0
-                        ? formatSigned(
-                            loadPen +
-                              kitPen +
-                              passiveMod.flatBonus +
-                              allyMod.flatBonus
-                          )
-                        : ""}
-                      {allyMod.diceModifier > 0
-                        ? ` +${allyMod.diceModifier}d`
-                        : ""}
-                      {allyMod.grantsTrained && sk.treinamento === 0
-                        ? " +T"
-                        : ""}
-                    </span>
-                  )}
-                </div>
-
-                {/* Expandable Description & Notes */}
-                {descExpanded && (
-                  <div className="rounded-sm border border-[#22222A] bg-[#09090B] px-2.5 py-2 space-y-1.5">
-                    <p className="text-xs leading-relaxed text-[#A1A1AA] whitespace-pre-line">
-                      {sk.descricao || "Sem descrição cadastrada."}
-                    </p>
-                    <div className="flex items-center justify-between pt-1 border-t border-[#1A1A22]">
-                      <button
-                        type="button"
-                        onClick={() => openEditModal(sk)}
-                        className="font-mono text-[10px] text-[#D4D4D8] hover:text-[#F4F4F5] underline"
+                    <div className="flex items-center gap-2 font-mono text-[11px]">
+                      <select
+                        value={sk.atributoBase}
+                        aria-label={`Atributo de ${sk.nome}`}
+                        onChange={(e) =>
+                          updateSkillById(sk.id, {
+                            atributoBase: e.target.value as AttributeKey,
+                          })
+                        }
+                        className="h-7 rounded bg-zinc-950 border border-white/10 px-2 text-[11px] font-semibold text-zinc-200 focus:outline-none focus:border-white/30"
                       >
-                        Editar nome, texto ou regras
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => deleteSkillById(sk)}
-                        className="inline-flex items-center gap-1 font-mono text-[10px] text-[#6E6E7E] hover:text-red-400"
+                        {ATTRS.map((a) => (
+                          <option key={a} value={a} className="bg-[#101014]">
+                            {a} ({effAttrs[a]})
+                          </option>
+                        ))}
+                      </select>
+
+                      <select
+                        value={sk.treinamento}
+                        aria-label={`Grau de treinamento de ${sk.nome}`}
+                        onChange={(e) =>
+                          updateSkillById(sk.id, {
+                            treinamento: Number(
+                              e.target.value
+                            ) as TrainingDegree,
+                          })
+                        }
+                        className={cn(
+                          "h-7 rounded border px-2 text-[11px] font-bold focus:outline-none",
+                          trainingMeta.badgeCls
+                        )}
                       >
-                        <Trash2 className="h-2.5 w-2.5" /> Excluir
-                      </button>
+                        {TRAINING_OPTIONS.map((opt) => (
+                          <option
+                            key={opt.value}
+                            value={opt.value}
+                            className="text-zinc-100 bg-[#101014]"
+                          >
+                            {opt.fullLabel}
+                          </option>
+                        ))}
+                      </select>
+
+                      <div
+                        className="flex items-center gap-1.5 rounded border border-white/10 bg-zinc-950 px-2 h-7 ml-auto"
+                        title="Bônus extra (Outros)"
+                      >
+                        <span className="text-[10px] text-zinc-400">OUT</span>
+                        <NumericInput
+                          value={sk.bonusOutros}
+                          aria-label={`Bônus extra de ${sk.nome}`}
+                          onValueChange={(val) =>
+                            updateSkillById(sk.id, {
+                              bonusOutros: val,
+                            })
+                          }
+                          className="w-9 bg-transparent text-center text-xs font-semibold text-zinc-100 focus:outline-none tabular-nums"
+                        />
+                      </div>
                     </div>
+
+                    {descExpanded && (
+                      <div className="rounded border border-white/10 bg-zinc-950 px-3 py-2 space-y-1.5">
+                        <p className="text-xs leading-relaxed text-zinc-400 whitespace-pre-line">
+                          {sk.descricao || "Sem descrição cadastrada."}
+                        </p>
+                        <div className="flex items-center justify-between pt-1 border-t border-white/10">
+                          <button
+                            type="button"
+                            onClick={() => openEditModal(sk)}
+                            className="font-mono text-[10px] text-zinc-300 hover:text-white underline"
+                          >
+                            Editar nome, texto ou regras
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => deleteSkillById(sk)}
+                            className="inline-flex items-center gap-1 font-mono text-[10px] text-zinc-500 hover:text-rose-400"
+                          >
+                            <Trash2 className="h-2.5 w-2.5" /> Excluir
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
 
       {/* Modal: Criar ou Editar Perícia */}
       <Modal
@@ -855,7 +913,7 @@ export function SkillsColumn({
             />
           </div>
 
-          <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#22222A]">
+          <div className="flex items-center justify-between gap-2 pt-3 border-t border-white/10">
             {editingSkillId ? (
               <Button
                 type="button"
@@ -891,6 +949,6 @@ export function SkillsColumn({
           </div>
         </form>
       </Modal>
-    </Card>
+    </div>
   );
 }

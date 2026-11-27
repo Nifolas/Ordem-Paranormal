@@ -9,6 +9,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
+import { ParanormalBackground } from "@/components/layout/ParanormalBackground";
 import { RollOverlay } from "@/components/layout/RollOverlay";
 
 const inter = Inter({
@@ -69,7 +70,8 @@ export default function RootLayout({
       className={`dark ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${crimsonPro.variable} ${specialElite.variable} ${caveat.variable}`}
     >
       <body className="font-sans antialiased bg-[#09090B] text-[#F4F4F5] selection:bg-zinc-200 selection:text-[#09090B] cris-grain">
-        <div className="min-h-screen flex flex-col relative">
+        <ParanormalBackground />
+        <div className="min-h-screen flex flex-col relative z-10">
           <Navbar />
           <main className="flex-1">{children}</main>
           <RollOverlay />

@@ -9,11 +9,10 @@ import {
   Dices,
   FileText,
   Flame,
-  Maximize2,
-  Minimize2,
   Plus,
   RefreshCw,
   Search,
+  SlidersHorizontal,
   Sparkles,
   Swords,
   Trash2,
@@ -25,6 +24,7 @@ import type {
   AgentAbility,
   AgentAttack,
   AgentRitual,
+  AgentSkill,
   ContentSource,
   InventoryItem,
   ParanormalElement,
@@ -33,7 +33,7 @@ import type {
 } from "@/types/ordem";
 import { BASE_RITUALS } from "@/data/rituals";
 import { BASE_ITEMS } from "@/data/equipment";
-import { SKILLS_BY_KEY, SKILLS_LIST } from "@/data/skills";
+import { getAgentSkillList, SKILLS_BY_KEY, SKILLS_LIST } from "@/data/skills";
 import {
   calculateCombatStats,
   calculateRitualPeCost,
@@ -74,6 +74,7 @@ import { useAppStore } from "@/store/useAppStore";
 import { AbilitiesTab } from "./AbilitiesTab";
 import { AlliesTab } from "./AlliesTab";
 import { InventoryTab } from "./InventoryTab";
+import { SkillsColumn } from "./SkillsColumn";
 import {
   Badge,
   Button,
@@ -86,6 +87,7 @@ import {
 } from "@/components/ui/primitives";
 
 export type SheetWorkspaceTab =
+  | "pericias"
   | "combate"
   | "habilidades"
   | "rituais"
@@ -118,28 +120,24 @@ interface ParanormalCostPrompt {
 }
 
 function EditorialSectionHeader({
-  index,
   title,
   count,
   rightSlot,
 }: {
-  index: string;
+  index?: string;
   title: string;
   count?: number;
   rightSlot?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#22222A] pb-2 mb-3">
+    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2 mb-3">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-[#6E6E7E]">
-          {index} //
-        </span>
-        <h3 className="font-display text-xs font-bold uppercase tracking-[0.14em] text-[#F4F4F5]">
+        <h3 className="font-display text-sm font-bold tracking-tight text-zinc-100">
           {title}
         </h3>
         {count !== undefined && (
-          <span className="font-mono text-[10px] text-[#8E8E9E] tabular-nums">
-            ({count})
+          <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 tabular-nums">
+            {count}
           </span>
         )}
       </div>
@@ -151,16 +149,14 @@ function EditorialSectionHeader({
 export function RightTabsColumn({
   agent,
   onUpdate,
-  isExpanded = false,
-  onToggleExpand,
+  onRollSkill,
   activeTab: controlledTab,
   onTabChange,
   hideHeaderOnMobile = false,
 }: {
   agent: Agent;
   onUpdate: (updater: (prev: Agent) => Agent) => void;
-  isExpanded?: boolean;
-  onToggleExpand?: () => void;
+  onRollSkill?: (skill: AgentSkill) => void;
   activeTab?: SheetWorkspaceTab;
   onTabChange?: (tab: SheetWorkspaceTab) => void;
   hideHeaderOnMobile?: boolean;
@@ -776,12 +772,24 @@ export function RightTabsColumn({
     return groups;
   }, [filteredRituals]);
 
+  const skillList = useMemo(() => getAgentSkillList(agent), [agent]);
+  const trainedSkillsCount = useMemo(
+    () => skillList.filter((s) => s.treinamento > 0).length,
+    [skillList]
+  );
+
   const tabs: {
     id: SheetWorkspaceTab;
     label: string;
     icon: React.ReactNode;
-    count?: number;
+    count?: number | string;
   }[] = [
+    {
+      id: "pericias",
+      label: "Perícias",
+      icon: <SlidersHorizontal className="h-3.5 w-3.5" />,
+      count: `${trainedSkillsCount}/${skillList.length}`,
+    },
     {
       id: "combate",
       label: "Combate",
@@ -826,7 +834,7 @@ export function RightTabsColumn({
       {/* Architectural Tabs Header */}
       <div
         className={cn(
-          "items-center justify-between gap-2 border-b border-[#22222A] bg-[#0C0C10] px-3 pt-1",
+          "items-center justify-between gap-2 border-b border-white/10 bg-[#0C0C10]/90 px-3 pt-1",
           hideHeaderOnMobile ? "hidden xl:flex" : "flex"
         )}
       >
@@ -863,29 +871,6 @@ export function RightTabsColumn({
             );
           })}
         </div>
-
-        {onToggleExpand && (
-          <button
-            type="button"
-            onClick={onToggleExpand}
-            className="hidden xl:inline-flex items-center gap-1.5 shrink-0 mb-1 rounded-sm border border-[#22222A] bg-[#141419] px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-wider text-[#A1A1AA] hover:border-[#32323E] hover:text-[#F4F4F5] transition-colors"
-            title={
-              isExpanded
-                ? "Restaurar coluna de perícias"
-                : "Expandir painel principal (recolher perícias)"
-            }
-          >
-            {isExpanded ? (
-              <>
-                <Minimize2 className="h-3 w-3" /> Mostrar Perícias
-              </>
-            ) : (
-              <>
-                <Maximize2 className="h-3 w-3" /> Expandir Painel
-              </>
-            )}
-          </button>
-        )}
       </div>
 
       {peAlert && (
@@ -896,6 +881,15 @@ export function RightTabsColumn({
 
       {/* Generous breathing workspace — zero max-h clipping */}
       <div className="p-5 sm:p-6">
+        {/* ================= PERÍCIAS (2 COLUNAS AMPLAS) ================= */}
+        {activeTab === "pericias" && (
+          <SkillsColumn
+            agent={agent}
+            onUpdate={onUpdate}
+            onRollSkill={(sk) => onRollSkill?.(sk)}
+          />
+        )}
+
         {/* ================= COMBATE ================= */}
         {activeTab === "combate" && (
           <div className="space-y-5">

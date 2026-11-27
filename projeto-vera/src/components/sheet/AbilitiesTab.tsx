@@ -90,28 +90,24 @@ function getClassBaseScalingTag(agent: Agent): string {
 }
 
 function SectionHeader({
-  index,
   title,
   count,
   rightSlot,
 }: {
-  index: string;
+  index?: string;
   title: string;
   count?: number;
   rightSlot?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#22222A] pb-2 mb-3">
+    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2 mb-3">
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[11px] font-bold tracking-[0.18em] text-[#6E6E7E]">
-          {index} //
-        </span>
-        <h3 className="font-display text-xs font-bold uppercase tracking-[0.14em] text-[#F4F4F5]">
+        <h3 className="font-display text-sm font-bold tracking-tight text-zinc-100">
           {title}
         </h3>
         {count !== undefined && (
-          <span className="font-mono text-[10px] text-[#8E8E9E]">
-            ({count})
+          <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 tabular-nums">
+            {count}
           </span>
         )}
       </div>
@@ -859,244 +855,247 @@ export function AbilitiesTab({
         </section>
       )}
 
-      {/* B. 03 // PROGRESSÃO DE TRILHA (Chronological Timeline) */}
-      {showSection("trilha") && (
-        <section>
-          <SectionHeader
-            index="03"
-            title={
-              trailDef
-                ? `Progressão de Trilha — ${trailDef.name}`
-                : "Progressão de Trilha"
-            }
-            count={unlockedTrailCount}
-            rightSlot={
-              trailDef && (
-                <button
-                  type="button"
-                  onClick={() => setShowFutureMilestones((v) => !v)}
-                  className="inline-flex items-center gap-1.5 rounded-sm border border-[#22222A] bg-[#0C0C10] px-2 py-0.5 font-mono text-[10px] text-[#8E8E9E] hover:text-[#F4F4F5] transition-colors"
-                >
-                  {showFutureMilestones ? (
-                    <>
-                      <EyeOff className="h-3 w-3" /> Ocultar futuros
-                    </>
-                  ) : (
-                    <>
-                      <Eye className="h-3 w-3" /> Mostrar marcos futuros
-                    </>
-                  )}
-                </button>
-              )
-            }
-          />
+      {/* B. Progressão de Trilha (Chronological Timeline — oculto na aba "Todas" quando não há trilha nem poderes de trilha) */}
+      {showSection("trilha") &&
+        (Boolean(trailDef) ||
+          customTrailAbilities.length > 0 ||
+          subFilter === "trilha") && (
+          <section>
+            <SectionHeader
+              title={
+                trailDef
+                  ? `Progressão de Trilha — ${trailDef.name}`
+                  : "Progressão de Trilha"
+              }
+              count={unlockedTrailCount + customTrailAbilities.length}
+              rightSlot={
+                trailDef && (
+                  <button
+                    type="button"
+                    onClick={() => setShowFutureMilestones((v) => !v)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-[#121218] px-2.5 py-1 text-xs text-zinc-400 hover:text-zinc-100 transition-colors"
+                  >
+                    {showFutureMilestones ? (
+                      <>
+                        <EyeOff className="h-3 w-3" /> Ocultar futuros
+                      </>
+                    ) : (
+                      <>
+                        <Eye className="h-3 w-3" /> Mostrar marcos futuros
+                      </>
+                    )}
+                  </button>
+                )
+              }
+            />
 
-          {!trailDef ? (
-            <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] px-5 py-5 text-xs text-[#8E8E9E]">
-              Nenhuma trilha selecionada.{" "}
-              {agent.classId === "sobrevivente"
-                ? "Disponível a partir do Estágio 2 em Configuração do Dossiê."
-                : "Disponível a partir de NEX 10% em Configuração do Dossiê."}
-            </div>
-          ) : (
-            <div className="relative pl-5 space-y-2.5 before:content-[''] before:absolute before:left-[7px] before:top-3 before:bottom-3 before:w-[1px] before:bg-[#22222A]">
-              {filteredTrailMilestones.map((m) => {
-                const isExpanded = expandedIds[m.id] ?? m.unlocked;
-                return (
-                  <div
-                    key={m.id}
+            {!trailDef && customTrailAbilities.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-white/10 bg-[#0C0C10]/60 px-5 py-4 text-xs text-zinc-400">
+                Nenhuma trilha selecionada.{" "}
+                {agent.classId === "sobrevivente"
+                  ? "Disponível a partir do Estágio 2 em Opções → Configurar Dossiê."
+                  : "Disponível a partir de NEX 10% em Opções → Configurar Dossiê."}
+              </div>
+            ) : (
+              <div className="relative pl-5 space-y-2.5 before:content-[''] before:absolute before:left-[7px] before:top-3 before:bottom-3 before:w-[1px] before:bg-white/15">
+                {filteredTrailMilestones.map((m) => {
+                  const isExpanded = expandedIds[m.id] ?? m.unlocked;
+                  return (
+                    <div
+                      key={m.id}
+                      className={cn(
+                        "relative rounded-lg border border-white/10 bg-[#101014]/90 transition-opacity",
+                        !m.unlocked && "opacity-45"
+                      )}
+                    >
+                      {/* Timeline node dot */}
+                      <span
+                        className={cn(
+                          "absolute -left-[19px] top-5 h-2.5 w-2.5 rounded-full border",
+                          m.unlocked
+                            ? "bg-zinc-100 border-zinc-100"
+                            : "bg-[#09090B] border-zinc-600"
+                        )}
+                      />
+
+                      <div
+                        role="button"
+                        tabIndex={0}
+                        onClick={() => toggleItem(m.id)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            toggleItem(m.id);
+                          }
+                        }}
+                        className="flex items-center justify-between gap-3 py-3.5 px-4 cursor-pointer select-none"
+                      >
+                        <div className="flex flex-wrap items-center gap-2.5">
+                          <span
+                            className={cn(
+                              "rounded border px-2 py-0.5 font-mono text-[10px] font-bold",
+                              m.unlocked
+                                ? "border-white/25 bg-[#16161C] text-zinc-100"
+                                : "border-white/10 bg-[#09090B] text-zinc-400"
+                            )}
+                          >
+                            {m.labelMarco}
+                          </span>
+                          <span className="text-[15px] font-semibold text-zinc-100">
+                            {m.name}
+                          </span>
+                          {!m.unlocked && (
+                            <span className="inline-flex items-center gap-1 font-mono text-[10px] text-zinc-500">
+                              <Lock className="h-3 w-3" /> Bloqueado
+                            </span>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="rounded border border-white/10 bg-[#09090B] px-2 py-0.5 font-mono text-[11px] text-zinc-300">
+                            {(m.peCost ?? 0) > 0
+                              ? `${m.peCost} ${resUnit}`
+                              : "Passiva"}
+                          </span>
+                          {m.unlocked && (
+                            <Button
+                              size="xs"
+                              variant={
+                                (m.peCost ?? 0) > 0 ? "default" : "secondary"
+                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onUseAbility({
+                                  id: m.id,
+                                  name: m.name,
+                                  source: "Trilha",
+                                  peCost: m.peCost ?? 0,
+                                  description: m.description,
+                                });
+                              }}
+                            >
+                              <Zap className="h-3 w-3" /> Usar
+                            </Button>
+                          )}
+                          {(trailDef?.id === "gdc_corrompido" && m.nex === 99) ||
+                          /roleta maluca/i.test(m.name) ? (
+                            <Button
+                              size="xs"
+                              variant="primary"
+                              onClick={handleRollRoletaMaluca}
+                              title="Rolar 1d6 na Roleta Maluca (Arauto do Caos) e registrar no histórico"
+                            >
+                              <Dices className="h-3.5 w-3.5" /> Roleta Maluca (1d6)
+                            </Button>
+                          ) : null}
+                          {isExpanded ? (
+                            <ChevronUp className="h-4 w-4 text-zinc-400" />
+                          ) : (
+                            <ChevronDown className="h-4 w-4 text-zinc-400" />
+                          )}
+                        </div>
+                      </div>
+
+                      {isExpanded && (
+                        <div className="border-t border-white/10 px-4 pb-4 pt-3 space-y-2.5">
+                          <p className="text-[14px] leading-[1.68] text-zinc-300">
+                            {m.description}
+                          </p>
+                          {((trailDef?.id === "gdc_corrompido" &&
+                            m.nex === 99) ||
+                            /roleta maluca/i.test(m.name)) &&
+                            roletaResult && (
+                              <div className="rounded-md border border-amber-500/40 bg-amber-500/10 p-3 text-xs space-y-1">
+                                <div className="flex items-center justify-between font-mono">
+                                  <span className="font-bold text-amber-300">
+                                    ROLETA MALUCA (1d6 = {roletaResult.face}):{" "}
+                                    {roletaResult.title}
+                                  </span>
+                                </div>
+                                <p className="text-zinc-100 leading-relaxed">
+                                  {roletaResult.effect}
+                                </p>
+                              </div>
+                            )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+
+                {customTrailAbilities.map(renderAccordionCard)}
+              </div>
+            )}
+          </section>
+        )}
+
+      {/* B. Poderes Gerais (oculto na visualização "Todas" quando vazio) */}
+      {showSection("gerais") &&
+        (filteredGeneralPowers.length > 0 || subFilter === "gerais") && (
+          <section>
+            <SectionHeader title="Poderes Gerais" count={generalPowers.length} />
+            {filteredGeneralPowers.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-white/10 bg-[#0C0C10]/60 px-5 py-4 flex items-center justify-between gap-3">
+                <span className="text-xs text-zinc-400">
+                  Nenhum poder geral adicionado à ficha.
+                </span>
+                <Button
+                  size="xs"
+                  variant="outline"
+                  onClick={() => setCatalogOpen(true)}
+                >
+                  <Plus className="h-3 w-3" /> Escolher Poder Geral
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {filteredGeneralPowers.map(renderAccordionCard)}
+              </div>
+            )}
+          </section>
+        )}
+
+      {/* B. Poderes Paranormais (oculto na visualização "Todas" quando vazio) */}
+      {showSection("paranormais") &&
+        (filteredParanormalPowers.length > 0 ||
+          subFilter === "paranormais") && (
+          <section>
+            <SectionHeader
+              title="Poderes Paranormais"
+              count={paranormalPowers.length}
+              rightSlot={
+                agent.affinityElement && (
+                  <span
                     className={cn(
-                      "relative rounded-md border border-[#22222A] bg-[#101014] transition-opacity",
-                      !m.unlocked && "opacity-45"
+                      "inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-[10px] uppercase",
+                      ELEMENT_STYLES[agent.affinityElement].badge
                     )}
                   >
-                    {/* Timeline node dot */}
-                    <span
-                      className={cn(
-                        "absolute -left-[19px] top-5 h-2.5 w-2.5 rounded-none border",
-                        m.unlocked
-                          ? "bg-[#F4F4F5] border-[#F4F4F5]"
-                          : "bg-[#09090B] border-[#525266]"
-                      )}
-                    />
-
-                    <div
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => toggleItem(m.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.preventDefault();
-                          toggleItem(m.id);
-                        }
-                      }}
-                      className="flex items-center justify-between gap-3 py-3.5 px-4 cursor-pointer select-none"
-                    >
-                      <div className="flex flex-wrap items-center gap-2.5">
-                        <span
-                          className={cn(
-                            "rounded-sm border px-2 py-0.5 font-mono text-[10px] font-bold",
-                            m.unlocked
-                              ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
-                              : "border-[#22222A] bg-[#09090B] text-[#8E8E9E]"
-                          )}
-                        >
-                          {m.labelMarco}
-                        </span>
-                        <span className="text-[15px] font-semibold text-[#F4F4F5]">
-                          {m.name}
-                        </span>
-                        {!m.unlocked && (
-                          <span className="inline-flex items-center gap-1 font-mono text-[10px] text-[#8E8E9E]">
-                            <Lock className="h-3 w-3" /> BLOQUEADO
-                          </span>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-2 shrink-0">
-                        <span className="rounded-sm border border-[#22222A] bg-[#09090B] px-2 py-0.5 font-mono text-[11px] text-[#D4D4D8]">
-                          {(m.peCost ?? 0) > 0
-                            ? `${m.peCost} ${resUnit}`
-                            : "PASSIVA"}
-                        </span>
-                        {m.unlocked && (
-                          <Button
-                            size="xs"
-                            variant={(m.peCost ?? 0) > 0 ? "default" : "secondary"}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onUseAbility({
-                                id: m.id,
-                                name: m.name,
-                                source: "Trilha",
-                                peCost: m.peCost ?? 0,
-                                description: m.description,
-                              });
-                            }}
-                          >
-                            <Zap className="h-3 w-3" /> Usar
-                          </Button>
-                        )}
-                        {(trailDef.id === "gdc_corrompido" && m.nex === 99) ||
-                        /roleta maluca/i.test(m.name) ? (
-                          <Button
-                            size="xs"
-                            variant="primary"
-                            onClick={handleRollRoletaMaluca}
-                            title="Rolar 1d6 na Roleta Maluca (Arauto do Caos) e registrar no histórico"
-                          >
-                            <Dices className="h-3.5 w-3.5" /> Roleta Maluca (1d6)
-                          </Button>
-                        ) : null}
-                        {isExpanded ? (
-                          <ChevronUp className="h-4 w-4 text-[#8E8E9E]" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-[#8E8E9E]" />
-                        )}
-                      </div>
-                    </div>
-
-                    {isExpanded && (
-                      <div className="border-t border-[#1E1E26] px-4 pb-4 pt-3 space-y-2.5">
-                        <p className="text-[14px] leading-[1.68] text-[#D4D4D8]">
-                          {m.description}
-                        </p>
-                        {((trailDef.id === "gdc_corrompido" && m.nex === 99) ||
-                          /roleta maluca/i.test(m.name)) &&
-                          roletaResult && (
-                            <div className="rounded-sm border border-amber-500/40 bg-amber-500/10 p-3 text-xs space-y-1">
-                              <div className="flex items-center justify-between font-mono">
-                                <span className="font-bold text-amber-300">
-                                  ROLETA MALUCA (1d6 = {roletaResult.face}):{" "}
-                                  {roletaResult.title}
-                                </span>
-                              </div>
-                              <p className="text-[#F4F4F5] leading-relaxed">
-                                {roletaResult.effect}
-                              </p>
-                            </div>
-                          )}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-
-              {customTrailAbilities.map(renderAccordionCard)}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* B. 04 // PODERES GERAIS */}
-      {showSection("gerais") && (
-        <section>
-          <SectionHeader
-            index="04"
-            title="Poderes Gerais"
-            count={generalPowers.length}
-          />
-          {filteredGeneralPowers.length === 0 ? (
-            <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] px-5 py-5 flex items-center justify-between gap-3">
-              <span className="text-xs text-[#8E8E9E]">
-                Nenhum poder geral na ficha.
-              </span>
-              <Button
-                size="xs"
-                variant="outline"
-                onClick={() => setCatalogOpen(true)}
-              >
-                <Plus className="h-3 w-3" /> Escolher Poder Geral
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {filteredGeneralPowers.map(renderAccordionCard)}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* B. 05 // PODERES PARANORMAIS */}
-      {showSection("paranormais") && (
-        <section>
-          <SectionHeader
-            index="05"
-            title="Poderes Paranormais"
-            count={paranormalPowers.length}
-            rightSlot={
-              agent.affinityElement && (
-                <span
-                  className={cn(
-                    "inline-flex items-center gap-1.5 rounded-sm border px-2 py-0.5 font-mono text-[10px] uppercase",
-                    ELEMENT_STYLES[agent.affinityElement].badge
-                  )}
-                >
-                  AFINIDADE: {agent.affinityElement}
+                    Afinidade: {agent.affinityElement}
+                  </span>
+                )
+              }
+            />
+            {filteredParanormalPowers.length === 0 ? (
+              <div className="rounded-lg border border-dashed border-white/10 bg-[#0C0C10]/60 px-5 py-4 flex items-center justify-between gap-3">
+                <span className="text-xs text-zinc-400">
+                  Nenhum poder paranormal (Transcender) registrado.
                 </span>
-              )
-            }
-          />
-          {filteredParanormalPowers.length === 0 ? (
-            <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] px-5 py-5 flex items-center justify-between gap-3">
-              <span className="text-xs text-[#8E8E9E]">
-                Nenhum poder paranormal (Transcender) registrado.
-              </span>
-              <Button
-                size="xs"
-                variant="outline"
-                onClick={() => setCatalogOpen(true)}
-              >
-                <Plus className="h-3 w-3" /> Transcender / Adicionar
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-2.5">
-              {filteredParanormalPowers.map(renderAccordionCard)}
-            </div>
-          )}
-        </section>
-      )}
+                <Button
+                  size="xs"
+                  variant="outline"
+                  onClick={() => setCatalogOpen(true)}
+                >
+                  <Plus className="h-3 w-3" /> Transcender / Adicionar
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2.5">
+                {filteredParanormalPowers.map(renderAccordionCard)}
+              </div>
+            )}
+          </section>
+        )}
 
       {/* D. Wide 2-Column Master-Detail Catalog Modal */}
       <AbilitiesCatalogModal
