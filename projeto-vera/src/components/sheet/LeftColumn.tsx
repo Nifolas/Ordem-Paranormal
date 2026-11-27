@@ -6,13 +6,13 @@ import {
   AlertOctagon,
   Brain,
   ChevronDown,
-  ChevronRight,
   ChevronUp,
   Dices,
   Footprints,
   Heart,
   Lock,
   Minus,
+  Pencil,
   Plus,
   Shield,
   ShieldAlert,
@@ -28,7 +28,6 @@ import {
 import type { GlossaryTermKey } from "@/lib/glossary";
 import type { Agent, AttributeKey } from "@/types/ordem";
 import { getOriginById } from "@/data/origins";
-import { getAgentSkillList } from "@/data/skills";
 import { COMMUNITY_CONDITIONS } from "@/data/supplements";
 import {
   calculateCombatStats,
@@ -378,14 +377,10 @@ export function LeftColumn({
   agent,
   onUpdate,
   onRollAttribute,
-  isSkillsOpen = false,
-  onOpenSkills,
 }: {
   agent: Agent;
   onUpdate: (updater: (prev: Agent) => Agent) => void;
   onRollAttribute: (key: AttributeKey) => void;
-  isSkillsOpen?: boolean;
-  onOpenSkills?: () => void;
 }) {
   const { setQuickRollerOpen } = useAppStore();
   const [newResType, setNewResType] = useState("Balístico");
@@ -394,6 +389,12 @@ export function LeftColumn({
   const [condPopoverOpen, setCondPopoverOpen] = useState(false);
   const [rdPopoverOpen, setRdPopoverOpen] = useState(false);
   const [defAdjustOpen, setDefAdjustOpen] = useState(false);
+  const [sheetEditor, setSheetEditor] = useState<"defense" | "peTurno" | null>(null);
+  const [sheetEditorCoords, setSheetEditorCoords] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
   const [condCoords, setCondCoords] = useState<{
     top: number;
     left: number;
@@ -409,6 +410,9 @@ export function LeftColumn({
   const condPortalRef = useRef<HTMLDivElement>(null);
   const rdRef = useRef<HTMLDivElement>(null);
   const rdPortalRef = useRef<HTMLDivElement>(null);
+  const defenseEditTriggerRef = useRef<HTMLButtonElement>(null);
+  const peTurnoEditTriggerRef = useRef<HTMLButtonElement>(null);
+  const sheetEditorPortalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!condPopoverOpen && !rdPopoverOpen) return;
@@ -460,8 +464,56 @@ export function LeftColumn({
     };
   }, [condPopoverOpen, rdPopoverOpen]);
 
-  const skillList = getAgentSkillList(agent);
-  const trainedSkillsCount = skillList.filter((s) => s.treinamento > 0).length;
+  useEffect(() => {
+    if (!sheetEditor) return;
+    const updatePosition = () => {
+      const trigger =
+        sheetEditor === "defense"
+          ? defenseEditTriggerRef.current
+          : peTurnoEditTriggerRef.current;
+      if (!trigger) return;
+      const rect = trigger.getBoundingClientRect();
+      const width = Math.min(360, window.innerWidth - 16);
+      const estimatedHeight = sheetEditor === "defense" ? 450 : 300;
+      let top = rect.bottom + 6;
+      if (top + estimatedHeight > window.innerHeight) {
+        top = Math.max(8, rect.top - estimatedHeight - 6);
+      }
+      setSheetEditorCoords({
+        top,
+        left: Math.max(8, Math.min(rect.right - width, window.innerWidth - width - 8)),
+        width,
+      });
+    };
+    updatePosition();
+    const handleOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
+      const trigger =
+        sheetEditor === "defense"
+          ? defenseEditTriggerRef.current
+          : peTurnoEditTriggerRef.current;
+      if (
+        trigger &&
+        !trigger.contains(target) &&
+        !sheetEditorPortalRef.current?.contains(target)
+      ) {
+        setSheetEditor(null);
+      }
+    };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSheetEditor(null);
+    };
+    document.addEventListener("mousedown", handleOutside);
+    document.addEventListener("keydown", handleEscape);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      document.removeEventListener("mousedown", handleOutside);
+      document.removeEventListener("keydown", handleEscape);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [sheetEditor]);
 
   const vitals = getAgentEffectiveVitals(agent);
   const combat = calculateCombatStats(agent);
@@ -594,6 +646,11 @@ export function LeftColumn({
   const hasManualDefAdjustments =
     agent.defense.protectionBonus !== 0 ||
     (agent.defense.abilityBonus ?? 0) + agent.defense.otherBonus !== 0 ||
+    (Number(agent.defense.defenseBonus) || 0) !== 0 ||
+    agent.defense.manualOverride != null ||
+    (Number(agent.defense.blockBonus) || 0) !== 0 ||
+    (Number(agent.defense.dodgeBonus) || 0) !== 0 ||
+    Boolean(agent.defense.allowManualDodge) ||
     agent.defense.displacement !== 9;
 
   const effectiveDisplacement = Math.max(
@@ -606,7 +663,15 @@ export function LeftColumn({
     Number(combat.shieldBonus) +
     Number(combat.accessoryBonus) +
     (Number(agent.defense.abilityBonus) || 0) +
-    (Number(agent.defense.otherBonus) || 0);
+    (Number(agent.defense.otherBonus) || 0) +
+    (Number(agent.defense.defenseBonus) || 0);
+  const peTurnoBonus =
+    (Number(originDef?.efeitosPassivos?.limitePeBonus) || 0) +
+    (Number(agent.peTurnoBonus) || 0);
+  const peTurnoBreakdown =
+    agent.peTurnoOverride !== null && agent.peTurnoOverride !== undefined
+      ? `Valor fixo ${Number(vitals.peLimit) || 0}`
+      : `Base ${Number(vitals.basePeLimitForDt) || 0} + bônus ${peTurnoBonus > 0 ? "+" : ""}${peTurnoBonus}`;
 
   const pdPool = agent.status.pd ?? {
     current: vitals.maxPd,
@@ -646,7 +711,20 @@ export function LeftColumn({
           </span>
         </div>
 
-        <div className="rounded-lg border border-white/10 bg-zinc-950/85 px-2.5 py-2 text-center">
+        <div
+          className="relative rounded-lg border border-white/10 bg-zinc-950/85 px-2.5 py-2 text-center"
+          title={peTurnoBreakdown}
+        >
+          <button
+            ref={peTurnoEditTriggerRef}
+            type="button"
+            onClick={() => setSheetEditor((current) => current === "peTurno" ? null : "peTurno")}
+            aria-label="Editar limite de PE por turno"
+            title="Editar limite de PE por turno"
+            className="absolute right-1 top-1 rounded p-1 text-zinc-500 transition-colors hover:bg-white/10 hover:text-zinc-100"
+          >
+            <Pencil className="h-3 w-3" />
+          </button>
           <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300/90 block">
             <TermTooltip
               term={vitals.usingPd ? "PD" : "PE"}
@@ -656,6 +734,9 @@ export function LeftColumn({
           </span>
           <span className="font-mono text-base font-bold text-white tabular-nums">
             {vitals.peLimit}
+          </span>
+          <span className="block truncate font-mono text-[8px] text-zinc-500">
+            {peTurnoBreakdown}
           </span>
         </div>
 
@@ -981,6 +1062,19 @@ export function LeftColumn({
 
       {/* 4. Bloco de Defesa (estilo C.R.I.S.): Escudo com DEFESA grande + breakdown e ao lado BLOQUEIO (RD) e ESQUIVA */}
       <Card className="p-3.5 space-y-2.5">
+        <div className="flex justify-end -mb-1">
+          <button
+            ref={defenseEditTriggerRef}
+            type="button"
+            onClick={() => setSheetEditor((current) => current === "defense" ? null : "defense")}
+            aria-label="Editar Defesa, Bloqueio e Esquiva"
+            title="Editar bônus e valores defensivos"
+            className="inline-flex items-center gap-1 rounded px-1.5 py-1 text-[10px] text-zinc-500 transition-colors hover:bg-white/10 hover:text-zinc-100"
+          >
+            <Pencil className="h-3 w-3" />
+            Editar
+          </button>
+        </div>
         <div className="grid grid-cols-[1.15fr_1fr] gap-2.5 items-stretch">
           {/* Escudo Principal da Defesa */}
           <div className="flex flex-col items-center justify-center rounded-lg border border-white/15 bg-[#0C0C10] px-3 py-3 text-center">
@@ -994,7 +1088,8 @@ export function LeftColumn({
             <p className="mt-1.5 font-mono text-[10px] text-zinc-400 leading-tight tabular-nums">
               10 + AGI ({Number(agent.attributes.AGI) || 0})
               {combat.protectionBonus !== 0 && ` + Prot (${combat.protectionBonus})`}
-              {extraDefBonus !== 0 && ` + Outros (${extraDefBonus})`}
+              {extraDefBonus !== 0 && ` + Outros (${extraDefBonus > 0 ? "+" : ""}${extraDefBonus})`}
+              {agent.defense.manualOverride != null && ` · Override (${Number(agent.defense.manualOverride) || 0})`}
             </p>
           </div>
 
@@ -1062,51 +1157,170 @@ export function LeftColumn({
       </Card>
 
       {/* 5. Botão de Destaque para Perícias (abre a aba Perícias no container principal da direita) */}
-      {onOpenSkills && (
-        <button
-          type="button"
-          onClick={onOpenSkills}
-          className={cn(
-            "group flex w-full items-center justify-between rounded-lg border px-4 py-3 text-left transition-all shadow-sm",
-            isSkillsOpen
-              ? "border-white bg-[#1A1A24] text-white shadow-[0_0_20px_rgba(255,255,255,0.08)]"
-              : "border-white/15 bg-zinc-950/85 hover:border-white/35 hover:bg-[#14141C] text-zinc-100"
-          )}
-        >
-          <div className="flex items-center gap-3 min-w-0">
-            <div
-              className={cn(
-                "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border transition-colors",
-                isSkillsOpen
-                  ? "border-white/40 bg-white text-zinc-950"
-                  : "border-white/15 bg-[#14141C] text-zinc-200 group-hover:border-white/30"
-              )}
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-            </div>
-            <div className="min-w-0">
-              <div className="font-display text-sm font-bold tracking-wide">
-                Perícias ({trainedSkillsCount} treinadas)
-              </div>
-              <div className="text-[11px] text-zinc-400 truncate">
-                {isSkillsOpen
-                  ? "Exibindo todas as perícias no painel ao lado"
-                  : `Clique para abrir e rolar as ${skillList.length} perícias`}
-              </div>
-            </div>
-          </div>
-          <ChevronRight
-            className={cn(
-              "h-4 w-4 shrink-0 transition-transform",
-              isSkillsOpen
-                ? "text-white translate-x-0.5"
-                : "text-zinc-400 group-hover:text-white group-hover:translate-x-0.5"
-            )}
-          />
-        </button>
-      )}
 
       {/* Card 2: Condições e Resistências sob demanda (Progressive Disclosure) */}
+      {sheetEditor && sheetEditorCoords && typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={sheetEditorPortalRef}
+            style={sheetEditorCoords}
+            role="dialog"
+            aria-label={sheetEditor === "defense" ? "Editar defesas" : "Editar limite de PE por turno"}
+            className="fixed z-[100] max-h-[calc(100vh-16px)] overflow-y-auto rounded-lg border border-white/20 bg-[#121218] p-3 shadow-2xl space-y-3 text-[#F4F4F5]"
+          >
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-300">
+                {sheetEditor === "defense" ? "Ajustes defensivos" : "Limite de PE por turno"}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSheetEditor(null)}
+                aria-label="Fechar edição"
+                className="rounded p-1 text-zinc-400 hover:bg-white/10 hover:text-white"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            {sheetEditor === "defense" ? (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <label className="font-mono text-[10px] text-zinc-400">
+                    Defesa (Outros / Bônus)
+                    <Input
+                      type="number"
+                      value={Number(agent.defense.defenseBonus) || 0}
+                      onChange={(event) => onUpdate((prev) => ({
+                        ...prev,
+                        defense: { ...prev.defense, defenseBonus: Number(event.target.value) || 0 },
+                      }))}
+                      aria-label="Bônus extra de Defesa"
+                      className="mt-1 h-8 w-full font-mono text-sm text-zinc-100"
+                    />
+                  </label>
+                  <label className="font-mono text-[10px] text-zinc-400">
+                    Bloqueio (Bônus de RD)
+                    <Input
+                      type="number"
+                      value={Number(agent.defense.blockBonus) || 0}
+                      onChange={(event) => onUpdate((prev) => ({
+                        ...prev,
+                        defense: { ...prev.defense, blockBonus: Number(event.target.value) || 0 },
+                      }))}
+                      aria-label="Bônus de RD no Bloqueio"
+                      className="mt-1 h-8 w-full font-mono text-sm text-zinc-100"
+                    />
+                  </label>
+                  <label className="font-mono text-[10px] text-zinc-400">
+                    Esquiva (Bônus)
+                    <Input
+                      type="number"
+                      value={Number(agent.defense.dodgeBonus) || 0}
+                      onChange={(event) => onUpdate((prev) => ({
+                        ...prev,
+                        defense: { ...prev.defense, dodgeBonus: Number(event.target.value) || 0 },
+                      }))}
+                      aria-label="Bônus de Esquiva"
+                      className="mt-1 h-8 w-full font-mono text-sm text-zinc-100"
+                    />
+                  </label>
+                  <label className="flex items-center gap-2 self-end rounded border border-white/10 bg-zinc-950/70 px-2 py-2 text-[10px] text-zinc-300">
+                    <input
+                      type="checkbox"
+                      checked={Boolean(agent.defense.allowManualDodge)}
+                      onChange={(event) => onUpdate((prev) => ({
+                        ...prev,
+                        defense: { ...prev.defense, allowManualDodge: event.target.checked },
+                      }))}
+                      aria-label="Permitir Esquiva sem treino em Reflexos"
+                      className="accent-emerald-400"
+                    />
+                    Permitir Esquiva manual
+                  </label>
+                </div>
+
+                <div className="space-y-2 border-t border-white/10 pt-2">
+                  <label className="flex items-center gap-2 text-[11px] text-zinc-300">
+                    <input
+                      type="checkbox"
+                      checked={agent.defense.manualOverride !== null && agent.defense.manualOverride !== undefined}
+                      onChange={(event) => onUpdate((prev) => ({
+                        ...prev,
+                        defense: {
+                          ...prev.defense,
+                          manualOverride: event.target.checked ? Number(combat.defense) || 0 : null,
+                        },
+                      }))}
+                      aria-label="Ativar valor fixo de Defesa"
+                      className="accent-zinc-200"
+                    />
+                    Travar Defesa em um valor manual
+                  </label>
+                  <Input
+                    type="number"
+                    disabled={agent.defense.manualOverride === null || agent.defense.manualOverride === undefined}
+                    value={(agent.defense.manualOverride ?? Number(combat.defense)) || 0}
+                    onChange={(event) => onUpdate((prev) => ({
+                      ...prev,
+                      defense: { ...prev.defense, manualOverride: Number(event.target.value) || 0 },
+                    }))}
+                    aria-label="Valor manual de Defesa"
+                    className="h-8 w-full font-mono text-sm text-zinc-100 disabled:opacity-50"
+                  />
+                </div>
+                <p className="text-[10px] leading-relaxed text-zinc-500">
+                  Os bônus extras são somados aos cálculos automáticos. O valor fixo substitui a Defesa calculada.
+                </p>
+              </>
+            ) : (
+              <>
+                <label className="block font-mono text-[10px] text-zinc-400">
+                  Bônus extra de PE / turno
+                  <Input
+                    type="number"
+                    value={Number(agent.peTurnoBonus) || 0}
+                    onChange={(event) => onUpdate((prev) => ({
+                      ...prev,
+                      peTurnoBonus: Number(event.target.value) || 0,
+                    }))}
+                    aria-label="Bônus extra de PE por turno"
+                    className="mt-1 h-8 w-full font-mono text-sm text-zinc-100"
+                  />
+                </label>
+                <label className="flex items-center gap-2 text-[11px] text-zinc-300">
+                  <input
+                    type="checkbox"
+                    checked={agent.peTurnoOverride !== null && agent.peTurnoOverride !== undefined}
+                    onChange={(event) => onUpdate((prev) => ({
+                      ...prev,
+                      peTurnoOverride: event.target.checked ? Number(vitals.peLimit) || 0 : null,
+                    }))}
+                    aria-label="Ativar valor fixo de PE por turno"
+                    className="accent-amber-300"
+                  />
+                  Definir valor final manualmente
+                </label>
+                <Input
+                  type="number"
+                  min={0}
+                  disabled={agent.peTurnoOverride === null || agent.peTurnoOverride === undefined}
+                  value={(agent.peTurnoOverride ?? Number(vitals.peLimit)) || 0}
+                  onChange={(event) => onUpdate((prev) => ({
+                    ...prev,
+                    peTurnoOverride: Number(event.target.value) || 0,
+                  }))}
+                  aria-label="Valor manual de PE por turno"
+                  className="h-8 w-full font-mono text-sm text-zinc-100 disabled:opacity-50"
+                />
+                <p className="rounded border border-white/10 bg-zinc-950/70 px-2 py-1.5 font-mono text-[10px] text-amber-200/80">
+                  {peTurnoBreakdown}
+                </p>
+              </>
+            )}
+          </div>,
+          document.body
+        )}
+
       <Card className="p-4 space-y-4">
         {/* Section A: Condições */}
         <div ref={condRef} className="relative space-y-2.5">

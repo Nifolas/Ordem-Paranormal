@@ -684,9 +684,23 @@ export interface Agent {
     paranormalAccessoryBonus?: number;
     abilityBonus?: number;
     otherBonus: number;
+    /** Extra manual bonus added to the calculated Defense. */
+    defenseBonus?: number;
+    /** Fixed Defense value; null or undefined keeps the automatic calculation. */
+    manualOverride?: number | null;
+    /** Extra RD added to the automatic Block value. */
+    blockBonus?: number;
+    /** Extra bonus added to the automatic Dodge value. */
+    dodgeBonus?: number;
+    /** Allows Dodge even when Reflexes is not trained. */
+    allowManualDodge?: boolean;
     displacement: number;
     resistances: Record<string, number>;
   };
+  /** Extra bonus to the PE/turn limit, added to class and origin values. */
+  peTurnoBonus?: number;
+  /** Fixed PE/turn limit; null or undefined keeps the automatic calculation. */
+  peTurnoOverride?: number | null;
   ritualDTBonus: number;
   skills: Record<SkillKey, AgentSkillState>;
   skillList?: AgentSkill[];

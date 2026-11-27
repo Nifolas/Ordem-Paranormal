@@ -241,11 +241,6 @@ export default function AgenteSheetPage({
     }
   };
 
-  const handleOpenSkillsFromLeftColumn = () => {
-    setWorkspaceTab("pericias");
-    setMobileTab("pericias");
-  };
-
   return (
     <div className="mx-auto max-w-[1600px] px-3 py-4 sm:px-6 space-y-4">
       {/* A. Cabeçalho Fixo no Topo (Identidade + Faixa de Status) */}
@@ -297,8 +292,6 @@ export default function AgenteSheetPage({
             agent={agent}
             onUpdate={handleUpdate}
             onRollAttribute={handleRollAttribute}
-            isSkillsOpen={workspaceTab === "pericias"}
-            onOpenSkills={handleOpenSkillsFromLeftColumn}
           />
         </section>
 

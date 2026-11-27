@@ -271,6 +271,59 @@ describe("sheetCalculator — Ordem Paranormal v1.2 + Sobrevivendo ao Horror", (
       // 5 + 2 = 7
       expect(combat.blockRd).toBe(7);
     });
+
+    it("soma bÃ´nus defensivos e de PE por turno com seguranÃ§a e respeita overrides manuais", () => {
+      const editableAgent = {
+        classId: "combatente",
+        nex: 10,
+        patente: "Recruta",
+        attributes: { AGI: "1", FOR: "1", INT: "1", PRE: "1", VIG: "1" },
+        defense: {
+          protectionBonus: "0",
+          otherBonus: "0",
+          defenseBonus: "2",
+          blockBonus: "3",
+          dodgeBonus: "4",
+          allowManualDodge: true,
+          manualOverride: null,
+          displacement: "9",
+          resistances: {},
+        },
+        peTurnoBonus: "2",
+        peTurnoOverride: null,
+        ritualDTBonus: "0",
+        inventory: [],
+        skills: {
+          reflexos: { attribute: "AGI", training: "0", bonus: "0" },
+          fortitude: { attribute: "VIG", training: "5", bonus: "0" },
+          luta: { attribute: "FOR", training: "0", bonus: "0" },
+        },
+      } as unknown as Agent;
+
+      const combat = calculateCombatStats(editableAgent);
+      expect(combat.defense).toBe(13);
+      expect(combat.canDodge).toBe(true);
+      expect(combat.dodge).toBe(17);
+      expect(combat.canBlock).toBe(true);
+      expect(combat.blockRd).toBe(8);
+      expect(combat.peLimit).toBe(
+        calculateVitals({
+          classId: "combatente",
+          nex: 10,
+          vig: 1,
+          pre: 1,
+          patente: "Recruta",
+        }).peLimit + 2
+      );
+
+      const fixedValues = calculateCombatStats({
+        ...editableAgent,
+        defense: { ...editableAgent.defense, manualOverride: "19" },
+        peTurnoOverride: "7",
+      } as unknown as Agent);
+      expect(fixedValues.defense).toBe(19);
+      expect(fixedValues.peLimit).toBe(7);
+    });
   });
 
   describe("Categoria Final de Itens, Modificações, Maldições e Opressão Elemental", () => {

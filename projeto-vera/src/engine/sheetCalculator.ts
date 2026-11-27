@@ -618,7 +618,8 @@ export function getAgentEffectiveVitals(agent: Agent) {
   let bonusPv = (eff?.pvFixo ?? 0) - halfPvPenalty;
   let bonusSan = 0;
   let bonusPe = -halfPePenalty;
-  let bonusPeLimit = eff?.limitePeBonus ?? 0;
+  let bonusPeLimit =
+    (Number(eff?.limitePeBonus) || 0) + (Number(agent.peTurnoBonus) || 0);
 
   if (agent.classId !== "sobrevivente") {
     const isHellHuntersOrigin =
@@ -708,7 +709,11 @@ export function getAgentEffectiveVitals(agent: Agent) {
     1,
     auto.maxPd + bonusPe - missionPePenalty - retainedPeTotal
   );
-  const effectivePeLimit = auto.peLimit + bonusPeLimit;
+  const calculatedPeLimit = auto.peLimit + bonusPeLimit;
+  const effectivePeLimit =
+    agent.peTurnoOverride !== null && agent.peTurnoOverride !== undefined
+      ? Math.max(0, Number(agent.peTurnoOverride) || 0)
+      : calculatedPeLimit;
 
   const maxPv =
     !agent.status.pv.autoCalc && agent.status.pv.maxOverride !== null
@@ -985,7 +990,7 @@ export function calculateCombatStats(agent: Agent) {
   const vulnerableDefensePenalty = agent.status?.vulneravel ? -2 : 0;
   const disorientedDefensePenalty = agent.status?.desorientado ? -3 : 0;
 
-  const defense = Math.max(
+  const calculatedDefense = Math.max(
     0,
     10 +
       Number(effAttrs.AGI) +
@@ -994,10 +999,16 @@ export function calculateCombatStats(agent: Agent) {
       accessoryBonus +
       abilityBonus +
       otherBonus +
+      (Number(agent.defense.defenseBonus) || 0) +
       Number(load.overloadDefensePenalty) +
       vulnerableDefensePenalty +
       disorientedDefensePenalty
   );
+  const defense =
+    agent.defense.manualOverride !== null &&
+    agent.defense.manualOverride !== undefined
+      ? Math.max(0, Number(agent.defense.manualOverride) || 0)
+      : calculatedDefense;
 
   const reflexosFromList = Array.isArray(agent.skillList)
     ? agent.skillList.find((s) => s.id === "reflexos")
@@ -1011,9 +1022,12 @@ export function calculateCombatStats(agent: Agent) {
     reflexosFromList !== undefined
       ? Number(reflexosFromList.bonusOutros) || 0
       : Number(reflexosSkill?.bonus) || 0;
-  const canDodge = reflexosTraining >= 5;
+  const canDodge = reflexosTraining >= 5 || Boolean(agent.defense.allowManualDodge);
   const reflexosBonus = reflexosTraining + reflexosOther;
-  const dodge = Number(defense) + Number(reflexosBonus);
+  const dodge =
+    Number(defense) +
+    Number(reflexosBonus) +
+    (Number(agent.defense.dodgeBonus) || 0);
 
   const fortitudeFromList = Array.isArray(agent.skillList)
     ? agent.skillList.find((s) => s.id === "fortitude")
@@ -1037,7 +1051,8 @@ export function calculateCombatStats(agent: Agent) {
   const blockRd =
     Number(fortitudeTraining) +
     Number(fortitudeOther) +
-    Number(cascaGrossaBlockBonus);
+    Number(cascaGrossaBlockBonus) +
+    (Number(agent.defense.blockBonus) || 0);
 
   const lutaFromList = Array.isArray(agent.skillList)
     ? agent.skillList.find((s) => s.id === "luta")
@@ -1057,8 +1072,14 @@ export function calculateCombatStats(agent: Agent) {
       level: agent.level,
     })
   ) || 1;
+  const calculatedPeLimit =
+    basePeLimit +
+    (Number(origin?.efeitosPassivos?.limitePeBonus) || 0) +
+    (Number(agent.peTurnoBonus) || 0);
   const peLimit =
-    basePeLimit + (Number(origin?.efeitosPassivos?.limitePeBonus) || 0);
+    agent.peTurnoOverride !== null && agent.peTurnoOverride !== undefined
+      ? Math.max(0, Number(agent.peTurnoOverride) || 0)
+      : calculatedPeLimit;
   const ritualDT =
     10 +
     basePeLimit +
