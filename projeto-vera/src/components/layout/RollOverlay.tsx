@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import {
   AlertTriangle,
   Dices,
@@ -230,7 +231,7 @@ export function RollOverlay() {
     <>
       {/* Toast Stack */}
       <div
-        className="pointer-events-none fixed bottom-4 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-sm flex-col gap-2"
+        className="pointer-events-none fixed bottom-4 right-4 z-[110] flex w-[calc(100vw-2rem)] max-w-sm flex-col gap-2"
         aria-live="polite"
       >
         {activeToasts.map((toast) => (
@@ -243,14 +244,16 @@ export function RollOverlay() {
         ))}
       </div>
 
-      {/* Quick Roller Drawer */}
-      {quickRollerOpen && (
-        <div
-          className="fixed inset-0 z-50 flex justify-end bg-black/75"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) setQuickRollerOpen(false);
-          }}
-        >
+      {/* Quick Roller Drawer via Portal */}
+      {quickRollerOpen &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[105] flex justify-end bg-black/75"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) setQuickRollerOpen(false);
+            }}
+          >
           <aside className="flex h-full w-full max-w-md flex-col border-l border-[#22222A] bg-[#09090B]">
             <div className="flex items-center justify-between border-b border-[#22222A] bg-[#101014] px-5 py-4">
               <div className="flex items-center gap-2.5">
@@ -423,7 +426,8 @@ export function RollOverlay() {
               </div>
             </div>
           </aside>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

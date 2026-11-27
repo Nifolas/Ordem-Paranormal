@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import {
   AlertTriangle,
+  Backpack,
   Minus,
   Pill,
   Plus,
@@ -10,6 +11,7 @@ import {
   Search,
   Swords,
   Trash2,
+  Weight,
   Wrench,
 } from "lucide-react";
 import type {
@@ -43,6 +45,8 @@ import {
   normalizeItemCategoryType,
 } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
+import { ITEM_CATEGORY_VISUALS, getItemVisualIcon } from "@/lib/ui-icons";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import { useAppStore } from "@/store/useAppStore";
 import { InventoryCatalogModal } from "./InventoryCatalogModal";
 import { Badge, Button, Input, Modal } from "@/components/ui/primitives";
@@ -292,8 +296,10 @@ export function InventoryTab({
       <div className="rounded-md border border-[#22222A] bg-[#0D0D11] p-4 space-y-3.5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#8E8E9E]">
-              Capacidade de Carga · FOR {agent.attributes.FOR}
+            <span className="inline-flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#8E8E9E]">
+              <Weight className="h-3 w-3 text-zinc-400" />
+              Capacidade de Carga · FOR {agent.attributes.FOR} ·{" "}
+              <TermTooltip term="Patente" label={agent.patente} />
             </span>
             <p className="font-mono text-sm text-[#F4F4F5] mt-0.5 tabular-nums">
               <strong>{loadStats.usedSpaces}</strong> / {loadStats.maxSpaces}{" "}
@@ -363,7 +369,7 @@ export function InventoryTab({
                 )}
               >
                 <span className="text-[9px] uppercase tracking-wider text-[#6E6E7E] block">
-                  Cat {ROMAN_CAT[cat]}
+                  <TermTooltip term="Categoria" label={`Cat ${ROMAN_CAT[cat]}`} />
                 </span>
                 <span className="font-bold">
                   {count}/{limit}
@@ -539,13 +545,15 @@ export function InventoryTab({
         {ITEM_CATEGORY_META.map((cat) => {
           const count = countsByType[cat.key];
           const active = typeFilter === cat.key;
+          const vis = ITEM_CATEGORY_VISUALS[cat.key];
+          const CatIcon = vis.icon;
           return (
             <button
               key={cat.key}
               type="button"
               onClick={() => setTypeFilter(cat.key)}
               className={cn(
-                "rounded-sm border px-2.5 py-1 text-[11px] font-medium transition-colors",
+                "inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 text-[11px] font-medium transition-colors",
                 active
                   ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
                   : count > 0
@@ -553,6 +561,7 @@ export function InventoryTab({
                   : "border-[#1A1A22] bg-[#0B0B0F] text-[#52525E] hover:text-[#8E8E9E]"
               )}
             >
+              <CatIcon className={cn("h-3 w-3", count > 0 || active ? "opacity-90" : "text-[#52525E]")} />
               {cat.shortLabel}{" "}
               <span className="font-mono text-[10px] opacity-70">({count})</span>
             </button>
@@ -568,23 +577,40 @@ export function InventoryTab({
 
       {/* Grouped 9-Category Inventory List */}
       {groupedInventory.length === 0 ? (
-        <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] p-10 text-center space-y-2">
-          <p className="text-sm text-[#A1A1AA]">
-            {agent.inventory.length === 0
-              ? "Inventário vazio."
-              : "Nenhum item nesta categoria com os filtros atuais."}
-          </p>
-          <p className="text-xs text-[#6E6E7E]">
-            Clique em &ldquo;Adicionar Item&rdquo; para navegar pelas 9
-            categorias oficiais (105 itens catalogados).
-          </p>
+        <div className="rounded-xl border border-dashed border-[#2A2A35] bg-[#0C0C10]/90 p-10 text-center flex flex-col items-center justify-center space-y-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+            <Backpack className="h-6 w-6" />
+          </div>
+          <div className="space-y-1 max-w-md">
+            <p className="text-sm font-semibold text-[#F4F4F5]">
+              {agent.inventory.length === 0
+                ? "Sua mochila de campo ainda está vazia"
+                : "Nenhum item encontrado nesta categoria"}
+            </p>
+            <p className="text-xs text-[#8E8E9E] leading-relaxed">
+              Adicione armas, coletes, kits de perícia, medicamentos ou itens amaldiçoados. O sistema calcula automaticamente seus espaços de carga e limites de Patente.
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setCatalogOpen(true)}
+          >
+            <Plus className="h-3.5 w-3.5" /> Adicionar Primeiro Item
+          </Button>
         </div>
       ) : (
         <div className="space-y-6">
-          {groupedInventory.map(({ meta, items }) => (
+          {groupedInventory.map(({ meta, items }) => {
+            const catVis = ITEM_CATEGORY_VISUALS[meta.key];
+            const CatHeaderIcon = catVis.icon;
+            return (
             <div key={meta.key}>
               <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-2 mb-3">
                 <div className="flex items-center gap-2">
+                  <span className={cn("inline-flex h-6 w-6 items-center justify-center rounded-md border", catVis.iconBoxCls)}>
+                    <CatHeaderIcon className="h-3.5 w-3.5" />
+                  </span>
                   <h3 className="font-display text-sm font-bold tracking-tight text-zinc-100">
                     {meta.label}
                   </h3>
@@ -613,6 +639,7 @@ export function InventoryTab({
                     ? ELEMENT_STYLES[accentElement]
                     : null;
                   const catKey = normalizeItemCategoryType(item);
+                  const ItemRowIcon = getItemVisualIcon(item);
 
                   return (
                     <div
@@ -625,6 +652,14 @@ export function InventoryTab({
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0 space-y-1 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={cn(
+                                "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-md border",
+                                catVis.iconBoxCls
+                              )}
+                            >
+                              <ItemRowIcon className="h-3.5 w-3.5" />
+                            </span>
                             <span className="font-display text-sm font-bold text-[#F4F4F5]">
                               {item.name}
                             </span>
@@ -887,7 +922,8 @@ export function InventoryTab({
                 })}
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

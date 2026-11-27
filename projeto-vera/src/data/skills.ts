@@ -78,8 +78,8 @@ export function buildSkillListFromRecord(
       especializacao: def.key === "profissao" ? "" : undefined,
       descricao: def.description ?? "",
       atributoBase: st?.attribute ?? def.defaultAttribute,
-      treinamento: st?.training ?? 0,
-      bonusOutros: st?.bonus ?? 0,
+      treinamento: (Number(st?.training) || 0) as AgentSkill["treinamento"],
+      bonusOutros: Number(st?.bonus) || 0,
       somenteTreinada: def.trainedOnly,
       penalidadeCarga: def.loadPenalty,
       requerKit: def.usesKit,
@@ -94,7 +94,11 @@ export function buildSkillListFromRecord(
  */
 export function getAgentSkillList(agent: Agent): AgentSkill[] {
   if (Array.isArray(agent.skillList) && agent.skillList.length > 0) {
-    return agent.skillList;
+    return agent.skillList.map((sk) => ({
+      ...sk,
+      treinamento: (Number(sk.treinamento) || 0) as AgentSkill["treinamento"],
+      bonusOutros: Number(sk.bonusOutros) || 0,
+    }));
   }
   return buildSkillListFromRecord(agent.skills);
 }
@@ -119,8 +123,8 @@ export function applyAgentSkillList(
       presentIds.add(key);
       nextRecord[key] = {
         attribute: sk.atributoBase,
-        training: sk.treinamento,
-        bonus: sk.bonusOutros,
+        training: (Number(sk.treinamento) || 0) as AgentSkill["treinamento"],
+        bonus: Number(sk.bonusOutros) || 0,
         hasKit: sk.hasKit ?? true,
       };
     }
@@ -140,21 +144,90 @@ export function applyAgentSkillList(
 
   return {
     ...agent,
-    skillList: nextList,
+    skillList: nextList.map((sk) => ({
+      ...sk,
+      treinamento: (Number(sk.treinamento) || 0) as AgentSkill["treinamento"],
+      bonusOutros: Number(sk.bonusOutros) || 0,
+    })),
     skills: nextRecord,
   };
 }
 
 /**
- * Migrates a persisted or imported Agent so it always has a valid `skillList`.
+ * Migrates and sanitizes a persisted or imported Agent so it always has numeric fields and a valid `skillList`.
  */
 export function migrateAgentSkillList(agent: Agent): Agent {
-  if (Array.isArray(agent.skillList) && agent.skillList.length > 0) {
-    return agent;
+  const rawSkills = agent.skills ?? ({} as Record<SkillKey, AgentSkillState>);
+  const sanitizedSkills: Record<SkillKey, AgentSkillState> = {
+    ...createDefaultSkills(),
+  };
+  for (const def of SKILLS_LIST) {
+    const st = rawSkills[def.key];
+    sanitizedSkills[def.key] = {
+      attribute: st?.attribute ?? def.defaultAttribute,
+      training: (Number(st?.training) || 0) as AgentSkillState["training"],
+      bonus: Number(st?.bonus) || 0,
+      hasKit: st?.hasKit ?? true,
+    };
   }
+
+  const sanitizedSkillList =
+    Array.isArray(agent.skillList) && agent.skillList.length > 0
+      ? agent.skillList.map((sk) => ({
+          ...sk,
+          treinamento: (Number(sk.treinamento) || 0) as AgentSkill["treinamento"],
+          bonusOutros: Number(sk.bonusOutros) || 0,
+        }))
+      : buildSkillListFromRecord(sanitizedSkills);
+
+  // Sync sanitizedSkillList into sanitizedSkills so both are 100% consistent
+  for (const sk of sanitizedSkillList) {
+    if (STANDARD_SKILL_KEYS.has(sk.id)) {
+      const key = sk.id as SkillKey;
+      sanitizedSkills[key] = {
+        attribute: sk.atributoBase,
+        training: (Number(sk.treinamento) || 0) as AgentSkill["treinamento"],
+        bonus: Number(sk.bonusOutros) || 0,
+        hasKit: sk.hasKit ?? true,
+      };
+    }
+  }
+
+  const rawRes = agent.defense?.resistances ?? {};
+  const sanitizedResistances: Record<string, number> = {};
+  for (const [k, v] of Object.entries(rawRes)) {
+    sanitizedResistances[k] = Number(v) || 0;
+  }
+
   return {
     ...agent,
-    skillList: buildSkillListFromRecord(agent.skills),
+    nex: Number(agent.nex) || 0,
+    stage: agent.stage !== undefined ? Number(agent.stage) || 1 : undefined,
+    transcenderCount: Number(agent.transcenderCount) || 0,
+    permanentSanLoss: Number(agent.permanentSanLoss) || 0,
+    ritualDTBonus: Number(agent.ritualDTBonus) || 0,
+    attributes: {
+      AGI: Number(agent.attributes?.AGI) || 0,
+      FOR: Number(agent.attributes?.FOR) || 0,
+      INT: Number(agent.attributes?.INT) || 0,
+      PRE: Number(agent.attributes?.PRE) || 0,
+      VIG: Number(agent.attributes?.VIG) || 0,
+    },
+    defense: {
+      protectionBonus: Number(agent.defense?.protectionBonus) || 0,
+      shieldBonus: Number(agent.defense?.shieldBonus) || 0,
+      paranormalAccessoryBonus:
+        Number(agent.defense?.paranormalAccessoryBonus) || 0,
+      abilityBonus: Number(agent.defense?.abilityBonus) || 0,
+      otherBonus: Number(agent.defense?.otherBonus) || 0,
+      displacement:
+        agent.defense?.displacement !== undefined
+          ? Number(agent.defense.displacement) || 9
+          : 9,
+      resistances: sanitizedResistances,
+    },
+    skills: sanitizedSkills,
+    skillList: sanitizedSkillList,
   };
 }
 

@@ -300,14 +300,28 @@ export function AlliesTab({
       </p>
 
       {allies.length === 0 ? (
-        <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] p-10 text-center space-y-2">
-          <p className="text-sm text-[#A1A1AA]">
-            Nenhum aliado ou companheiro animal vinculado ao dossiê.
-          </p>
-          <p className="text-xs text-[#6E6E7E]">
-            Escolha entre os 6 modelos oficiais (Acólito, Faz-Tudo, Guerrilheiro,
-            Socorrista, Cão Adestrado, Companheiro Animal) ou crie um customizado.
-          </p>
+        <div className="rounded-xl border border-dashed border-[#2A2A35] bg-[#0C0C10]/90 p-10 text-center flex flex-col items-center justify-center space-y-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-teal-500/30 bg-teal-500/10 text-teal-400">
+            <PawPrint className="h-6 w-6" />
+          </div>
+          <div className="space-y-1 max-w-md">
+            <p className="text-sm font-semibold text-[#F4F4F5]">
+              Nenhum aliado ou companheiro animal vinculado ao dossiê
+            </p>
+            <p className="text-xs text-[#8E8E9E] leading-relaxed">
+              Adicione aliados (Acólito, Faz-Tudo, Guerrilheiro, Socorrista) ou pets (Cão Adestrado, Companheiro Animal) que concedem bônus passivos automáticos e habilidades em campo.
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => {
+              resetModal();
+              setAddModalOpen(true);
+            }}
+          >
+            <Plus className="h-3.5 w-3.5" /> Adicionar Primeiro Aliado / Pet
+          </Button>
         </div>
       ) : (
         <div className="space-y-3">

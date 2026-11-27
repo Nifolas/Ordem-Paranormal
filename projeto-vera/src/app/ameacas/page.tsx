@@ -31,6 +31,8 @@ import {
 } from "@/components/SourceToggles";
 import { rollDiceFormula, rollOrdemTest } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
+import { ELEMENT_VISUALS } from "@/lib/ui-icons";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import type {
   AgentAlly,
   ContentSource,
@@ -590,18 +592,21 @@ export default function AmeacasPage() {
           </button>
           {ELEMENTS.map((el) => {
             const st = ELEMENT_STYLES[el];
+            const ev = ELEMENT_VISUALS[el];
+            const ElIcon = ev.icon;
             return (
               <button
                 key={el}
                 type="button"
                 onClick={() => setElementFilter(el)}
                 className={cn(
-                  "rounded-sm border px-2.5 py-1 text-xs transition-colors",
+                  "inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 text-xs transition-colors",
                   elementFilter === el
                     ? st.badge
                     : "border-[#22222A] bg-[#101014] text-[#8E8E9E] hover:text-[#D4D4D8]"
                 )}
               >
+                <ElIcon className={cn("h-3.5 w-3.5", ev.iconColor)} />
                 {el}
               </button>
             );
@@ -686,7 +691,7 @@ export default function AmeacasPage() {
                       </span>
                     ))}
                     <Badge variant="default" className="font-mono">
-                      VD {threat.vd}
+                      <TermTooltip term="VD" label={`VD ${threat.vd}`} />
                     </Badge>
                     {threat.isHomebrew && <Badge variant="purple">HB</Badge>}
                   </div>

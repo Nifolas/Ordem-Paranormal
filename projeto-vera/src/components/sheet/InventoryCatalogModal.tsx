@@ -3,6 +3,7 @@
 import React, { useMemo, useState } from "react";
 import {
   Check,
+  Layers,
   Plus,
   Search,
   Swords,
@@ -36,6 +37,8 @@ import {
   toggleSourceList,
 } from "@/components/SourceToggles";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
+import { ITEM_CATEGORY_VISUALS, getItemVisualIcon } from "@/lib/ui-icons";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import { useAppStore } from "@/store/useAppStore";
 import {
   Badge,
@@ -289,7 +292,7 @@ export function InventoryCatalogModal({
       <div className="flex flex-col h-full min-h-0">
         {/* Top Category Tabs Strip */}
         <div className="shrink-0 border-b border-[#22222A] bg-[#0C0C10] px-4 py-2.5 space-y-2.5">
-          <div className="flex flex-wrap items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1.5">
             <button
               type="button"
               onClick={() => {
@@ -297,12 +300,13 @@ export function InventoryCatalogModal({
                 setSelectedId(null);
               }}
               className={cn(
-                "rounded-sm border px-2.5 py-1 text-[11px] font-medium transition-colors",
+                "inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 text-[11px] font-medium transition-colors",
                 activeTab === "todos"
                   ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
                   : "border-[#22222A] bg-[#101014] text-[#8E8E9E] hover:text-[#D4D4D8]"
               )}
             >
+              <Layers className="h-3.5 w-3.5 text-zinc-400" />
               Todos{" "}
               <span className="font-mono text-[10px] opacity-75">
                 ({allLibraryItems.length})
@@ -311,6 +315,8 @@ export function InventoryCatalogModal({
 
             {ITEM_CATEGORY_META.map((cat) => {
               const active = activeTab === cat.key;
+              const vis = ITEM_CATEGORY_VISUALS[cat.key];
+              const CatIcon = vis.icon;
               return (
                 <button
                   key={cat.key}
@@ -320,12 +326,13 @@ export function InventoryCatalogModal({
                     setSelectedId(null);
                   }}
                   className={cn(
-                    "rounded-sm border px-2.5 py-1 text-[11px] font-medium transition-colors",
+                    "inline-flex items-center gap-1.5 rounded-sm border px-2.5 py-1 text-[11px] font-medium transition-colors",
                     active
                       ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
                       : "border-[#22222A] bg-[#101014] text-[#8E8E9E] hover:text-[#D4D4D8]"
                   )}
                 >
+                  <CatIcon className="h-3.5 w-3.5 opacity-85" />
                   {cat.shortLabel}{" "}
                   <span className="font-mono text-[10px] opacity-70">
                     ({categoryCounts[cat.key]})
@@ -676,6 +683,7 @@ export function InventoryCatalogModal({
                   const elStyle = item.element
                     ? ELEMENT_STYLES[item.element]
                     : null;
+                  const ItemIcon = getItemVisualIcon(item);
 
                   return (
                     <button
@@ -695,13 +703,14 @@ export function InventoryCatalogModal({
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                          <ItemIcon className="h-3.5 w-3.5 shrink-0 text-zinc-400" />
                           <span className="text-xs font-semibold text-[#F4F4F5] leading-snug">
                             {item.name}
                           </span>
                           <SourceBadge source={item.source} />
                         </div>
                         <span className="shrink-0 font-mono text-[10px] text-[#8E8E9E] tabular-nums">
-                          CAT {ROMAN_CAT[item.category]}
+                          <TermTooltip term="Categoria" label={`CAT ${ROMAN_CAT[item.category]}`} />
                         </span>
                       </div>
                       <div className="mt-1 flex items-center gap-1.5 flex-wrap font-mono text-[10px] text-[#6E6E7E]">

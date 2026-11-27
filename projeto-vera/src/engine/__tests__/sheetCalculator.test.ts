@@ -240,6 +240,37 @@ describe("sheetCalculator — Ordem Paranormal v1.2 + Sobrevivendo ao Horror", (
       expect(combat.canBlock).toBe(false); // Fortitude destreinada
       expect(combat.canCounterAttack).toBe(true);
     });
+
+    it("garante soma numérica para Defesa, Esquiva e Bloqueio mesmo se campos persistidos forem strings (nunca concatena 118 ou 123)", () => {
+      const stringifiedAgent = {
+        classId: "combatente",
+        nex: "10",
+        patente: "Recruta",
+        attributes: { AGI: "1", FOR: "2", INT: "1", PRE: "1", VIG: "2" },
+        defense: {
+          protectionBonus: "5",
+          shieldBonus: "2",
+          otherBonus: "0",
+          displacement: "9",
+          resistances: {},
+        },
+        ritualDTBonus: "0",
+        inventory: [],
+        skills: {
+          reflexos: { attribute: "AGI", training: "5", bonus: "0" },
+          fortitude: { attribute: "VIG", training: "5", bonus: "2" },
+          luta: { attribute: "FOR", training: "5", bonus: "0" },
+        },
+      } as unknown as Agent;
+
+      const combat = calculateCombatStats(stringifiedAgent);
+      // 10 + 1(AGI) + 5(Prot) + 2(Escudo) = 18 (jamais 118!)
+      expect(combat.defense).toBe(18);
+      // 18 + 5(Reflexos) = 23 (jamais 123!)
+      expect(combat.dodge).toBe(23);
+      // 5 + 2 = 7
+      expect(combat.blockRd).toBe(7);
+    });
   });
 
   describe("Categoria Final de Itens, Modificações, Maldições e Opressão Elemental", () => {

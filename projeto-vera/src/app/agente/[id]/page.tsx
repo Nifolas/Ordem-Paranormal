@@ -283,9 +283,9 @@ export default function AgenteSheetPage({
       </div>
 
       {/* B. Corpo da Ficha no Desktop (>= 1280px) em 2 Colunas:
-          1. Esquerda (340px fixos): Pentagrama de Atributos Grande (C.R.I.S.) + Botão Perícias + Condições & RD
+          1. Esquerda (350px fixos): Pentagrama de Atributos Grande (C.R.I.S.) + Faixa Rápida + PV/SAN/PE + Defesa/Bloqueio/Esquiva + Botão Perícias + Condições & RD
           2. Direita (flex-1): Container Principal Amplo com todas as Abas (Perícias, Combate, Habilidades, Rituais, Inventário, Aliados & Pets, Descrição) */}
-      <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[340px_minmax(0,1fr)] gap-5 items-start">
+      <div className="relative z-10 grid grid-cols-1 xl:grid-cols-[350px_minmax(0,1fr)] gap-5 items-start">
         {/* 1. Coluna Esquerda (340px) */}
         <section
           className={cn(

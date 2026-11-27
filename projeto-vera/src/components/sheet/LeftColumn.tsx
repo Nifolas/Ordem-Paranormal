@@ -4,18 +4,28 @@ import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   AlertOctagon,
+  Brain,
   ChevronDown,
   ChevronRight,
   ChevronUp,
   Dices,
   Footprints,
+  Heart,
+  Lock,
+  Minus,
   Plus,
   Shield,
+  ShieldAlert,
   SlidersHorizontal,
+  Sparkles,
   Swords,
   Trash2,
+  Unlock,
+  Wind,
   X,
+  Zap,
 } from "lucide-react";
+import type { GlossaryTermKey } from "@/lib/glossary";
 import type { Agent, AttributeKey } from "@/types/ordem";
 import { getOriginById } from "@/data/origins";
 import { getAgentSkillList } from "@/data/skills";
@@ -27,10 +37,18 @@ import {
   getAgentEffectiveVitals,
   getTrailCarryBonus,
 } from "@/lib/ordem-rules";
-import { cn } from "@/lib/utils";
+import { clamp, cn } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
 import { AttributePentagram } from "./AttributePentagram";
-import { Badge, Button, Card, Input, Select } from "@/components/ui/primitives";
+import { TermTooltip } from "@/components/ui/TermTooltip";
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+  NumericInput,
+  Select,
+} from "@/components/ui/primitives";
 
 const COMMON_DAMAGE_TYPES = [
   "Balístico",
@@ -47,6 +65,314 @@ const COMMON_DAMAGE_TYPES = [
   "Conhecimento",
   "Energia",
 ];
+
+function VitalStackBar({
+  label,
+  glossaryTerm,
+  icon: Icon,
+  accentClass,
+  barColor,
+  current,
+  temp,
+  max,
+  autoCalc,
+  alertBadge,
+  onAdjust,
+  onSetCurrent,
+  onSetTemp,
+  onToggleAuto,
+  onSetMaxOverride,
+}: {
+  label: string;
+  glossaryTerm?: GlossaryTermKey;
+  icon?: React.ComponentType<{ className?: string }>;
+  accentClass: string;
+  barColor: string;
+  current: number;
+  temp?: number;
+  max: number;
+  autoCalc: boolean;
+  alertBadge?: string | null;
+  onAdjust: (delta: number) => void;
+  onSetCurrent: (val: number) => void;
+  onSetTemp?: (val: number) => void;
+  onToggleAuto: () => void;
+  onSetMaxOverride: (val: number) => void;
+}) {
+  const pct = max > 0 ? clamp((current / max) * 100, 0, 100) : 0;
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const [showTempInput, setShowTempInput] = useState(false);
+  const [popoverCoords, setPopoverCoords] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
+  const portalPopoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!popoverOpen) return;
+    const updatePosition = () => {
+      if (!popoverRef.current) return;
+      const rect = popoverRef.current.getBoundingClientRect();
+      setPopoverCoords({
+        top: rect.bottom + 6,
+        left: Math.max(
+          8,
+          Math.min(
+            rect.left,
+            window.innerWidth - Math.max(rect.width, 250) - 8
+          )
+        ),
+        width: Math.max(rect.width, 250),
+      });
+    };
+    updatePosition();
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(target) &&
+        (!portalPopoverRef.current || !portalPopoverRef.current.contains(target))
+      ) {
+        setPopoverOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [popoverOpen]);
+
+  const hasTemp = (temp ?? 0) > 0;
+
+  return (
+    <div
+      ref={popoverRef}
+      className="relative rounded-lg border border-white/10 bg-[#0C0C10]/95 px-3.5 py-2.5 space-y-2"
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 min-w-0">
+          {Icon && <Icon className={cn("h-3.5 w-3.5 shrink-0", accentClass)} />}
+          <span
+            className={cn(
+              "font-display text-xs font-bold uppercase tracking-wider",
+              accentClass
+            )}
+          >
+            {glossaryTerm ? (
+              <TermTooltip term={glossaryTerm} label={label} showIcon={false} />
+            ) : (
+              label
+            )}
+          </span>
+          {alertBadge && (
+            <span className="rounded-sm border border-amber-500/35 bg-amber-500/10 px-1.5 py-0.5 font-mono text-[9px] uppercase text-amber-300">
+              {alertBadge}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          <div className="inline-flex items-center rounded-md border border-white/10 bg-[#121218] p-0.5">
+            <button
+              type="button"
+              onClick={() => onAdjust(-1)}
+              className="flex h-6 w-6 items-center justify-center rounded text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
+              title={`Diminuir 1 ${label}`}
+              aria-label={`Diminuir 1 ${label}`}
+            >
+              <Minus className="h-3 w-3" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setPopoverOpen((v) => !v)}
+              title="Clique para ajustes rápidos (-5 / +5) ou editar máximo"
+              className="px-2 py-0.5 font-mono text-sm font-bold text-zinc-100 hover:text-white tabular-nums transition-colors"
+            >
+              <span>{current}</span>
+              <span className="mx-1 text-zinc-500 font-normal">/</span>
+              <span className="text-zinc-300 font-semibold">{max}</span>
+              {hasTemp && (
+                <span className="ml-1 text-xs font-semibold text-emerald-400">
+                  +{temp}
+                </span>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => onAdjust(1)}
+              className="flex h-6 w-6 items-center justify-center rounded text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
+              title={`Aumentar 1 ${label}`}
+              aria-label={`Aumentar 1 ${label}`}
+            >
+              <Plus className="h-3 w-3" />
+            </button>
+          </div>
+
+          {onSetTemp && (
+            <button
+              type="button"
+              onClick={() => setShowTempInput((v) => !v)}
+              title="Pontos temporários"
+              className={cn(
+                "h-7 rounded-md border px-1.5 font-mono text-[10px] font-medium transition-colors",
+                hasTemp || showTempInput
+                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                  : "border-white/10 bg-[#121218] text-zinc-400 hover:text-zinc-200"
+              )}
+            >
+              {hasTemp ? `TMP +${temp}` : "+TMP"}
+            </button>
+          )}
+        </div>
+      </div>
+
+      <div className="h-2.5 w-full rounded-full bg-zinc-900 overflow-hidden">
+        <div
+          className={cn(
+            "h-full rounded-full transition-all duration-200",
+            barColor
+          )}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+
+      {onSetTemp && showTempInput && (
+        <div className="flex items-center justify-between gap-2 pt-0.5 text-xs">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+            {label} Temporário
+          </span>
+          <div className="flex items-center gap-1">
+            <NumericInput
+              min={0}
+              value={temp ?? 0}
+              onValueChange={(val) => onSetTemp(Math.max(0, val))}
+              aria-label={`${label} temporário`}
+              className="h-6 w-14 rounded bg-zinc-950 border border-white/15 px-1.5 font-mono text-xs font-semibold text-emerald-300 text-center focus:outline-none tabular-nums"
+            />
+            {(temp ?? 0) > 0 && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSetTemp(0);
+                  setShowTempInput(false);
+                }}
+                className="rounded px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 hover:text-red-300"
+              >
+                Zerar
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {popoverOpen &&
+        popoverCoords &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={portalPopoverRef}
+            style={{
+              top: popoverCoords.top,
+              left: popoverCoords.left,
+              width: popoverCoords.width,
+            }}
+            className="fixed z-[110] rounded-lg border border-white/20 bg-[#121218] p-3 shadow-2xl space-y-2.5 text-[#F4F4F5]"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                Ajuste Rápido de {label}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPopoverOpen(false)}
+                className="text-zinc-400 hover:text-zinc-100"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-4 gap-1.5">
+              {[-5, -1, 1, 5].map((delta) => (
+                <button
+                  key={delta}
+                  type="button"
+                  onClick={() => onAdjust(delta)}
+                  className="rounded border border-white/10 bg-zinc-950 py-1 font-mono text-xs font-semibold text-zinc-200 hover:border-white/25 hover:bg-zinc-900 transition-colors"
+                >
+                  {delta > 0 ? `+${delta}` : delta}
+                </button>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10 text-xs">
+              <div>
+                <label className="font-mono text-[10px] text-zinc-400 block mb-1">
+                  Valor Atual
+                </label>
+                <NumericInput
+                  value={current}
+                  onValueChange={(val) => onSetCurrent(Math.max(0, val))}
+                  aria-label={`${label} atual`}
+                  className="h-7 w-full rounded bg-zinc-950 border border-white/15 px-2 font-mono text-xs font-bold text-zinc-100 text-center"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-mono text-[10px] text-zinc-400">
+                    Máximo
+                  </label>
+                  <button
+                    type="button"
+                    onClick={onToggleAuto}
+                    className="inline-flex items-center gap-0.5 font-mono text-[9px] text-zinc-400 hover:text-zinc-100"
+                    title={
+                      autoCalc
+                        ? "Cálculo automático ativo — clique para editar manualmente"
+                        : "Máximo manual — clique para voltar ao automático"
+                    }
+                  >
+                    {autoCalc ? (
+                      <>
+                        <Lock className="h-2.5 w-2.5" /> Auto
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="h-2.5 w-2.5 text-amber-300" /> Manual
+                      </>
+                    )}
+                  </button>
+                </div>
+                {autoCalc ? (
+                  <div className="h-7 flex items-center justify-center rounded border border-white/10 bg-zinc-950/60 font-mono text-xs font-semibold text-zinc-400">
+                    {max}
+                  </div>
+                ) : (
+                  <NumericInput
+                    min={1}
+                    fallback={1}
+                    value={max}
+                    onValueChange={(val) => onSetMaxOverride(Math.max(1, val))}
+                    aria-label={`${label} máximo manual`}
+                    className="h-7 w-full rounded bg-zinc-950 border border-amber-500/40 px-2 font-mono text-xs font-bold text-zinc-100 text-center"
+                  />
+                )}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+    </div>
+  );
+}
 
 export function LeftColumn({
   agent,
@@ -270,21 +596,472 @@ export function LeftColumn({
     (agent.defense.abilityBonus ?? 0) + agent.defense.otherBonus !== 0 ||
     agent.defense.displacement !== 9;
 
+  const effectiveDisplacement = Math.max(
+    1,
+    (Number(agent.defense.displacement) || 9) +
+      Number(load.overloadDisplacementPenalty)
+  );
+  const squaresCount = Math.floor(effectiveDisplacement / 1.5);
+  const extraDefBonus =
+    Number(combat.shieldBonus) +
+    Number(combat.accessoryBonus) +
+    (Number(agent.defense.abilityBonus) || 0) +
+    (Number(agent.defense.otherBonus) || 0);
+
+  const pdPool = agent.status.pd ?? {
+    current: vitals.maxPd,
+    temp: 0,
+    maxOverride: null,
+    autoCalc: true,
+  };
+
   return (
     <div className="space-y-3.5">
-      {/* Card 1: Atributos (Pentagrama grande estilo C.R.I.S.) */}
+      {/* 1. Pentagrama de Atributos (grande e clicável estilo C.R.I.S.) */}
       <AttributePentagram
         attributes={agent.attributes}
         onRollAttribute={onRollAttribute}
         onChangeAttribute={(key, val) =>
           onUpdate((prev) => ({
             ...prev,
-            attributes: { ...prev.attributes, [key]: val },
+            attributes: { ...prev.attributes, [key]: Number(val) || 0 },
           }))
         }
       />
 
-      {/* Botão de Destaque para Perícias (abre a aba Perícias no container principal da direita) */}
+      {/* 2. Faixa Rápida: NEX % | PE / Turno | Deslocamento (m / q) em 3 mini-cards alinhados */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="rounded-lg border border-white/10 bg-zinc-950/85 px-2.5 py-2 text-center">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400 block">
+            {agent.classId === "sobrevivente" ? (
+              "ESTÁGIO"
+            ) : (
+              <TermTooltip term="NEX" label="NEX" showIcon={false} />
+            )}
+          </span>
+          <span className="font-mono text-base font-bold text-white tabular-nums">
+            {agent.classId === "sobrevivente"
+              ? `Est. ${agent.stage ?? 1}`
+              : `${agent.nex}%`}
+          </span>
+        </div>
+
+        <div className="rounded-lg border border-white/10 bg-zinc-950/85 px-2.5 py-2 text-center">
+          <span className="font-mono text-[10px] uppercase tracking-wider text-amber-300/90 block">
+            <TermTooltip
+              term={vitals.usingPd ? "PD" : "PE"}
+              label={`${vitals.usingPd ? "PD" : "PE"} / TURNO`}
+              showIcon={false}
+            />
+          </span>
+          <span className="font-mono text-base font-bold text-white tabular-nums">
+            {vitals.peLimit}
+          </span>
+        </div>
+
+        <div
+          className="rounded-lg border border-white/10 bg-zinc-950/85 px-2.5 py-2 text-center"
+          title={
+            load.isOverloaded
+              ? `Deslocamento reduzido em -3m por Sobrecarga (Base ${agent.defense.displacement}m)`
+              : `Deslocamento por ação de movimento: ${effectiveDisplacement}m (${squaresCount} quadrados)`
+          }
+        >
+          <span className="inline-flex items-center justify-center gap-1 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+            <Footprints className="h-2.5 w-2.5" /> DESL.
+          </span>
+          <span
+            className={cn(
+              "font-mono text-base font-bold tabular-nums block",
+              load.isOverloaded ? "text-amber-300" : "text-white"
+            )}
+          >
+            {effectiveDisplacement}m{" "}
+            <span className="text-xs font-normal text-zinc-400">
+              ({squaresCount}q)
+            </span>
+          </span>
+        </div>
+      </div>
+
+      {/* 3. Barras Vitais Empilhadas e Limpas (VIDA / SANIDADE / ESFORÇO) */}
+      <Card className="p-3.5 space-y-2.5">
+        <VitalStackBar
+          label="VIDA (PV)"
+          glossaryTerm="PV"
+          icon={Heart}
+          accentClass="text-rose-300"
+          barColor="bg-rose-500/85"
+          current={Number(agent.status.pv.current) || 0}
+          temp={Number(agent.status.pv.temp) || 0}
+          max={Number(vitals.maxPv) || 1}
+          autoCalc={agent.status.pv.autoCalc}
+          alertBadge={autoConds.machucado ? "Machucado" : null}
+          onAdjust={(delta) =>
+            onUpdate((prev) => {
+              const nextVal = Math.max(
+                0,
+                (Number(prev.status.pv.current) || 0) + delta
+              );
+              const maxPv = getAgentEffectiveVitals(prev).maxPv;
+              return {
+                ...prev,
+                status: {
+                  ...prev.status,
+                  pv: { ...prev.status.pv, current: nextVal },
+                  machucado: nextVal <= Math.floor(maxPv / 2),
+                  morrendo: nextVal === 0 ? true : prev.status.morrendo,
+                },
+              };
+            })
+          }
+          onSetCurrent={(val) =>
+            onUpdate((prev) => ({
+              ...prev,
+              status: {
+                ...prev.status,
+                pv: { ...prev.status.pv, current: Math.max(0, Number(val) || 0) },
+              },
+            }))
+          }
+          onSetTemp={(val) =>
+            onUpdate((prev) => ({
+              ...prev,
+              status: {
+                ...prev.status,
+                pv: { ...prev.status.pv, temp: Number(val) || 0 },
+              },
+            }))
+          }
+          onToggleAuto={() =>
+            onUpdate((prev) => ({
+              ...prev,
+              status: {
+                ...prev.status,
+                pv: {
+                  ...prev.status.pv,
+                  autoCalc: !prev.status.pv.autoCalc,
+                  maxOverride: prev.status.pv.maxOverride ?? vitals.maxPv,
+                },
+              },
+            }))
+          }
+          onSetMaxOverride={(val) =>
+            onUpdate((prev) => ({
+              ...prev,
+              status: {
+                ...prev.status,
+                pv: { ...prev.status.pv, maxOverride: Number(val) || 1 },
+              },
+            }))
+          }
+        />
+
+        {vitals.usingPd ? (
+          <VitalStackBar
+            label="DETERMINAÇÃO (PD)"
+            glossaryTerm="PD"
+            icon={Sparkles}
+            accentClass="text-violet-300"
+            barColor="bg-violet-500/85"
+            current={Number(pdPool.current) || 0}
+            temp={Number(pdPool.temp) || 0}
+            max={Number(vitals.maxPd) || 1}
+            autoCalc={pdPool.autoCalc}
+            alertBadge={
+              pdPool.current <= Math.floor(vitals.maxPd / 2) ? "Abalado" : null
+            }
+            onAdjust={(delta) =>
+              onUpdate((prev) => {
+                const cur = prev.status.pd ?? pdPool;
+                return {
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pd: {
+                      ...cur,
+                      current: Math.max(0, (Number(cur.current) || 0) + delta),
+                    },
+                  },
+                };
+              })
+            }
+            onSetCurrent={(val) =>
+              onUpdate((prev) => {
+                const cur = prev.status.pd ?? pdPool;
+                return {
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pd: { ...cur, current: Math.max(0, Number(val) || 0) },
+                  },
+                };
+              })
+            }
+            onSetTemp={(val) =>
+              onUpdate((prev) => {
+                const cur = prev.status.pd ?? pdPool;
+                return {
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pd: { ...cur, temp: Number(val) || 0 },
+                  },
+                };
+              })
+            }
+            onToggleAuto={() =>
+              onUpdate((prev) => {
+                const cur = prev.status.pd ?? pdPool;
+                return {
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pd: {
+                      ...cur,
+                      autoCalc: !cur.autoCalc,
+                      maxOverride: cur.maxOverride ?? vitals.maxPd,
+                    },
+                  },
+                };
+              })
+            }
+            onSetMaxOverride={(val) =>
+              onUpdate((prev) => {
+                const cur = prev.status.pd ?? pdPool;
+                return {
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pd: { ...cur, maxOverride: Number(val) || 1 },
+                  },
+                };
+              })
+            }
+          />
+        ) : (
+          <>
+            <VitalStackBar
+              label="SANIDADE (SAN)"
+              glossaryTerm="SAN"
+              icon={Brain}
+              accentClass="text-sky-300"
+              barColor="bg-sky-500/85"
+              current={Number(agent.status.san.current) || 0}
+              max={Number(vitals.maxSan) || 1}
+              autoCalc={agent.status.san.autoCalc}
+              alertBadge={autoConds.perturbado ? "Perturbado" : null}
+              onAdjust={(delta) =>
+                onUpdate((prev) => {
+                  const nextVal = Math.max(
+                    0,
+                    (Number(prev.status.san.current) || 0) + delta
+                  );
+                  const maxSan = getAgentEffectiveVitals(prev).maxSan;
+                  return {
+                    ...prev,
+                    status: {
+                      ...prev.status,
+                      san: { ...prev.status.san, current: nextVal },
+                      perturbado: nextVal <= Math.floor(maxSan / 2),
+                      enlouquecendo:
+                        nextVal === 0 ? true : prev.status.enlouquecendo,
+                    },
+                  };
+                })
+              }
+              onSetCurrent={(val) =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    san: {
+                      ...prev.status.san,
+                      current: Math.max(0, Number(val) || 0),
+                    },
+                  },
+                }))
+              }
+              onToggleAuto={() =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    san: {
+                      ...prev.status.san,
+                      autoCalc: !prev.status.san.autoCalc,
+                      maxOverride: prev.status.san.maxOverride ?? vitals.maxSan,
+                    },
+                  },
+                }))
+              }
+              onSetMaxOverride={(val) =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    san: { ...prev.status.san, maxOverride: Number(val) || 1 },
+                  },
+                }))
+              }
+            />
+
+            <VitalStackBar
+              label="ESFORÇO (PE)"
+              glossaryTerm="PE"
+              icon={Zap}
+              accentClass="text-amber-300"
+              barColor="bg-amber-500/85"
+              current={Number(agent.status.pe.current) || 0}
+              temp={Number(agent.status.pe.temp) || 0}
+              max={Number(vitals.maxPe) || 1}
+              autoCalc={agent.status.pe.autoCalc}
+              onAdjust={(delta) =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pe: {
+                      ...prev.status.pe,
+                      current: Math.max(
+                        0,
+                        (Number(prev.status.pe.current) || 0) + delta
+                      ),
+                    },
+                  },
+                }))
+              }
+              onSetCurrent={(val) =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pe: {
+                      ...prev.status.pe,
+                      current: Math.max(0, Number(val) || 0),
+                    },
+                  },
+                }))
+              }
+              onSetTemp={(val) =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pe: { ...prev.status.pe, temp: Number(val) || 0 },
+                  },
+                }))
+              }
+              onToggleAuto={() =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pe: {
+                      ...prev.status.pe,
+                      autoCalc: !prev.status.pe.autoCalc,
+                      maxOverride: prev.status.pe.maxOverride ?? vitals.maxPe,
+                    },
+                  },
+                }))
+              }
+              onSetMaxOverride={(val) =>
+                onUpdate((prev) => ({
+                  ...prev,
+                  status: {
+                    ...prev.status,
+                    pe: { ...prev.status.pe, maxOverride: Number(val) || 1 },
+                  },
+                }))
+              }
+            />
+          </>
+        )}
+      </Card>
+
+      {/* 4. Bloco de Defesa (estilo C.R.I.S.): Escudo com DEFESA grande + breakdown e ao lado BLOQUEIO (RD) e ESQUIVA */}
+      <Card className="p-3.5 space-y-2.5">
+        <div className="grid grid-cols-[1.15fr_1fr] gap-2.5 items-stretch">
+          {/* Escudo Principal da Defesa */}
+          <div className="flex flex-col items-center justify-center rounded-lg border border-white/15 bg-[#0C0C10] px-3 py-3 text-center">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-zinc-300">
+              <Shield className="h-3.5 w-3.5 text-zinc-200" />
+              <TermTooltip term="Defesa" label="DEFESA" showIcon={false} />
+            </div>
+            <div className="mt-1 flex h-12 w-12 items-center justify-center rounded-xl border-2 border-zinc-200/80 bg-zinc-950 font-mono text-2xl font-extrabold text-white shadow-[0_0_16px_rgba(255,255,255,0.1)] tabular-nums">
+              {Number(combat.defense)}
+            </div>
+            <p className="mt-1.5 font-mono text-[10px] text-zinc-400 leading-tight tabular-nums">
+              10 + AGI ({Number(agent.attributes.AGI) || 0})
+              {combat.protectionBonus !== 0 && ` + Prot (${combat.protectionBonus})`}
+              {extraDefBonus !== 0 && ` + Outros (${extraDefBonus})`}
+            </p>
+          </div>
+
+          {/* Bloqueio (RD) e Esquiva ao lado */}
+          <div className="flex flex-col justify-between gap-2">
+            <div
+              className={cn(
+                "flex-1 flex items-center justify-between rounded-lg border border-white/10 bg-[#0C0C10] px-3 py-2",
+                !combat.canBlock && "opacity-55"
+              )}
+              title={
+                combat.canBlock
+                  ? `Bloqueio: Reduz o dano de um ataque corpo a corpo em RD ${combat.blockRd} (igual ao seu bônus de Fortitude)`
+                  : "Bloqueio: Requer ser treinado na perícia Fortitude"
+              }
+            >
+              <div className="space-y-0.5">
+                <span className="inline-flex items-center gap-1 font-display text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                  <ShieldAlert className="h-3 w-3" />
+                  <TermTooltip
+                    term="Bloqueio"
+                    label="BLOQUEIO"
+                    showIcon={false}
+                  />
+                </span>
+                <span className="block font-mono text-[9px] text-zinc-500">
+                  {combat.canBlock ? "Fortitude (RD)" : "Req. Fortitude"}
+                </span>
+              </div>
+              <span className="font-mono text-lg font-bold text-zinc-100 tabular-nums">
+                {combat.canBlock ? `RD ${Number(combat.blockRd)}` : "—"}
+              </span>
+            </div>
+
+            <div
+              className={cn(
+                "flex-1 flex items-center justify-between rounded-lg border border-white/10 bg-[#0C0C10] px-3 py-2",
+                !combat.canDodge && "opacity-55"
+              )}
+              title={
+                combat.canDodge
+                  ? `Esquiva = Defesa (${Number(combat.defense)}) + Reflexos (${Number(combat.dodge) - Number(combat.defense)}) = ${Number(combat.dodge)}`
+                  : "Esquiva: Requer ser treinado na perícia Reflexos"
+              }
+            >
+              <div className="space-y-0.5">
+                <span className="inline-flex items-center gap-1 font-display text-[10px] font-bold uppercase tracking-wider text-emerald-300">
+                  <Wind className="h-3 w-3" />
+                  <TermTooltip
+                    term="Esquiva"
+                    label="ESQUIVA"
+                    showIcon={false}
+                  />
+                </span>
+                <span className="block font-mono text-[9px] text-zinc-500">
+                  {combat.canDodge ? "Def + Reflexos" : "Req. Reflexos"}
+                </span>
+              </div>
+              <span className="font-mono text-lg font-bold text-zinc-100 tabular-nums">
+                {combat.canDodge ? Number(combat.dodge) : "—"}
+              </span>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* 5. Botão de Destaque para Perícias (abre a aba Perícias no container principal da direita) */}
       {onOpenSkills && (
         <button
           type="button"
@@ -537,7 +1314,7 @@ export function LeftColumn({
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1.5 font-display text-xs font-bold uppercase tracking-wider text-zinc-200">
               <Shield className="h-3.5 w-3.5 text-zinc-400" />
-              <span>Resistências (RD)</span>
+              <TermTooltip term="RD" label="Resistências (RD)" />
             </span>
             <button
               type="button"

@@ -7,13 +7,21 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  Briefcase,
   Check,
+  ChevronDown,
+  ChevronUp,
+  Compass,
+  FileText,
   Flame,
+  Layers,
   Minus,
   Plus,
   Search,
+  Skull,
   Sparkles,
   Upload,
+  Zap,
 } from "lucide-react";
 import { useAppStore } from "@/store/useAppStore";
 import { BASE_ORIGINS } from "@/data/origins";
@@ -41,6 +49,8 @@ import {
   validateInitialAttributes,
 } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
+import { CLASS_VISUALS, RESOURCE_ICONS } from "@/lib/ui-icons";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import type {
   Agent,
   AgentAbility,
@@ -164,6 +174,25 @@ export default function NovoAgenteWizardPage() {
   const [selectedPowerIds, setSelectedPowerIds] = useState<string[]>([]);
   const [selectedRitualIds, setSelectedRitualIds] = useState<string[]>([]);
   const [originSearch, setOriginSearch] = useState("");
+  const [originBookTab, setOriginBookTab] = useState<
+    | "todas"
+    | "livro_basico"
+    | "sobrevivendo_ao_horror"
+    | "arquivos_secretos"
+    | "suplementos"
+    | "homebrew"
+  >("livro_basico");
+  const [expandedOriginIds, setExpandedOriginIds] = useState<
+    Record<string, boolean>
+  >({});
+  const [trailBookTab, setTrailBookTab] = useState<
+    | "todas"
+    | "livro_basico"
+    | "sobrevivendo_ao_horror"
+    | "arquivos_secretos"
+    | "suplementos"
+    | "homebrew"
+  >("todas");
   const [powerSearch, setPowerSearch] = useState("");
   const [ritualSearch, setRitualSearch] = useState("");
 
@@ -571,22 +600,34 @@ export default function NovoAgenteWizardPage() {
         {/* Live Vitals Preview Strip */}
         <div className="flex items-center gap-3 rounded-md border border-[#22222A] bg-[#101014] px-4 py-2.5 font-mono text-xs tabular-nums">
           <div>
-            <span className="text-[10px] text-red-400 block">PV</span>
+            <span className="text-[10px] text-red-400 flex items-center gap-1">
+              <RESOURCE_ICONS.pv.icon className="h-3 w-3" />
+              <TermTooltip term="PV" />
+            </span>
             <span className="font-bold text-[#F4F4F5]">{previewVitals.maxPv}</span>
           </div>
           {usePdRule ? (
             <div>
-              <span className="text-[10px] text-purple-400 block">PD</span>
+              <span className="text-[10px] text-purple-400 flex items-center gap-1">
+                <RESOURCE_ICONS.pd.icon className="h-3 w-3" />
+                <TermTooltip term="PD" />
+              </span>
               <span className="font-bold text-[#F4F4F5]">{previewVitals.maxPd}</span>
             </div>
           ) : (
             <>
               <div>
-                <span className="text-[10px] text-sky-400 block">SAN</span>
+                <span className="text-[10px] text-sky-400 flex items-center gap-1">
+                  <RESOURCE_ICONS.san.icon className="h-3 w-3" />
+                  <TermTooltip term="SAN" />
+                </span>
                 <span className="font-bold text-[#F4F4F5]">{previewVitals.maxSan}</span>
               </div>
               <div>
-                <span className="text-[10px] text-amber-400 block">PE</span>
+                <span className="text-[10px] text-amber-400 flex items-center gap-1">
+                  <RESOURCE_ICONS.pe.icon className="h-3 w-3" />
+                  <TermTooltip term="PE" />
+                </span>
                 <span className="font-bold text-[#F4F4F5]">{previewVitals.maxPe}</span>
               </div>
             </>
@@ -733,7 +774,13 @@ export default function NovoAgenteWizardPage() {
 
             <div>
               <label className="text-xs font-medium text-zinc-300 block mb-1">
-                {mode === "sobrevivente" ? "Estágio Inicial (1 a 5)" : "NEX Inicial"}
+                {mode === "sobrevivente" ? (
+                  "Estágio Inicial (1 a 5)"
+                ) : (
+                  <>
+                    <TermTooltip term="NEX" label="NEX" /> Inicial
+                  </>
+                )}
               </label>
               {mode === "sobrevivente" ? (
                 <Select
@@ -772,7 +819,7 @@ export default function NovoAgenteWizardPage() {
 
             <div>
               <label className="text-xs font-medium text-zinc-300 block mb-1">
-                Patente na Ordem
+                <TermTooltip term="Patente" label="Patente" /> na Ordem
               </label>
               <Select
                 value={patente}
@@ -919,138 +966,380 @@ export default function NovoAgenteWizardPage() {
       )}
 
       {/* ================= STEP 3: ORIGEM ================= */}
-      {step === 3 && (
-        <Card className="p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#22222A] pb-3">
-            <div>
-              <h2 className="font-display text-base font-bold text-[#F4F4F5]">
-                Escolha sua Origem ({filteredOrigins.length} disponíveis)
-              </h2>
-              <p className="text-xs text-[#8E8E9E] mt-0.5">
-                Aplica automaticamente as perícias treinadas e o poder de origem (incluindo bônus passivos).
-              </p>
-            </div>
-            <div className="relative w-full sm:w-72">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
-              <Input
-                value={originSearch}
-                onChange={(e) => setOriginSearch(e.target.value)}
-                placeholder="Buscar origem, perícia ou poder..."
-                className="h-8 pl-8 text-xs"
-              />
-            </div>
-          </div>
+      {step === 3 && (() => {
+        const getBookGroup = (
+          src?: ContentSource
+        ):
+          | "livro_basico"
+          | "sobrevivendo_ao_horror"
+          | "arquivos_secretos"
+          | "suplementos"
+          | "homebrew" => {
+          const s = src ?? "livro_basico";
+          if (s === "livro_basico") return "livro_basico";
+          if (s === "sobrevivendo_ao_horror") return "sobrevivendo_ao_horror";
+          if (s === "arquivos_secretos") return "arquivos_secretos";
+          if (s === "homebrew") return "homebrew";
+          return "suplementos";
+        };
 
-          <div className="flex flex-col gap-2.5">
-            {filteredOrigins
-              .filter((origin) => {
-                const q = originSearch.trim().toLowerCase();
-                if (!q) return true;
-                return (
-                  origin.name.toLowerCase().includes(q) ||
-                  origin.powerName.toLowerCase().includes(q) ||
-                  origin.powerDescription.toLowerCase().includes(q) ||
-                  origin.description.toLowerCase().includes(q) ||
-                  origin.trainedSkills.some((sk) =>
-                    (SKILLS_BY_KEY[sk]?.name ?? sk).toLowerCase().includes(q)
-                  )
-                );
-              })
-              .map((origin) => {
-                const selected = selectedOrigin.id === origin.id;
-                const showNarrativeDesc =
-                  origin.description &&
-                  origin.description.trim() !== origin.powerDescription.trim();
-                return (
-                  <button
-                    key={origin.id}
-                    type="button"
-                    onClick={() => setOriginId(origin.id)}
+        const q = originSearch.trim().toLowerCase();
+        const searchMatchedOrigins = filteredOrigins.filter((origin) => {
+          if (!q) return true;
+          return (
+            origin.name.toLowerCase().includes(q) ||
+            origin.powerName.toLowerCase().includes(q) ||
+            origin.powerDescription.toLowerCase().includes(q) ||
+            origin.description.toLowerCase().includes(q) ||
+            origin.trainedSkills.some((sk) =>
+              (SKILLS_BY_KEY[sk]?.name ?? sk).toLowerCase().includes(q)
+            )
+          );
+        });
+
+        const originGroupMeta: {
+          id:
+            | "livro_basico"
+            | "sobrevivendo_ao_horror"
+            | "arquivos_secretos"
+            | "suplementos"
+            | "homebrew";
+          label: string;
+          subtitle: string;
+          recommended?: boolean;
+          icon: React.ComponentType<{ className?: string }>;
+          iconCls: string;
+        }[] = [
+          {
+            id: "livro_basico",
+            label: "Livro Básico",
+            subtitle: "Origens clássicas do sistema oficial — ideais para seu primeiro agente.",
+            recommended: true,
+            icon: BookOpen,
+            iconCls: "text-emerald-400",
+          },
+          {
+            id: "sobrevivendo_ao_horror",
+            label: "Sobrevivendo ao Horror",
+            subtitle: "Suplemento oficial focado em investigação e terror de sobrevivência.",
+            icon: Skull,
+            iconCls: "text-rose-400",
+          },
+          {
+            id: "arquivos_secretos",
+            label: "Arquivos Secretos",
+            subtitle: "Origens temáticas das edições oficiais de Arquivos Secretos.",
+            icon: FileText,
+            iconCls: "text-amber-400",
+          },
+          {
+            id: "suplementos",
+            label: "Suplementos",
+            subtitle: "Grimório do Cataclisma e expansões da comunidade habilitadas na ficha.",
+            icon: Compass,
+            iconCls: "text-purple-400",
+          },
+          {
+            id: "homebrew",
+            label: "Homebrew",
+            subtitle: "Origens personalizadas criadas por você.",
+            icon: Sparkles,
+            iconCls: "text-pink-400",
+          },
+        ];
+
+        const countsByGroup = {
+          todas: searchMatchedOrigins.length,
+          livro_basico: searchMatchedOrigins.filter(
+            (o) => getBookGroup(o.source) === "livro_basico"
+          ).length,
+          sobrevivendo_ao_horror: searchMatchedOrigins.filter(
+            (o) => getBookGroup(o.source) === "sobrevivendo_ao_horror"
+          ).length,
+          arquivos_secretos: searchMatchedOrigins.filter(
+            (o) => getBookGroup(o.source) === "arquivos_secretos"
+          ).length,
+          suplementos: searchMatchedOrigins.filter(
+            (o) => getBookGroup(o.source) === "suplementos"
+          ).length,
+          homebrew: searchMatchedOrigins.filter(
+            (o) => getBookGroup(o.source) === "homebrew"
+          ).length,
+        };
+
+        const visibleGroups = originGroupMeta
+          .filter((g) =>
+            originBookTab === "todas"
+              ? countsByGroup[g.id] > 0
+              : g.id === originBookTab
+          )
+          .map((g) => ({
+            ...g,
+            items: searchMatchedOrigins.filter(
+              (o) => getBookGroup(o.source) === g.id
+            ),
+          }));
+
+        const renderOriginCard = (origin: (typeof filteredOrigins)[number]) => {
+          const selected = selectedOrigin.id === origin.id;
+          const isExpanded = Boolean(expandedOriginIds[origin.id] || selected);
+          const isLongPower = origin.powerDescription.length > 155;
+
+          return (
+            <div
+              key={origin.id}
+              onClick={() => setOriginId(origin.id)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setOriginId(origin.id);
+                }
+              }}
+              className={cn(
+                "w-full cursor-pointer rounded-lg border border-l-[3px] px-4 py-3.5 text-left transition-all space-y-2.5",
+                selected
+                  ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C] shadow-sm"
+                  : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+              )}
+            >
+              {/* Header Row: Name + Discrete Book Badge + 2 Trained Skills with Icon */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span
                     className={cn(
-                      "w-full rounded-md border border-l-[3px] px-4 py-3.5 text-left transition-colors space-y-2.5",
+                      "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
                       selected
-                        ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
-                        : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+                        ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                        : "border-[#32323E] bg-[#09090B] text-transparent"
                     )}
                   >
-                    {/* Header Row: Name + Perícias + Fonte */}
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <span
-                          className={cn(
-                            "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
-                            selected
-                              ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
-                              : "border-[#32323E] bg-[#09090B] text-transparent"
-                          )}
-                        >
-                          <Check className="h-3 w-3" />
-                        </span>
-                        <h3 className="font-display text-[15px] font-bold text-[#F4F4F5]">
-                          {origin.name}
-                        </h3>
-                        <SourceBadge source={origin.source} />
-                        <span className="font-mono text-[10px] text-[#6E6E7E]">
-                          {SOURCE_LABELS[origin.source ?? "livro_basico"]}
-                        </span>
-                      </div>
+                    <Check className="h-3 w-3" />
+                  </span>
+                  <span className="inline-flex h-6 w-6 items-center justify-center rounded-md border border-white/10 bg-[#14141C] text-zinc-300">
+                    <Briefcase className="h-3.5 w-3.5" />
+                  </span>
+                  <h3 className="font-display text-[15px] font-bold text-[#F4F4F5]">
+                    {origin.name}
+                  </h3>
+                  <SourceBadge source={origin.source} />
+                </div>
 
-                      <div className="flex flex-wrap items-center gap-1.5">
-                        {origin.trainedSkills.map((sk) => (
-                          <Badge
-                            key={sk}
-                            variant="purple"
-                            className="font-mono text-[10px]"
-                          >
-                            {SKILLS_BY_KEY[sk]?.name ?? sk}
-                          </Badge>
-                        ))}
-                        {origin.trainedSkillNotes?.map((note, idx) => (
-                          <Badge
-                            key={idx}
-                            variant="outline"
-                            className="font-mono text-[10px] text-[#D4D4D8]"
-                          >
-                            {note}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {origin.trainedSkills.map((sk) => (
+                    <Badge
+                      key={sk}
+                      variant="purple"
+                      className="font-mono text-[10px] gap-1"
+                    >
+                      <Zap className="h-2.5 w-2.5 text-purple-300" />
+                      {SKILLS_BY_KEY[sk]?.name ?? sk}
+                    </Badge>
+                  ))}
+                  {origin.trainedSkillNotes?.map((note, idx) => (
+                    <Badge
+                      key={idx}
+                      variant="outline"
+                      className="font-mono text-[10px] text-[#D4D4D8] gap-1"
+                    >
+                      <Zap className="h-2.5 w-2.5 text-zinc-400" />
+                      {note}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
 
-                    {origin.prerequisites && (
-                      <p className="font-mono text-[11px] text-amber-300">
-                        Pré-requisito: {origin.prerequisites}
-                      </p>
+              {origin.prerequisites && (
+                <p className="font-mono text-[11px] text-amber-300">
+                  Pré-requisito: {origin.prerequisites}
+                </p>
+              )}
+
+              {/* Power Name + Short Summary with Expandable Full Text */}
+              <div className="rounded-md border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5 space-y-1">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-purple-300">
+                      PODER · {origin.powerName}
+                    </span>
+                    {(origin.powerPeCost ?? 0) > 0 && (
+                      <span className="font-mono text-[10px] text-amber-300">
+                        ({origin.powerPeCost} PE)
+                      </span>
                     )}
+                  </div>
 
-                    {showNarrativeDesc && (
-                      <p className="text-xs text-[#A1A1AA] leading-relaxed">
-                        {origin.description}
-                      </p>
+                  {isLongPower && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setExpandedOriginIds((prev) => ({
+                          ...prev,
+                          [origin.id]: !isExpanded,
+                        }));
+                      }}
+                      className="inline-flex items-center gap-1 font-mono text-[10px] text-zinc-400 hover:text-zinc-100"
+                    >
+                      {isExpanded ? (
+                        <>
+                          Recolher <ChevronUp className="h-3 w-3" />
+                        </>
+                      ) : (
+                        <>
+                          Ler texto completo <ChevronDown className="h-3 w-3" />
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+
+                <p
+                  className={cn(
+                    "text-[13px] text-[#D4D4D8] leading-relaxed",
+                    !isExpanded && isLongPower && "line-clamp-2"
+                  )}
+                >
+                  {origin.powerDescription}
+                </p>
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <Card className="p-6 space-y-5">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#22222A] pb-3.5">
+              <div>
+                <h2 className="font-display text-base font-bold text-[#F4F4F5]">
+                  Escolha sua Origem ({filteredOrigins.length} disponíveis)
+                </h2>
+                <p className="text-xs text-[#8E8E9E] mt-0.5">
+                  Navegue por livro/suplemento. Se for sua primeira ficha, recomendamos começar pelo <strong className="text-emerald-300">Livro Básico</strong>.
+                </p>
+              </div>
+              <div className="relative w-full sm:w-72">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
+                <Input
+                  value={originSearch}
+                  onChange={(e) => {
+                    setOriginSearch(e.target.value);
+                    if (e.target.value.trim() && originBookTab !== "todas") {
+                      setOriginBookTab("todas");
+                    }
+                  }}
+                  placeholder="Buscar origem, perícia ou poder..."
+                  className="h-8 pl-8 text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Book / Category Tabs with Icons, Counters & "Recomendado" Badge */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              {originGroupMeta.map((g) => {
+                const count = countsByGroup[g.id];
+                if (count === 0 && g.id === "homebrew") return null;
+                const active = originBookTab === g.id;
+                const Icon = g.icon;
+                return (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => setOriginBookTab(g.id)}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors",
+                      active
+                        ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                        : "border-[#22222A] bg-[#0D0D11] text-[#8E8E9E] hover:border-[#32323E] hover:text-[#D4D4D8]"
                     )}
-
-                    {/* Power & Full Description Below */}
-                    <div className="rounded-sm border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5 space-y-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-purple-300">
-                          PODER DE ORIGEM · {origin.powerName}
-                        </span>
-                        {(origin.powerPeCost ?? 0) > 0 && (
-                          <span className="font-mono text-[10px] text-amber-300">
-                            ({origin.powerPeCost} PE)
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[13px] text-[#D4D4D8] leading-relaxed">
-                        {origin.powerDescription}
-                      </p>
-                    </div>
+                  >
+                    <Icon className={cn("h-3.5 w-3.5", g.iconCls)} />
+                    <span>{g.label}</span>
+                    {g.recommended && (
+                      <span className="rounded bg-emerald-500/15 border border-emerald-500/35 px-1.5 py-0.2 font-mono text-[9px] font-bold uppercase text-emerald-300">
+                        Recomendado
+                      </span>
+                    )}
+                    <span className="font-mono text-[10px] opacity-75">
+                      ({count})
+                    </span>
                   </button>
                 );
               })}
-          </div>
-        </Card>
-      )}
+
+              <button
+                type="button"
+                onClick={() => setOriginBookTab("todas")}
+                className={cn(
+                  "inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium transition-colors",
+                  originBookTab === "todas"
+                    ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                    : "border-[#22222A] bg-[#0D0D11] text-[#8E8E9E] hover:border-[#32323E] hover:text-[#D4D4D8]"
+                )}
+              >
+                <Layers className="h-3.5 w-3.5 text-zinc-400" />
+                <span>Todas</span>
+                <span className="font-mono text-[10px] opacity-75">
+                  ({countsByGroup.todas})
+                </span>
+              </button>
+            </div>
+
+            {/* Origins Grouped by Section Headers */}
+            {visibleGroups.every((g) => g.items.length === 0) ? (
+              <div className="rounded-lg border border-dashed border-[#22222A] bg-[#0B0B0F] p-8 text-center text-xs text-zinc-400 space-y-2">
+                <p>Nenhuma origem encontrada neste livro com o filtro atual.</p>
+                {originBookTab !== "todas" && (
+                  <Button
+                    size="xs"
+                    variant="outline"
+                    onClick={() => setOriginBookTab("todas")}
+                  >
+                    Ver em Todos os Livros ({countsByGroup.todas})
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {visibleGroups.map((group) => {
+                  if (group.items.length === 0) return null;
+                  const GroupIcon = group.icon;
+                  return (
+                    <div key={group.id} className="space-y-2.5">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-2">
+                        <div className="flex items-center gap-2">
+                          <GroupIcon
+                            className={cn("h-4 w-4", group.iconCls)}
+                          />
+                          <h3 className="font-display text-sm font-bold text-zinc-100">
+                            {group.label}
+                          </h3>
+                          {group.recommended && (
+                            <Badge variant="success" className="text-[9px] font-mono">
+                              RECOMENDADO PARA INICIANTES
+                            </Badge>
+                          )}
+                          <span className="rounded bg-white/10 px-1.5 py-0.5 font-mono text-[10px] text-zinc-300 tabular-nums">
+                            {group.items.length}
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-zinc-400">
+                          {group.subtitle}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col gap-2.5">
+                        {group.items.map(renderOriginCard)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </Card>
+        );
+      })()}
 
       {/* ================= STEP 4: CLASSE & TRILHA ================= */}
       {step === 4 && (
@@ -1077,6 +1366,8 @@ export default function NovoAgenteWizardPage() {
                     enabledSources.includes(c.source))
             ).map((cls) => {
               const selected = effectiveClassId === cls.id;
+              const clsVis = CLASS_VISUALS[cls.id];
+              const ClsIcon = clsVis?.icon;
               return (
                 <button
                   key={cls.id}
@@ -1107,6 +1398,16 @@ export default function NovoAgenteWizardPage() {
                       >
                         <Check className="h-3 w-3" />
                       </span>
+                      {ClsIcon && (
+                        <span
+                          className={cn(
+                            "inline-flex h-6 w-6 items-center justify-center rounded-md border",
+                            clsVis.iconBoxCls
+                          )}
+                        >
+                          <ClsIcon className="h-3.5 w-3.5" />
+                        </span>
+                      )}
                       <h3 className="font-display text-base font-bold text-[#F4F4F5]">
                         {cls.name}
                       </h3>
@@ -1179,79 +1480,239 @@ export default function NovoAgenteWizardPage() {
               )}
             </div>
 
-            {trilhaUnlocked ? (
-              <div className="flex flex-col gap-2.5">
-                {availableTrails.map((t) => {
-                  const selected = trilhaId === t.id;
-                  return (
+            {trilhaUnlocked ? (() => {
+              const getTrailBookGroup = (
+                src?: ContentSource
+              ):
+                | "livro_basico"
+                | "sobrevivendo_ao_horror"
+                | "arquivos_secretos"
+                | "suplementos"
+                | "homebrew" => {
+                const s = src ?? "livro_basico";
+                if (s === "livro_basico") return "livro_basico";
+                if (s === "sobrevivendo_ao_horror") return "sobrevivendo_ao_horror";
+                if (s === "arquivos_secretos") return "arquivos_secretos";
+                if (s === "homebrew") return "homebrew";
+                return "suplementos";
+              };
+
+              const trailSourceMeta: {
+                id:
+                  | "livro_basico"
+                  | "sobrevivendo_ao_horror"
+                  | "arquivos_secretos"
+                  | "suplementos"
+                  | "homebrew";
+                label: string;
+                recommended?: boolean;
+                icon: React.ComponentType<{ className?: string }>;
+                iconCls: string;
+              }[] = [
+                {
+                  id: "livro_basico",
+                  label: "Livro Básico",
+                  recommended: true,
+                  icon: BookOpen,
+                  iconCls: "text-emerald-400",
+                },
+                {
+                  id: "sobrevivendo_ao_horror",
+                  label: "Sobrevivendo ao Horror",
+                  icon: Skull,
+                  iconCls: "text-rose-400",
+                },
+                {
+                  id: "arquivos_secretos",
+                  label: "Arquivos Secretos",
+                  icon: FileText,
+                  iconCls: "text-amber-400",
+                },
+                {
+                  id: "suplementos",
+                  label: "Suplementos",
+                  icon: Compass,
+                  iconCls: "text-purple-400",
+                },
+                {
+                  id: "homebrew",
+                  label: "Homebrew",
+                  icon: Sparkles,
+                  iconCls: "text-pink-400",
+                },
+              ];
+
+              const trailCounts = {
+                todas: availableTrails.length,
+                livro_basico: availableTrails.filter(
+                  (t) => getTrailBookGroup(t.source) === "livro_basico"
+                ).length,
+                sobrevivendo_ao_horror: availableTrails.filter(
+                  (t) => getTrailBookGroup(t.source) === "sobrevivendo_ao_horror"
+                ).length,
+                arquivos_secretos: availableTrails.filter(
+                  (t) => getTrailBookGroup(t.source) === "arquivos_secretos"
+                ).length,
+                suplementos: availableTrails.filter(
+                  (t) => getTrailBookGroup(t.source) === "suplementos"
+                ).length,
+                homebrew: availableTrails.filter(
+                  (t) => getTrailBookGroup(t.source) === "homebrew"
+                ).length,
+              };
+
+              const visibleTrailGroups = trailSourceMeta
+                .filter((g) =>
+                  trailBookTab === "todas"
+                    ? trailCounts[g.id] > 0
+                    : g.id === trailBookTab
+                )
+                .map((g) => ({
+                  ...g,
+                  items: availableTrails.filter(
+                    (t) => getTrailBookGroup(t.source) === g.id
+                  ),
+                }));
+
+              return (
+                <div className="space-y-4">
+                  {/* Book Filter Pills for Trails */}
+                  <div className="flex flex-wrap items-center gap-1.5">
                     <button
-                      key={t.id}
                       type="button"
-                      onClick={() => setTrilhaId(selected ? null : t.id)}
+                      onClick={() => setTrailBookTab("todas")}
                       className={cn(
-                        "w-full rounded-md border border-l-[3px] px-4 py-3.5 text-left transition-colors space-y-2.5",
-                        selected
-                          ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
-                          : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+                        "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+                        trailBookTab === "todas"
+                          ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                          : "border-[#22222A] bg-[#0D0D11] text-[#8E8E9E] hover:border-[#32323E] hover:text-[#D4D4D8]"
                       )}
                     >
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="flex items-center gap-2.5 flex-wrap">
-                          <span
-                            className={cn(
-                              "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
-                              selected
-                                ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
-                                : "border-[#32323E] bg-[#09090B] text-transparent"
-                            )}
-                          >
-                            <Check className="h-3 w-3" />
-                          </span>
-                          <span className="font-display text-[15px] font-bold text-[#F4F4F5]">
-                            {t.name}
-                          </span>
-                          <SourceBadge source={t.source} />
-                          <span className="font-mono text-[10px] text-[#6E6E7E]">
-                            {SOURCE_LABELS[t.source ?? "livro_basico"]}
-                          </span>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-1">
-                          {t.abilitiesByNex.map((ab) => (
-                            <Badge
-                              key={`${t.id}-${ab.nex}`}
-                              variant="outline"
-                              className="font-mono text-[10px]"
-                            >
-                              {effectiveClassId === "sobrevivente"
-                                ? `Est. ${ab.nex}`
-                                : `${ab.nex}%`}{" "}
-                              · {ab.name}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="space-y-1.5 rounded-sm border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5">
-                        {t.abilitiesByNex.map((ab) => (
-                          <p
-                            key={`${t.id}-desc-${ab.nex}`}
-                            className="text-[12.5px] text-[#D4D4D8] leading-relaxed"
-                          >
-                            <strong className="font-mono text-[10px] uppercase tracking-wider text-purple-300">
-                              {effectiveClassId === "sobrevivente"
-                                ? `ESTÁGIO ${ab.nex}`
-                                : `NEX ${ab.nex}%`}{" "}
-                              — {ab.name}:
-                            </strong>{" "}
-                            {ab.description}
-                          </p>
-                        ))}
-                      </div>
+                      <Layers className="h-3.5 w-3.5 text-zinc-400" />
+                      <span>Todas ({trailCounts.todas})</span>
                     </button>
-                  );
-                })}
-              </div>
-            ) : (
+                    {trailSourceMeta.map((g) => {
+                      const count = trailCounts[g.id];
+                      if (count === 0) return null;
+                      const active = trailBookTab === g.id;
+                      const Icon = g.icon;
+                      return (
+                        <button
+                          key={g.id}
+                          type="button"
+                          onClick={() => setTrailBookTab(g.id)}
+                          className={cn(
+                            "inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+                            active
+                              ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                              : "border-[#22222A] bg-[#0D0D11] text-[#8E8E9E] hover:border-[#32323E] hover:text-[#D4D4D8]"
+                          )}
+                        >
+                          <Icon className={cn("h-3.5 w-3.5", g.iconCls)} />
+                          <span>{g.label}</span>
+                          <span className="font-mono text-[10px] opacity-75">
+                            ({count})
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="space-y-5">
+                    {visibleTrailGroups.map((group) => {
+                      if (group.items.length === 0) return null;
+                      const GroupIcon = group.icon;
+                      return (
+                        <div key={group.id} className="space-y-2.5">
+                          <div className="flex items-center gap-2 border-b border-white/10 pb-1.5">
+                            <GroupIcon
+                              className={cn("h-3.5 w-3.5", group.iconCls)}
+                            />
+                            <span className="font-display text-xs font-bold uppercase tracking-wider text-zinc-200">
+                              {group.label}
+                            </span>
+                            <span className="rounded bg-white/10 px-1.5 py-0.2 font-mono text-[10px] text-zinc-300">
+                              {group.items.length}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col gap-2.5">
+                            {group.items.map((t) => {
+                              const selected = trilhaId === t.id;
+                              return (
+                                <button
+                                  key={t.id}
+                                  type="button"
+                                  onClick={() =>
+                                    setTrilhaId(selected ? null : t.id)
+                                  }
+                                  className={cn(
+                                    "w-full rounded-md border border-l-[3px] px-4 py-3.5 text-left transition-colors space-y-2.5",
+                                    selected
+                                      ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
+                                      : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+                                  )}
+                                >
+                                  <div className="flex flex-wrap items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2.5 flex-wrap">
+                                      <span
+                                        className={cn(
+                                          "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
+                                          selected
+                                            ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                                            : "border-[#32323E] bg-[#09090B] text-transparent"
+                                        )}
+                                      >
+                                        <Check className="h-3 w-3" />
+                                      </span>
+                                      <span className="font-display text-[15px] font-bold text-[#F4F4F5]">
+                                        {t.name}
+                                      </span>
+                                      <SourceBadge source={t.source} />
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-1">
+                                      {t.abilitiesByNex.map((ab) => (
+                                        <Badge
+                                          key={`${t.id}-${ab.nex}`}
+                                          variant="outline"
+                                          className="font-mono text-[10px]"
+                                        >
+                                          {effectiveClassId === "sobrevivente"
+                                            ? `Est. ${ab.nex}`
+                                            : `${ab.nex}%`}{" "}
+                                          · {ab.name}
+                                        </Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+
+                                  <div className="space-y-1.5 rounded-sm border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5">
+                                    {t.abilitiesByNex.map((ab) => (
+                                      <p
+                                        key={`${t.id}-desc-${ab.nex}`}
+                                        className="text-[12.5px] text-[#D4D4D8] leading-relaxed"
+                                      >
+                                        <strong className="font-mono text-[10px] uppercase tracking-wider text-purple-300">
+                                          {effectiveClassId === "sobrevivente"
+                                            ? `ESTÁGIO ${ab.nex}`
+                                            : `NEX ${ab.nex}%`}{" "}
+                                          — {ab.name}:
+                                        </strong>{" "}
+                                        {ab.description}
+                                      </p>
+                                    ))}
+                                  </div>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })() : (
               <p className="text-xs text-zinc-500">
                 Você poderá escolher sua Trilha na ficha assim que atingir{" "}
                 {effectiveClassId === "sobrevivente"

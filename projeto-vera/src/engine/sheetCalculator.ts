@@ -999,38 +999,71 @@ export function calculateCombatStats(agent: Agent) {
       disorientedDefensePenalty
   );
 
-  const reflexosSkill = agent.skills.reflexos;
-  const canDodge = (Number(reflexosSkill?.training) || 0) >= 5;
-  const reflexosBonus = reflexosSkill
-    ? (Number(reflexosSkill.training) || 0) + (Number(reflexosSkill.bonus) || 0)
-    : 0;
-  const dodge = defense + reflexosBonus;
+  const reflexosFromList = Array.isArray(agent.skillList)
+    ? agent.skillList.find((s) => s.id === "reflexos")
+    : undefined;
+  const reflexosSkill = agent.skills?.reflexos;
+  const reflexosTraining =
+    reflexosFromList !== undefined
+      ? Number(reflexosFromList.treinamento) || 0
+      : Number(reflexosSkill?.training) || 0;
+  const reflexosOther =
+    reflexosFromList !== undefined
+      ? Number(reflexosFromList.bonusOutros) || 0
+      : Number(reflexosSkill?.bonus) || 0;
+  const canDodge = reflexosTraining >= 5;
+  const reflexosBonus = reflexosTraining + reflexosOther;
+  const dodge = Number(defense) + Number(reflexosBonus);
 
-  const fortitudeSkill = agent.skills.fortitude;
-  const canBlock = (Number(fortitudeSkill?.training) || 0) >= 5;
+  const fortitudeFromList = Array.isArray(agent.skillList)
+    ? agent.skillList.find((s) => s.id === "fortitude")
+    : undefined;
+  const fortitudeSkill = agent.skills?.fortitude;
+  const fortitudeTraining =
+    fortitudeFromList !== undefined
+      ? Number(fortitudeFromList.treinamento) || 0
+      : Number(fortitudeSkill?.training) || 0;
+  const fortitudeOther =
+    fortitudeFromList !== undefined
+      ? Number(fortitudeFromList.bonusOutros) || 0
+      : Number(fortitudeSkill?.bonus) || 0;
+  const canBlock = fortitudeTraining >= 5;
   const cascaGrossaBlockBonus =
     agent.classId === "combatente" &&
     trail === "tropa_de_choque" &&
     Number(agent.nex) >= 10
-      ? Number(effAttrs.VIG)
+      ? Number(effAttrs.VIG) || 0
       : 0;
   const blockRd =
-    (fortitudeSkill
-      ? (Number(fortitudeSkill.training) || 0) +
-        (Number(fortitudeSkill.bonus) || 0)
-      : 0) + cascaGrossaBlockBonus;
+    Number(fortitudeTraining) +
+    Number(fortitudeOther) +
+    Number(cascaGrossaBlockBonus);
 
-  const lutaSkill = agent.skills.luta;
-  const canCounterAttack = (Number(lutaSkill?.training) || 0) >= 5;
+  const lutaFromList = Array.isArray(agent.skillList)
+    ? agent.skillList.find((s) => s.id === "luta")
+    : undefined;
+  const lutaSkill = agent.skills?.luta;
+  const lutaTraining =
+    lutaFromList !== undefined
+      ? Number(lutaFromList.treinamento) || 0
+      : Number(lutaSkill?.training) || 0;
+  const canCounterAttack = lutaTraining >= 5;
 
   // Note: Universitário +1 PE limit does NOT affect Ritual DT
-  const basePeLimit = calculatePeLimit(agent.classId, agent.nex, agent.stage, {
-    patente: agent.patente,
-    optionalRules: agent.optionalRules,
-    level: agent.level,
-  });
-  const peLimit = basePeLimit + (origin?.efeitosPassivos?.limitePeBonus ?? 0);
-  const ritualDT = 10 + basePeLimit + effAttrs.PRE + (agent.ritualDTBonus ?? 0);
+  const basePeLimit = Number(
+    calculatePeLimit(agent.classId, Number(agent.nex) || 0, Number(agent.stage) || 1, {
+      patente: agent.patente,
+      optionalRules: agent.optionalRules,
+      level: agent.level,
+    })
+  ) || 1;
+  const peLimit =
+    basePeLimit + (Number(origin?.efeitosPassivos?.limitePeBonus) || 0);
+  const ritualDT =
+    10 +
+    basePeLimit +
+    (Number(effAttrs.PRE) || 0) +
+    (Number(agent.ritualDTBonus) || 0);
 
   return {
     defense,

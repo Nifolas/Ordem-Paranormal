@@ -4,9 +4,13 @@ import React, { useMemo, useState } from "react";
 import {
   AlertTriangle,
   Check,
+  Compass,
+  Layers,
   Plus,
   Search,
+  Shield,
   Sparkles,
+  Wand2,
 } from "lucide-react";
 import type {
   AbilitySource,
@@ -34,6 +38,8 @@ import {
 } from "@/components/SourceToggles";
 import { checkPowerPrerequisites } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
+import { ELEMENT_VISUALS } from "@/lib/ui-icons";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import { useAppStore } from "@/store/useAppStore";
 import {
   Badge,
@@ -241,13 +247,13 @@ export function AbilitiesCatalogModal({
     onClose();
   };
 
-  const tabs: { id: CatalogTab; label: string }[] = [
-    { id: "classe", label: "Poderes de Classe" },
-    { id: "gerais", label: "Poderes Gerais" },
-    { id: "paranormais", label: "Paranormais" },
-    { id: "versatilidade", label: "Versatilidade / Outras" },
-    { id: "homebrew", label: "Homebrew" },
-    { id: "custom", label: "+ Criar Custom" },
+  const tabs: { id: CatalogTab; label: string; icon: React.ReactNode }[] = [
+    { id: "classe", label: "Poderes de Classe", icon: <Shield className="h-3.5 w-3.5 text-amber-400" /> },
+    { id: "gerais", label: "Poderes Gerais", icon: <Compass className="h-3.5 w-3.5 text-sky-400" /> },
+    { id: "paranormais", label: "Paranormais", icon: <Wand2 className="h-3.5 w-3.5 text-purple-400" /> },
+    { id: "versatilidade", label: "Versatilidade / Outras", icon: <Layers className="h-3.5 w-3.5 text-emerald-400" /> },
+    { id: "homebrew", label: "Homebrew", icon: <Sparkles className="h-3.5 w-3.5 text-pink-400" /> },
+    { id: "custom", label: "Criar Custom", icon: <Plus className="h-3.5 w-3.5" /> },
   ];
 
   return (
@@ -262,7 +268,7 @@ export function AbilitiesCatalogModal({
     >
       <div className="flex flex-col h-full">
         {/* Category Tab Strip */}
-        <div className="flex items-center gap-1 overflow-x-auto border-b border-[#22222A] bg-[#0C0C10] px-4 py-2 shrink-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto border-b border-[#22222A] bg-[#0C0C10] px-4 py-2 shrink-0">
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -272,12 +278,13 @@ export function AbilitiesCatalogModal({
                 setSelectedPowerId(null);
               }}
               className={cn(
-                "whitespace-nowrap rounded-sm px-3 py-1.5 text-xs font-medium transition-colors border",
+                "inline-flex items-center gap-1.5 whitespace-nowrap rounded-sm px-3 py-1.5 text-xs font-medium transition-colors border",
                 tab === t.id
                   ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
                   : "border-transparent text-[#8E8E9E] hover:text-[#D4D4D8] hover:bg-[#16161C]"
               )}
             >
+              {t.icon}
               {t.label}
             </button>
           ))}
@@ -484,18 +491,21 @@ export function AbilitiesCatalogModal({
                     </button>
                     {PARANORMAL_ELEMENTS.map((el) => {
                       const st = ELEMENT_STYLES[el];
+                      const ev = ELEMENT_VISUALS[el];
+                      const ElIcon = ev.icon;
                       return (
                         <button
                           key={el}
                           type="button"
                           onClick={() => setElementFilter(el)}
                           className={cn(
-                            "rounded-sm border px-2 py-0.5 font-mono text-[10px] transition-colors",
+                            "inline-flex items-center gap-1 rounded-sm border px-2 py-0.5 font-mono text-[10px] transition-colors",
                             elementFilter === el
                               ? st.badge
                               : "border-[#22222A] bg-[#09090B] text-[#8E8E9E] hover:text-[#D4D4D8]"
                           )}
                         >
+                          <ElIcon className={cn("h-3 w-3", ev.iconColor)} />
                           {el}
                         </button>
                       );
@@ -653,7 +663,8 @@ export function AbilitiesCatalogModal({
                     {selectedPower.affinityDescription && (
                       <div className="rounded-sm border border-[#22222A] border-l-[3px] border-l-amber-400 bg-[#101014] p-4 space-y-1.5">
                         <div className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-amber-300">
-                          <Sparkles className="h-3 w-3" /> AFINIDADE (NEX 50%+)
+                          <Sparkles className="h-3 w-3" />{" "}
+                          <TermTooltip term="Afinidade" label="AFINIDADE (NEX 50%+)" />
                         </div>
                         <p className="text-[14px] leading-[1.65] text-[#D4D4D8]">
                           {selectedPower.affinityDescription}

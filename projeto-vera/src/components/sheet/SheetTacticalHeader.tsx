@@ -4,25 +4,20 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
-  AlertTriangle,
   ArrowLeft,
   BookOpen,
   Coffee,
   Download,
   Dumbbell,
-  Footprints,
-  Lock,
-  Minus,
   MoreHorizontal,
-  Plus,
   RotateCcw,
   Settings2,
   SlidersHorizontal,
   Sparkles,
-  Unlock,
   Upload,
   X,
 } from "lucide-react";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import type {
   Agent,
   AgentClassId,
@@ -44,26 +39,21 @@ import {
 } from "@/components/SourceToggles";
 import { getAgentSkillList } from "@/data/skills";
 import {
-  calculateCombatStats,
-  calculateLoadAndCategories,
   calculateVitals,
-  evaluateVitalConditions,
   getAgentEffectiveVitals,
-  getTrailCarryBonus,
   NEX_STEPS,
   normalizeCatalogId,
   rollDiceFormula,
   SURVIVOR_STAGES,
 } from "@/lib/ordem-rules";
 import { exportAgentToJson } from "@/services/storage";
-import { clamp, cn, ELEMENT_STYLES, formatSigned } from "@/lib/utils";
+import { cn, ELEMENT_STYLES, formatSigned } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
 import { InterludeModal } from "./InterludeModal";
 import {
   Button,
   Input,
   Modal,
-  NumericInput,
   Select,
 } from "@/components/ui/primitives";
 
@@ -81,301 +71,6 @@ const ELEMENTS: ParanormalElement[] = [
   "Conhecimento",
   "Energia",
 ];
-
-function HeaderResourceBar({
-  label,
-  accentClass,
-  barColor,
-  current,
-  temp,
-  max,
-  autoCalc,
-  alertBadge,
-  onAdjust,
-  onSetCurrent,
-  onSetTemp,
-  onToggleAuto,
-  onSetMaxOverride,
-}: {
-  label: string;
-  accentClass: string;
-  barColor: string;
-  current: number;
-  temp?: number;
-  max: number;
-  autoCalc: boolean;
-  alertBadge?: string | null;
-  onAdjust: (delta: number) => void;
-  onSetCurrent: (val: number) => void;
-  onSetTemp?: (val: number) => void;
-  onToggleAuto: () => void;
-  onSetMaxOverride: (val: number) => void;
-}) {
-  const pct = max > 0 ? clamp((current / max) * 100, 0, 100) : 0;
-  const [popoverOpen, setPopoverOpen] = useState(false);
-  const [showTempInput, setShowTempInput] = useState(false);
-  const [popoverCoords, setPopoverCoords] = useState<{
-    top: number;
-    left: number;
-    width: number;
-  } | null>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
-  const portalPopoverRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!popoverOpen) return;
-    const updatePosition = () => {
-      if (!popoverRef.current) return;
-      const rect = popoverRef.current.getBoundingClientRect();
-      setPopoverCoords({
-        top: rect.bottom + 6,
-        left: Math.max(8, Math.min(rect.left, window.innerWidth - Math.max(rect.width, 250) - 8)),
-        width: Math.max(rect.width, 250),
-      });
-    };
-    updatePosition();
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        popoverRef.current &&
-        !popoverRef.current.contains(target) &&
-        (!portalPopoverRef.current || !portalPopoverRef.current.contains(target))
-      ) {
-        setPopoverOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", updatePosition, true);
-    window.addEventListener("resize", updatePosition);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", updatePosition, true);
-      window.removeEventListener("resize", updatePosition);
-    };
-  }, [popoverOpen]);
-
-  const hasTemp = (temp ?? 0) > 0;
-
-  return (
-    <div
-      ref={popoverRef}
-      className="relative rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3.5 py-2.5 space-y-2"
-    >
-      {/* Top Row: Label + Alert Badge + Clean [-] [current / max] [+] + [+TMP] */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 min-w-0">
-          <span
-            className={cn(
-              "font-display text-xs font-bold uppercase tracking-wider",
-              accentClass
-            )}
-          >
-            {label}
-          </span>
-          {alertBadge && (
-            <span className="rounded-sm border border-amber-500/35 bg-amber-500/10 px-1.5 py-0.5 font-mono text-[9px] uppercase text-amber-300">
-              {alertBadge}
-            </span>
-          )}
-        </div>
-
-        {/* Clean Controls: [-] [Current / Max] [+] and discreet [+TMP] */}
-        <div className="flex items-center gap-1.5 shrink-0">
-          <div className="inline-flex items-center rounded-md border border-white/10 bg-[#121218] p-0.5">
-            <button
-              type="button"
-              onClick={() => onAdjust(-1)}
-              className="flex h-6 w-6 items-center justify-center rounded text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
-              title={`Diminuir 1 ${label}`}
-              aria-label={`Diminuir 1 ${label}`}
-            >
-              <Minus className="h-3 w-3" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setPopoverOpen((v) => !v)}
-              title="Clique para ajustes rápidos (-5 / +5) ou editar máximo"
-              className="px-2 py-0.5 font-mono text-sm font-bold text-zinc-100 hover:text-white tabular-nums transition-colors"
-            >
-              <span>{current}</span>
-              <span className="mx-1 text-zinc-500 font-normal">/</span>
-              <span className="text-zinc-300 font-semibold">{max}</span>
-              {hasTemp && (
-                <span className="ml-1 text-xs font-semibold text-emerald-400">
-                  +{temp}
-                </span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onAdjust(1)}
-              className="flex h-6 w-6 items-center justify-center rounded text-zinc-400 hover:bg-white/10 hover:text-zinc-100 transition-colors"
-              title={`Aumentar 1 ${label}`}
-              aria-label={`Aumentar 1 ${label}`}
-            >
-              <Plus className="h-3 w-3" />
-            </button>
-          </div>
-
-          {onSetTemp && (
-            <button
-              type="button"
-              onClick={() => setShowTempInput((v) => !v)}
-              title="Pontos temporários"
-              className={cn(
-                "h-7 rounded-md border px-1.5 font-mono text-[10px] font-medium transition-colors",
-                hasTemp || showTempInput
-                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
-                  : "border-white/10 bg-[#121218] text-zinc-400 hover:text-zinc-200"
-              )}
-            >
-              {hasTemp ? `TMP +${temp}` : "+TMP"}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Progress bar with harmonious colors */}
-      <div className="h-2 w-full rounded-full bg-zinc-900 overflow-hidden">
-        <div
-          className={cn("h-full rounded-full transition-all duration-200", barColor)}
-          style={{ width: `${pct}%` }}
-        />
-      </div>
-
-      {/* Inline Temp editor when toggled */}
-      {onSetTemp && showTempInput && (
-        <div className="flex items-center justify-between gap-2 pt-0.5 text-xs">
-          <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
-            {label} Temporário
-          </span>
-          <div className="flex items-center gap-1">
-            <NumericInput
-              min={0}
-              value={temp ?? 0}
-              onValueChange={(val) => onSetTemp(Math.max(0, val))}
-              aria-label={`${label} temporário`}
-              className="h-6 w-14 rounded bg-zinc-950 border border-white/15 px-1.5 font-mono text-xs font-semibold text-emerald-300 text-center focus:outline-none tabular-nums"
-            />
-            {(temp ?? 0) > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  onSetTemp(0);
-                  setShowTempInput(false);
-                }}
-                className="rounded px-1.5 py-0.5 font-mono text-[10px] text-zinc-400 hover:text-red-300"
-              >
-                Zerar
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Popover via Portal for Quick Adjustments (-5 / +5), Direct Value Input & Auto/Manual Max */}
-      {popoverOpen &&
-        popoverCoords &&
-        typeof document !== "undefined" &&
-        createPortal(
-          <div
-            ref={portalPopoverRef}
-            style={{
-              top: popoverCoords.top,
-              left: popoverCoords.left,
-              width: popoverCoords.width,
-            }}
-            className="fixed z-50 rounded-lg border border-white/20 bg-[#121218] p-3 shadow-2xl space-y-2.5 text-[#F4F4F5]"
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
-                Ajuste Rápido de {label}
-              </span>
-              <button
-                type="button"
-                onClick={() => setPopoverOpen(false)}
-                className="text-zinc-400 hover:text-zinc-100"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-
-            <div className="grid grid-cols-4 gap-1.5">
-              {[-5, -1, 1, 5].map((delta) => (
-                <button
-                  key={delta}
-                  type="button"
-                  onClick={() => onAdjust(delta)}
-                  className="rounded border border-white/10 bg-zinc-950 py-1 font-mono text-xs font-semibold text-zinc-200 hover:border-white/25 hover:bg-zinc-900 transition-colors"
-                >
-                  {delta > 0 ? `+${delta}` : delta}
-                </button>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-white/10 text-xs">
-              <div>
-                <label className="font-mono text-[10px] text-zinc-400 block mb-1">
-                  Valor Atual
-                </label>
-                <NumericInput
-                  value={current}
-                  onValueChange={(val) => onSetCurrent(Math.max(0, val))}
-                  aria-label={`${label} atual`}
-                  className="h-7 w-full rounded bg-zinc-950 border border-white/15 px-2 font-mono text-xs font-bold text-zinc-100 text-center"
-                />
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="font-mono text-[10px] text-zinc-400">
-                    Máximo
-                  </label>
-                  <button
-                    type="button"
-                    onClick={onToggleAuto}
-                    className="inline-flex items-center gap-0.5 font-mono text-[9px] text-zinc-400 hover:text-zinc-100"
-                    title={
-                      autoCalc
-                        ? "Cálculo automático ativo — clique para editar manualmente"
-                        : "Máximo manual — clique para voltar ao automático"
-                    }
-                  >
-                    {autoCalc ? (
-                      <>
-                        <Lock className="h-2.5 w-2.5" /> Auto
-                      </>
-                    ) : (
-                      <>
-                        <Unlock className="h-2.5 w-2.5 text-amber-300" /> Manual
-                      </>
-                    )}
-                  </button>
-                </div>
-                {autoCalc ? (
-                  <div className="h-7 flex items-center justify-center rounded border border-white/10 bg-zinc-950/60 font-mono text-xs font-semibold text-zinc-400">
-                    {max}
-                  </div>
-                ) : (
-                  <NumericInput
-                    min={1}
-                    fallback={1}
-                    value={max}
-                    onValueChange={(val) => onSetMaxOverride(Math.max(1, val))}
-                    aria-label={`${label} máximo manual`}
-                    className="h-7 w-full rounded bg-zinc-950 border border-amber-500/40 px-2 font-mono text-xs font-bold text-zinc-100 text-center"
-                  />
-                )}
-              </div>
-            </div>
-          </div>,
-          document.body
-        )}
-    </div>
-  );
-}
 
 export function SheetTacticalHeader({
   agent,
@@ -497,26 +192,6 @@ export function SheetTacticalHeader({
       t.id === agent.trilhaId || t.id === normalizeCatalogId(agent.trilhaId)
   );
   const vitals = getAgentEffectiveVitals(agent);
-  const combat = calculateCombatStats(agent);
-  const load = calculateLoadAndCategories({
-    forAttr: agent.attributes.FOR,
-    patente: agent.patente,
-    inventory: agent.inventory,
-    extraCapacityBonus: getTrailCarryBonus(agent),
-    organization: agent.organization,
-  });
-  const autoConds = evaluateVitalConditions({
-    currentPv: agent.status.pv.current,
-    maxPv: vitals.maxPv,
-    currentSan: agent.status.san.current,
-    maxSan: vitals.maxSan,
-    usingPd: vitals.usingPd,
-  });
-
-  const effectiveDisplacement = Math.max(
-    1,
-    agent.defense.displacement + load.overloadDisplacementPenalty
-  );
 
   const elemStyle = agent.affinityElement
     ? ELEMENT_STYLES[agent.affinityElement]
@@ -528,13 +203,6 @@ export function SheetTacticalHeader({
       : agent.nex >= 10;
 
   const affinityUnlocked = agent.classId !== "sobrevivente" && agent.nex >= 50;
-
-  const pdPool = agent.status.pd ?? {
-    current: vitals.maxPd,
-    temp: 0,
-    maxOverride: null,
-    autoCalc: true,
-  };
 
   const normalizedTrailVal = trail?.id ?? "";
   const normalizedOriginVal =
@@ -757,13 +425,20 @@ export function SheetTacticalHeader({
                   </>
                 )}
                 <span className="text-zinc-600">·</span>
-                <span>{agent.patente}</span>
+                <TermTooltip
+                  term="Patente"
+                  label={agent.patente}
+                  showIcon={false}
+                />
                 <span className="text-zinc-600">·</span>
-                <span
-                  className="font-mono text-[11px] text-zinc-300"
-                  title={`Máximo de ${vitals.usingPd ? "PD" : "PE"} que pode gastar por turno`}
-                >
-                  Limite de {vitals.usingPd ? "PD" : "PE"}: {vitals.peLimit}
+                <span className="font-mono text-[11px] text-zinc-300">
+                  Limite de{" "}
+                  <TermTooltip
+                    term={vitals.usingPd ? "PD" : "PE"}
+                    label={vitals.usingPd ? "PD" : "PE"}
+                    showIcon={false}
+                  />
+                  : {vitals.peLimit}
                 </span>
               </div>
             </div>
@@ -934,455 +609,78 @@ export function SheetTacticalHeader({
           </div>
         </div>
 
-        {/* Row 2: Dedicated Status & Combat Strip (PV, SAN, PE/PD + Defesa, Esquiva, Bloqueio, Deslocamento) */}
-        <div className="border-t border-white/10 bg-[#0B0B0F]/75 px-4 py-3.5 sm:px-5">
-          <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_auto] items-stretch">
-            {/* Resource Bars with more harmonious, less saturated colors */}
-            <div
-              className={cn(
-                "grid gap-3",
-                vitals.usingPd
-                  ? "grid-cols-1 sm:grid-cols-2"
-                  : "grid-cols-1 sm:grid-cols-3"
-              )}
-            >
-              <HeaderResourceBar
-                label="PV"
-                accentClass="text-rose-300"
-                barColor="bg-rose-500/80"
-                current={agent.status.pv.current}
-                temp={agent.status.pv.temp ?? 0}
-                max={vitals.maxPv}
-                autoCalc={agent.status.pv.autoCalc}
-                alertBadge={autoConds.machucado ? "Machucado" : null}
-                onAdjust={(delta) =>
-                  onUpdate((prev) => {
-                    const nextVal = Math.max(0, prev.status.pv.current + delta);
-                    const maxPv = getAgentEffectiveVitals(prev).maxPv;
-                    return {
-                      ...prev,
-                      status: {
-                        ...prev.status,
-                        pv: { ...prev.status.pv, current: nextVal },
-                        machucado: nextVal <= Math.floor(maxPv / 2),
-                        morrendo: nextVal === 0 ? true : prev.status.morrendo,
-                      },
-                    };
-                  })
-                }
-                onSetCurrent={(val) =>
-                  onUpdate((prev) => ({
-                    ...prev,
-                    status: {
-                      ...prev.status,
-                      pv: { ...prev.status.pv, current: Math.max(0, val) },
-                    },
-                  }))
-                }
-                onSetTemp={(val) =>
-                  onUpdate((prev) => ({
-                    ...prev,
-                    status: {
-                      ...prev.status,
-                      pv: { ...prev.status.pv, temp: val },
-                    },
-                  }))
-                }
-                onToggleAuto={() =>
-                  onUpdate((prev) => ({
-                    ...prev,
-                    status: {
-                      ...prev.status,
-                      pv: {
-                        ...prev.status.pv,
-                        autoCalc: !prev.status.pv.autoCalc,
-                        maxOverride:
-                          prev.status.pv.maxOverride ?? vitals.maxPv,
-                      },
-                    },
-                  }))
-                }
-                onSetMaxOverride={(val) =>
-                  onUpdate((prev) => ({
-                    ...prev,
-                    status: {
-                      ...prev.status,
-                      pv: { ...prev.status.pv, maxOverride: val },
-                    },
-                  }))
-                }
-              />
-
-              {vitals.usingPd ? (
-                <HeaderResourceBar
-                  label="PD"
-                  accentClass="text-violet-300"
-                  barColor="bg-violet-500/80"
-                  current={pdPool.current}
-                  temp={pdPool.temp ?? 0}
-                  max={vitals.maxPd}
-                  autoCalc={pdPool.autoCalc}
-                  alertBadge={
-                    pdPool.current <= Math.floor(vitals.maxPd / 2)
-                      ? "Abalado"
-                      : null
-                  }
-                  onAdjust={(delta) =>
-                    onUpdate((prev) => {
-                      const cur = prev.status.pd ?? pdPool;
-                      return {
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pd: {
-                            ...cur,
-                            current: Math.max(0, cur.current + delta),
-                          },
-                        },
-                      };
-                    })
-                  }
-                  onSetCurrent={(val) =>
-                    onUpdate((prev) => {
-                      const cur = prev.status.pd ?? pdPool;
-                      return {
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pd: { ...cur, current: Math.max(0, val) },
-                        },
-                      };
-                    })
-                  }
-                  onSetTemp={(val) =>
-                    onUpdate((prev) => {
-                      const cur = prev.status.pd ?? pdPool;
-                      return {
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pd: { ...cur, temp: val },
-                        },
-                      };
-                    })
-                  }
-                  onToggleAuto={() =>
-                    onUpdate((prev) => {
-                      const cur = prev.status.pd ?? pdPool;
-                      return {
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pd: {
-                            ...cur,
-                            autoCalc: !cur.autoCalc,
-                            maxOverride: cur.maxOverride ?? vitals.maxPd,
-                          },
-                        },
-                      };
-                    })
-                  }
-                  onSetMaxOverride={(val) =>
-                    onUpdate((prev) => {
-                      const cur = prev.status.pd ?? pdPool;
-                      return {
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pd: { ...cur, maxOverride: val },
-                        },
-                      };
-                    })
-                  }
-                />
-              ) : (
-                <>
-                  <HeaderResourceBar
-                    label="SAN"
-                    accentClass="text-sky-300"
-                    barColor="bg-sky-500/80"
-                    current={agent.status.san.current}
-                    max={vitals.maxSan}
-                    autoCalc={agent.status.san.autoCalc}
-                    alertBadge={autoConds.perturbado ? "Perturbado" : null}
-                    onAdjust={(delta) =>
-                      onUpdate((prev) => {
-                        const nextVal = Math.max(
-                          0,
-                          prev.status.san.current + delta
-                        );
-                        const maxSan = getAgentEffectiveVitals(prev).maxSan;
-                        return {
-                          ...prev,
-                          status: {
-                            ...prev.status,
-                            san: { ...prev.status.san, current: nextVal },
-                            perturbado: nextVal <= Math.floor(maxSan / 2),
-                            enlouquecendo:
-                              nextVal === 0 ? true : prev.status.enlouquecendo,
-                          },
-                        };
-                      })
-                    }
-                    onSetCurrent={(val) =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          san: {
-                            ...prev.status.san,
-                            current: Math.max(0, val),
-                          },
-                        },
-                      }))
-                    }
-                    onToggleAuto={() =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          san: {
-                            ...prev.status.san,
-                            autoCalc: !prev.status.san.autoCalc,
-                            maxOverride:
-                              prev.status.san.maxOverride ?? vitals.maxSan,
-                          },
-                        },
-                      }))
-                    }
-                    onSetMaxOverride={(val) =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          san: { ...prev.status.san, maxOverride: val },
-                        },
-                      }))
-                    }
-                  />
-
-                  <HeaderResourceBar
-                    label="PE"
-                    accentClass="text-amber-300"
-                    barColor="bg-amber-500/80"
-                    current={agent.status.pe.current}
-                    temp={agent.status.pe.temp ?? 0}
-                    max={vitals.maxPe}
-                    autoCalc={agent.status.pe.autoCalc}
-                    onAdjust={(delta) =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pe: {
-                            ...prev.status.pe,
-                            current: Math.max(
-                              0,
-                              prev.status.pe.current + delta
-                            ),
-                          },
-                        },
-                      }))
-                    }
-                    onSetCurrent={(val) =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pe: { ...prev.status.pe, current: Math.max(0, val) },
-                        },
-                      }))
-                    }
-                    onSetTemp={(val) =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pe: { ...prev.status.pe, temp: val },
-                        },
-                      }))
-                    }
-                    onToggleAuto={() =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pe: {
-                            ...prev.status.pe,
-                            autoCalc: !prev.status.pe.autoCalc,
-                            maxOverride:
-                              prev.status.pe.maxOverride ?? vitals.maxPe,
-                          },
-                        },
-                      }))
-                    }
-                    onSetMaxOverride={(val) =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        status: {
-                          ...prev.status,
-                          pe: { ...prev.status.pe, maxOverride: val },
-                        },
-                      }))
-                    }
-                  />
-                </>
-              )}
-            </div>
-
-            {/* Clean Defense / Esquiva / Bloqueio / Deslocamento Quartet with Beginner Tooltips */}
-            <div className="grid grid-cols-4 gap-2 lg:min-w-[320px]">
+        {/* Active Interlude Bonus Dice & Mission PE Penalty Strip (only shown when active) */}
+        {((agent.interludeBonusDice?.length ?? 0) > 0 ||
+          (agent.missionPeMaxPenalty ?? 0) > 0) && (
+          <div className="border-t border-white/10 bg-[#0B0B0F]/75 px-4 py-2.5 sm:px-5 flex flex-wrap items-center gap-2">
+            {(agent.interludeBonusDice ?? []).length > 0 && (
+              <span className="font-mono text-[10px] uppercase tracking-wider text-[#8E8E9E]">
+                Bônus de Interlúdio (clique para rolar e gastar):
+              </span>
+            )}
+            {(agent.interludeBonusDice ?? []).map((die) => (
               <div
-                className="flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center"
-                title={`Defesa = 10 + AGI (${Number(agent.attributes.AGI) || 0}) + Proteção (${combat.protectionBonus}) + Escudo/Bônus (${combat.shieldBonus + combat.accessoryBonus + (Number(agent.defense.abilityBonus) || 0) + (Number(agent.defense.otherBonus) || 0)}) = ${combat.defense}`}
-              >
-                <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
-                  Defesa
-                </span>
-                <span className="font-mono text-xl font-bold text-zinc-100 tabular-nums mt-0.5">
-                  {Number(combat.defense)}
-                </span>
-              </div>
-
-              <div
+                key={die.id}
                 className={cn(
-                  "flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center",
-                  !combat.canDodge && "opacity-50"
+                  "inline-flex items-center rounded-sm border font-mono text-[11px] overflow-hidden",
+                  die.source === "exercitar"
+                    ? "border-emerald-500/40 bg-emerald-600/10 text-emerald-300"
+                    : "border-purple-500/40 bg-purple-600/10 text-purple-300"
                 )}
-                title={
-                  combat.canDodge
-                    ? `Esquiva = Defesa (${combat.defense}) + Bônus de Reflexos (${combat.dodge - combat.defense}) = ${combat.dodge}`
-                    : "Esquiva: Requer ser treinado na perícia Reflexos (soma Reflexos à sua Defesa como reação)"
-                }
               >
-                <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
-                  Esquiva
-                </span>
-                <span className="font-mono text-xl font-bold text-zinc-200 tabular-nums mt-0.5">
-                  {combat.canDodge ? combat.dodge : "—"}
-                </span>
-              </div>
-
-              <div
-                className={cn(
-                  "flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center",
-                  !combat.canBlock && "opacity-50"
-                )}
-                title={
-                  combat.canBlock
-                    ? `Bloqueio: Reduz o dano de um ataque corpo a corpo em RD ${combat.blockRd} (igual ao seu bônus de Fortitude)`
-                    : "Bloqueio: Requer ser treinado na perícia Fortitude (concede RD igual à sua Fortitude como reação)"
-                }
-              >
-                <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-400">
-                  Bloqueio
-                </span>
-                <span className="font-mono text-xl font-bold text-zinc-200 tabular-nums mt-0.5">
-                  {combat.canBlock ? `RD ${combat.blockRd}` : "—"}
-                </span>
-              </div>
-
-              <div
-                className="flex flex-col justify-center items-center rounded-lg border border-white/10 bg-[#0C0C10]/90 px-3 py-2 text-center"
-                title={
-                  load.isOverloaded
-                    ? `Deslocamento reduzido em -3m por Sobrecarga (Base ${agent.defense.displacement}m)`
-                    : `Deslocamento por ação de movimento: ${effectiveDisplacement}m (${Math.floor(effectiveDisplacement / 1.5)} quadrados)`
-                }
-              >
-                <span className="inline-flex items-center justify-center gap-1 text-[10px] font-medium uppercase tracking-wider text-zinc-400">
-                  <Footprints className="h-2.5 w-2.5" /> Desl.
-                </span>
-                <span
-                  className={cn(
-                    "font-mono text-xl font-bold tabular-nums mt-0.5",
-                    load.isOverloaded ? "text-amber-300" : "text-zinc-200"
-                  )}
+                <button
+                  type="button"
+                  onClick={() => handleSpendBonusDie(die)}
+                  className="inline-flex items-center gap-1.5 px-2 py-0.5 hover:bg-white/10 transition-colors"
+                  title={`Rolar e gastar ${die.label}`}
                 >
-                  {effectiveDisplacement}m
-                </span>
-                {load.isOverloaded && (
-                  <span className="inline-flex items-center justify-center gap-0.5 font-mono text-[9px] text-amber-400">
-                    <AlertTriangle className="h-2.5 w-2.5" /> -3m
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Active Interlude Bonus Dice & Mission PE Penalty Strip */}
-          {((agent.interludeBonusDice?.length ?? 0) > 0 ||
-            (agent.missionPeMaxPenalty ?? 0) > 0) && (
-            <div className="mt-2.5 flex flex-wrap items-center gap-2 border-t border-[#1E1E26] pt-2.5">
-              {(agent.interludeBonusDice ?? []).length > 0 && (
-                <span className="font-mono text-[10px] uppercase tracking-wider text-[#8E8E9E]">
-                  Bônus de Interlúdio (clique para rolar e gastar):
-                </span>
-              )}
-              {(agent.interludeBonusDice ?? []).map((die) => (
-                <div
-                  key={die.id}
-                  className={cn(
-                    "inline-flex items-center rounded-sm border font-mono text-[11px] overflow-hidden",
-                    die.source === "exercitar"
-                      ? "border-emerald-500/40 bg-emerald-600/10 text-emerald-300"
-                      : "border-purple-500/40 bg-purple-600/10 text-purple-300"
+                  {die.source === "exercitar" ? (
+                    <Dumbbell className="h-3 w-3" />
+                  ) : (
+                    <BookOpen className="h-3 w-3" />
                   )}
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleSpendBonusDie(die)}
-                    className="inline-flex items-center gap-1.5 px-2 py-0.5 hover:bg-white/10 transition-colors"
-                    title={`Rolar e gastar ${die.label}`}
-                  >
-                    {die.source === "exercitar" ? (
-                      <Dumbbell className="h-3 w-3" />
-                    ) : (
-                      <BookOpen className="h-3 w-3" />
-                    )}
-                    <span>
-                      +{die.dieFormula} ({die.appliesTo.join("/")})
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onUpdate((prev) => ({
-                        ...prev,
-                        interludeBonusDice: (
-                          prev.interludeBonusDice ?? []
-                        ).filter((d) => d.id !== die.id),
-                      }))
-                    }
-                    className="px-1 py-0.5 opacity-60 hover:opacity-100 border-l border-current/20"
-                    title="Descartar dado bônus sem rolar"
-                  >
-                    <X className="h-2.5 w-2.5" />
-                  </button>
-                </div>
-              ))}
-
-              {(agent.missionPeMaxPenalty ?? 0) > 0 && (
-                <div className="ml-auto inline-flex items-center gap-2 rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] text-amber-300">
                   <span>
-                    Sucesso a Qualquer Custo: -{agent.missionPeMaxPenalty}{" "}
-                    {vitals.usingPd ? "PD" : "PE"} máx.
+                    +{die.dieFormula} ({die.appliesTo.join("/")})
                   </span>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      onUpdate((prev) => ({ ...prev, missionPeMaxPenalty: 0 }))
-                    }
-                    className="inline-flex items-center gap-0.5 underline hover:text-white"
-                    title="Restaurar ao fim da missão"
-                  >
-                    <RotateCcw className="h-2.5 w-2.5" /> Restaurar
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onUpdate((prev) => ({
+                      ...prev,
+                      interludeBonusDice: (
+                        prev.interludeBonusDice ?? []
+                      ).filter((d) => d.id !== die.id),
+                    }))
+                  }
+                  className="px-1 py-0.5 opacity-60 hover:opacity-100 border-l border-current/20"
+                  title="Descartar dado bônus sem rolar"
+                >
+                  <X className="h-2.5 w-2.5" />
+                </button>
+              </div>
+            ))}
+
+            {(agent.missionPeMaxPenalty ?? 0) > 0 && (
+              <div className="ml-auto inline-flex items-center gap-2 rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 font-mono text-[10px] text-amber-300">
+                <span>
+                  Sucesso a Qualquer Custo: -{agent.missionPeMaxPenalty}{" "}
+                  {vitals.usingPd ? "PD" : "PE"} máx.
+                </span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onUpdate((prev) => ({ ...prev, missionPeMaxPenalty: 0 }))
+                  }
+                  className="inline-flex items-center gap-0.5 underline hover:text-white"
+                  title="Restaurar ao fim da missão"
+                >
+                  <RotateCcw className="h-2.5 w-2.5" /> Restaurar
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Modal: Assistente de Interlúdio */}

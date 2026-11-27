@@ -51,6 +51,8 @@ import {
   rollWeaponDamage,
 } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, formatSigned, generateId } from "@/lib/utils";
+import { ELEMENT_VISUALS } from "@/lib/ui-icons";
+import { TermTooltip } from "@/components/ui/TermTooltip";
 import { COMMUNITY_ITEMS, COMMUNITY_RITUALS } from "@/data/supplements";
 import {
   COMMUNITY_SOURCES,
@@ -909,19 +911,31 @@ export function RightTabsColumn({
             />
 
             <p className="font-mono text-[11px] text-[#8E8E9E] -mt-2">
-              Crítico multiplica apenas dados base da arma — bônus fixos e dados
-              extras permanecem separados (OP v1.2).
+              <TermTooltip term="Crítico" label="Crítico" /> multiplica apenas dados base da arma — bônus fixos e dados
+              extras permanecem separados (OP v1.2).{" "}
+              <TermTooltip term="Margem de Ameaça" label="Margem de Ameaça" /> define o valor no d20 para ameaça crítica.
             </p>
 
             {agent.attacks.length === 0 ? (
-              <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] p-10 text-center space-y-2">
-                <p className="text-sm text-[#A1A1AA]">
-                  Nenhum ataque cadastrado no dossiê.
-                </p>
-                <p className="text-xs text-[#6E6E7E]">
-                  Adicione armas da biblioteca oficial ou configure ataques
-                  customizados.
-                </p>
+              <div className="rounded-xl border border-dashed border-[#2A2A35] bg-[#0C0C10]/90 p-10 text-center flex flex-col items-center justify-center space-y-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-red-500/30 bg-red-500/10 text-red-400">
+                  <Swords className="h-6 w-6" />
+                </div>
+                <div className="space-y-1 max-w-md">
+                  <p className="text-sm font-semibold text-[#F4F4F5]">
+                    Nenhuma arma ou ataque cadastrado ainda
+                  </p>
+                  <p className="text-xs text-[#8E8E9E] leading-relaxed">
+                    Adicione armas corpo a corpo ou de fogo para rolar testes de ataque, dano normal e dano crítico com um clique.
+                  </p>
+                </div>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => setAttackModalOpen(true)}
+                >
+                  <Plus className="h-3.5 w-3.5" /> Adicionar Primeiro Ataque
+                </Button>
               </div>
             ) : (
               <div className="space-y-3">
@@ -1305,7 +1319,7 @@ export function RightTabsColumn({
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-md border border-[#22222A] bg-[#0D0D11] px-4 py-3.5">
               <div className="space-y-0.5">
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8E8E9E]">
-                  DT de Rituais · 10 + Lim. PE + PRE + Extra
+                  <TermTooltip term="DT" label="DT de Rituais" /> · 10 + Lim. PE + PRE + Extra
                 </p>
                 <div className="flex items-baseline gap-2.5">
                   <span className="font-mono text-2xl font-bold text-[#F4F4F5] tabular-nums">
@@ -1427,6 +1441,8 @@ export function RightTabsColumn({
                 </button>
                 {ELEMENTS.map((el) => {
                   const st = ELEMENT_STYLES[el];
+                  const ev = ELEMENT_VISUALS[el];
+                  const ElIcon = ev.icon;
                   const active = ritElementFilter === el;
                   return (
                     <button
@@ -1440,7 +1456,7 @@ export function RightTabsColumn({
                           : "border-[#22222A] bg-[#0D0D11] text-[#8E8E9E] hover:border-[#32323E] hover:text-[#D4D4D8]"
                       )}
                     >
-                      <span className={cn("h-1.5 w-1.5 rounded-full", st.dot)} />
+                      <ElIcon className={cn("h-3 w-3", ev.iconColor)} />
                       {el}
                     </button>
                   );
@@ -1450,15 +1466,27 @@ export function RightTabsColumn({
 
             {/* Ritual Cards grouped by Circle */}
             {ritualsByCircle.length === 0 ? (
-              <div className="rounded-md border border-dashed border-[#22222A] bg-[#0C0C10] p-10 text-center space-y-2">
-                <p className="text-sm text-[#A1A1AA]">
-                  Nenhum ritual encontrado com esses filtros.
-                </p>
-                <p className="text-xs text-[#6E6E7E]">
-                  Clique em &ldquo;Aprender Ritual&rdquo; para consultar todos
-                  os {allLibraryRituals.length} rituais do catálogo oficial e
-                  Homebrew.
-                </p>
+              <div className="rounded-xl border border-dashed border-[#2A2A35] bg-[#0C0C10]/90 p-10 text-center flex flex-col items-center justify-center space-y-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-purple-500/30 bg-purple-500/10 text-purple-400">
+                  <Flame className="h-6 w-6" />
+                </div>
+                <div className="space-y-1 max-w-md">
+                  <p className="text-sm font-semibold text-[#F4F4F5]">
+                    {agent.rituals.length === 0
+                      ? "Você ainda não aprendeu nenhum ritual paranormal"
+                      : "Nenhum ritual encontrado com esses filtros"}
+                  </p>
+                  <p className="text-xs text-[#8E8E9E] leading-relaxed">
+                    Consulte os {allLibraryRituals.length} rituais de Sangue, Morte, Conhecimento, Energia e Medo do 1º ao 4º Círculo para conjurar em cena.
+                  </p>
+                </div>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => setRitModalOpen(true)}
+                >
+                  <Plus className="h-3.5 w-3.5" /> Aprender Primeiro Ritual
+                </Button>
               </div>
             ) : (
               <div className="space-y-6">

@@ -49,11 +49,11 @@ export default function LandingPage() {
     },
     {
       index: "03",
-      title: "Bestiário do Outro Lado",
-      meta: `${threats.length} AMEAÇAS CATALOGADAS`,
+      title: "Compêndio & Bestiário",
+      meta: `${threats.length} AMEAÇAS · ${BASE_ORIGINS.length} ORIGENS · ${BASE_RITUALS.length} RITUAIS`,
       summary:
-        "Criaturas de VD 15 a 400, Relíquias, Ameaças da Realidade, Enigma de Medo interativo e ataques clicáveis.",
-      href: "/ameacas",
+        "Hub visual completo com Guia do Iniciante, Origens, Classes, Trilhas, Poderes, Rituais, Equipamentos e Bestiário do Outro Lado.",
+      href: "/compendio",
     },
     {
       index: "04",
