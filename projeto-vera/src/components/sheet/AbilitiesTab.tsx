@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import {
   ChevronDown,
   ChevronUp,
+  Dices,
   Edit3,
   Eye,
   EyeOff,
@@ -22,7 +23,11 @@ import type {
 import { getOriginById } from "@/data/origins";
 import { getClassById } from "@/data/classes";
 import { BASE_TRAILS } from "@/data/trails";
-import { COMMUNITY_TRAILS } from "@/data/supplements";
+import {
+  COMMUNITY_TRAILS,
+  rollRoletaMaluca,
+  type RoletaMalucaOutcome,
+} from "@/data/supplements";
 import { SOURCE_UPPER_LABELS as BOOK_SOURCE_LABEL } from "@/lib/sources";
 import { SKILLS_BY_KEY } from "@/data/skills";
 import {
@@ -59,6 +64,27 @@ function getClassBaseScalingTag(agent: Agent): string {
   if (agent.classId === "ocultista") {
     const m = getNexMilestones("ocultista", agent.nex);
     return `ATÉ ${m.maxRitualCircle}º CÍRCULO`;
+  }
+  if (agent.classId === "devoto") {
+    const m = getNexMilestones("devoto", agent.nex);
+    const bless =
+      agent.nex >= 75
+        ? "+1d10 (6 PE)"
+        : agent.nex >= 40
+        ? "+1d8 (4 PE)"
+        : "+1d6 (2 PE)";
+    return `ABENÇOAR ${bless} · ATÉ ${m.maxRitualCircle}º CÍRCULO`;
+  }
+  if (agent.classId === "predador") {
+    const mark =
+      agent.nex >= 85
+        ? "+1d12 (5 PE)"
+        : agent.nex >= 55
+        ? "+1d10 (4 PE)"
+        : agent.nex >= 25
+        ? "+1d8 (3 PE)"
+        : "+1d6 (2 PE)";
+    return `PRESA MARCADA ${mark} · CAT I -1`;
   }
   return `ESTÁGIO ${agent.stage ?? 1} · +2 (1 PE)`;
 }
@@ -103,7 +129,7 @@ export function AbilitiesTab({
   onUpdate: (updater: (prev: Agent) => Agent) => void;
   onUseAbility: (ability: AgentAbility) => void;
 }) {
-  const { homebrew } = useAppStore();
+  const { homebrew, pushRoll } = useAppStore();
   const vitals = getAgentEffectiveVitals(agent);
   const resUnit = vitals.usingPd ? "PD" : "PE";
 
@@ -112,6 +138,29 @@ export function AbilitiesTab({
   const [showFutureMilestones, setShowFutureMilestones] = useState(true);
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [roletaResult, setRoletaResult] = useState<RoletaMalucaOutcome | null>(
+    null
+  );
+
+  const handleRollRoletaMaluca = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    const outcome = rollRoletaMaluca();
+    setRoletaResult(outcome);
+    pushRoll({
+      actorName: agent.name,
+      actorId: agent.id,
+      label: `Roleta Maluca (1d6): ${outcome.title}`,
+      kind: "ability",
+      formula: "1d6 (Arauto do Caos)",
+      diceRolled: [outcome.face],
+      mode: "sum",
+      bonus: 0,
+      total: outcome.face,
+      isNat20: outcome.face === 6,
+      isNat1: outcome.face === 1,
+      details: outcome.effect,
+    });
+  };
   const [editDraft, setEditDraft] = useState<{
     name: string;
     peCost: number;
@@ -928,6 +977,17 @@ export function AbilitiesTab({
                             <Zap className="h-3 w-3" /> Usar
                           </Button>
                         )}
+                        {(trailDef.id === "gdc_corrompido" && m.nex === 99) ||
+                        /roleta maluca/i.test(m.name) ? (
+                          <Button
+                            size="xs"
+                            variant="primary"
+                            onClick={handleRollRoletaMaluca}
+                            title="Rolar 1d6 na Roleta Maluca (Arauto do Caos) e registrar no histórico"
+                          >
+                            <Dices className="h-3.5 w-3.5" /> Roleta Maluca (1d6)
+                          </Button>
+                        ) : null}
                         {isExpanded ? (
                           <ChevronUp className="h-4 w-4 text-[#8E8E9E]" />
                         ) : (
@@ -937,10 +997,25 @@ export function AbilitiesTab({
                     </div>
 
                     {isExpanded && (
-                      <div className="border-t border-[#1E1E26] px-4 pb-4 pt-3">
+                      <div className="border-t border-[#1E1E26] px-4 pb-4 pt-3 space-y-2.5">
                         <p className="text-[14px] leading-[1.68] text-[#D4D4D8]">
                           {m.description}
                         </p>
+                        {((trailDef.id === "gdc_corrompido" && m.nex === 99) ||
+                          /roleta maluca/i.test(m.name)) &&
+                          roletaResult && (
+                            <div className="rounded-sm border border-amber-500/40 bg-amber-500/10 p-3 text-xs space-y-1">
+                              <div className="flex items-center justify-between font-mono">
+                                <span className="font-bold text-amber-300">
+                                  ROLETA MALUCA (1d6 = {roletaResult.face}):{" "}
+                                  {roletaResult.title}
+                                </span>
+                              </div>
+                              <p className="text-[#F4F4F5] leading-relaxed">
+                                {roletaResult.effect}
+                              </p>
+                            </div>
+                          )}
                       </div>
                     )}
                   </div>

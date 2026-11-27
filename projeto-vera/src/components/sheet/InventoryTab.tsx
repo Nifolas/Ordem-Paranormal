@@ -4,7 +4,9 @@ import React, { useMemo, useState } from "react";
 import {
   AlertTriangle,
   Minus,
+  Pill,
   Plus,
+  RotateCcw,
   Search,
   Swords,
   Trash2,
@@ -204,6 +206,53 @@ export function InventoryTab({
     }));
   };
 
+  const consumeMedicineDose = (item: InventoryItem) => {
+    const maxUses = item.maxUses ?? 2;
+    const currentUses = item.currentUses ?? maxUses;
+    if (currentUses <= 0) return;
+    const nextUses = currentUses - 1;
+    const gr = item.riskGrade ?? 0;
+
+    onUpdate((prev) => ({
+      ...prev,
+      dailyMedicineUses: (prev.dailyMedicineUses ?? 0) + 1,
+      dailyRiskGradeSum: (prev.dailyRiskGradeSum ?? 0) + gr,
+      inventory: prev.inventory.map((i) =>
+        i.id === item.id ? { ...i, currentUses: nextUses, maxUses } : i
+      ),
+    }));
+  };
+
+  const restoreMedicineDoses = (item: InventoryItem) => {
+    const maxUses = item.maxUses ?? 2;
+    onUpdate((prev) => ({
+      ...prev,
+      inventory: prev.inventory.map((i) =>
+        i.id === item.id ? { ...i, currentUses: maxUses, maxUses } : i
+      ),
+    }));
+  };
+
+  const hasRiskMedicinesInInventory = useMemo(
+    () =>
+      agent.inventory.some(
+        (i) => i.riskGrade !== undefined || i.maxUses !== undefined
+      ) ||
+      (agent.dailyMedicineUses ?? 0) > 0 ||
+      (agent.dailyRiskGradeSum ?? 0) > 0 ||
+      (agent.enabledSources ?? []).includes("grimorio_do_cataclisma"),
+    [
+      agent.inventory,
+      agent.dailyMedicineUses,
+      agent.dailyRiskGradeSum,
+      agent.enabledSources,
+    ]
+  );
+
+  const dailyUses = agent.dailyMedicineUses ?? 0;
+  const dailyGrSum = agent.dailyRiskGradeSum ?? 0;
+  const isOverdoseAlert = dailyUses >= 3 && dailyGrSum >= 7;
+
   const sendWeaponToCombat = (item: InventoryItem) => {
     const ammoInfo = getDefaultMagazineCapacity(item.name);
     const isRanged =
@@ -324,6 +373,130 @@ export function InventoryTab({
           })}
         </div>
       </div>
+
+      {/* Optional Daily G.R. (Grau de Risco) & Overdose Tracker */}
+      {hasRiskMedicinesInInventory && (
+        <div
+          className={cn(
+            "rounded-md border p-3.5 space-y-2 transition-colors",
+            isOverdoseAlert
+              ? "border-red-500/60 bg-red-950/20"
+              : "border-[#22222A] bg-[#0D0D11]"
+          )}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <Pill className="h-3.5 w-3.5 text-amber-400" />
+              <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#D4D4D8]">
+                G.R. Consumido no Dia (Remédios)
+              </span>
+              <Badge variant="outline" className="font-mono text-[10px]">
+                USOS NO DIA: {dailyUses}
+              </Badge>
+              <Badge
+                variant={isOverdoseAlert ? "danger" : "warning"}
+                className="font-mono text-[10px]"
+              >
+                SOMA G.R.: {dailyGrSum}
+              </Badge>
+            </div>
+
+            <div className="flex items-center gap-1.5 font-mono text-[10px]">
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    dailyMedicineUses: Math.max(
+                      0,
+                      (prev.dailyMedicineUses ?? 0) - 1
+                    ),
+                  }))
+                }
+                className="rounded-sm border border-[#22222A] bg-[#141419] px-2 py-0.5 text-[#A1A1AA] hover:text-[#F4F4F5]"
+                title="Diminuir usos no dia"
+              >
+                -1 Uso
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    dailyMedicineUses: (prev.dailyMedicineUses ?? 0) + 1,
+                  }))
+                }
+                className="rounded-sm border border-[#22222A] bg-[#141419] px-2 py-0.5 text-[#A1A1AA] hover:text-[#F4F4F5]"
+                title="Adicionar uso no dia"
+              >
+                +1 Uso
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    dailyRiskGradeSum: Math.max(
+                      0,
+                      (prev.dailyRiskGradeSum ?? 0) - 1
+                    ),
+                  }))
+                }
+                className="rounded-sm border border-[#22222A] bg-[#141419] px-2 py-0.5 text-[#A1A1AA] hover:text-[#F4F4F5]"
+                title="Diminuir G.R. acumulado"
+              >
+                -1 G.R.
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    dailyRiskGradeSum: (prev.dailyRiskGradeSum ?? 0) + 1,
+                  }))
+                }
+                className="rounded-sm border border-[#22222A] bg-[#141419] px-2 py-0.5 text-[#A1A1AA] hover:text-[#F4F4F5]"
+                title="Somar +1 G.R."
+              >
+                +1 G.R.
+              </button>
+              {(dailyUses > 0 || dailyGrSum > 0) && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    onUpdate((prev) => ({
+                      ...prev,
+                      dailyMedicineUses: 0,
+                      dailyRiskGradeSum: 0,
+                    }))
+                  }
+                  className="inline-flex items-center gap-1 rounded-sm border border-[#22222A] bg-[#141419] px-2 py-0.5 text-[#8E8E9E] hover:text-[#F4F4F5]"
+                  title="Zerar contador diário de G.R."
+                >
+                  <RotateCcw className="h-2.5 w-2.5" /> Zerar Dia
+                </button>
+              )}
+            </div>
+          </div>
+
+          {isOverdoseAlert ? (
+            <div className="flex items-center gap-2 rounded-sm border border-red-500/50 bg-red-600/15 px-3 py-1.5 text-xs text-red-200 font-mono">
+              <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-red-400" />
+              <span>
+                <strong>ALERTA DE OVERDOSE:</strong> {dailyUses} usos no dia e
+                soma de G.R. = {dailyGrSum} (&ge; 3 usos e G.R. &ge; 7). Exige
+                teste de Fortitude contra Overdose!
+              </span>
+            </div>
+          ) : (
+            <p className="font-mono text-[10px] text-[#8E8E9E]">
+              Regra de Remédios (Grimório do Cataclisma): consumir 3 ou mais
+              doses no mesmo dia cuja soma de Grau de Risco (G.R.) seja &ge; 7
+              exige teste contra Overdose.
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Search + Add Item Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-2.5">
@@ -533,6 +706,27 @@ export function InventoryTab({
                                 +{item.carryBonus} CARGA
                               </Badge>
                             ) : null}
+                            {item.maxUses !== undefined && (
+                              <Badge
+                                variant={
+                                  (item.currentUses ?? item.maxUses) === 0
+                                    ? "danger"
+                                    : "outline"
+                                }
+                                className="font-mono text-[10px] text-sky-300 border-sky-500/40"
+                              >
+                                Usos ({item.currentUses ?? item.maxUses}/
+                                {item.maxUses})
+                              </Badge>
+                            )}
+                            {item.riskGrade !== undefined && (
+                              <Badge
+                                variant="warning"
+                                className="font-mono text-[10px]"
+                              >
+                                G.R. {item.riskGrade}
+                              </Badge>
+                            )}
                           </div>
 
                           {item.description && (
@@ -575,6 +769,36 @@ export function InventoryTab({
 
                         {/* Item Action Controls */}
                         <div className="flex items-center gap-1.5 shrink-0 flex-wrap justify-end">
+                          {/* Medicine Usos (2/2) quick controls */}
+                          {item.maxUses !== undefined && (
+                            <div className="inline-flex items-center gap-1">
+                              <button
+                                type="button"
+                                onClick={() => consumeMedicineDose(item)}
+                                disabled={
+                                  (item.currentUses ?? item.maxUses) <= 0
+                                }
+                                className="rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-1 font-mono text-[10px] text-amber-200 hover:bg-amber-500/20 disabled:opacity-35"
+                                title="Consumir 1 dose deste medicamento e somar o G.R. no contador diário"
+                              >
+                                Usar Dose (
+                                {item.currentUses ?? item.maxUses}/
+                                {item.maxUses})
+                              </button>
+                              {(item.currentUses ?? item.maxUses) <
+                                item.maxUses && (
+                                <button
+                                  type="button"
+                                  onClick={() => restoreMedicineDoses(item)}
+                                  className="rounded-sm border border-[#22222A] bg-[#141419] p-1 text-[#8E8E9E] hover:text-[#F4F4F5]"
+                                  title="Restaurar usos (2/2)"
+                                >
+                                  <RotateCcw className="h-3 w-3" />
+                                </button>
+                              )}
+                            </div>
+                          )}
+
                           {/* Quantity stepper */}
                           <div className="inline-flex items-center rounded-sm border border-[#22222A] bg-[#121217] font-mono text-[11px]">
                             <button

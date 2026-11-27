@@ -35,7 +35,10 @@ import {
 } from "../ordem-rules";
 import { BASE_ORIGINS } from "@/data/origins";
 import { ALL_CLASSES, getClassById } from "@/data/classes";
+import { ALLY_TEMPLATES, COMMUNITY_PET_TEMPLATES } from "@/data/allies";
 import {
+  BARALHO_INFINITO_CARDS,
+  COMMUNITY_CLASS_POWERS,
   COMMUNITY_CONDITIONS,
   COMMUNITY_CURSED_ITEMS,
   COMMUNITY_CURSES,
@@ -46,12 +49,35 @@ import {
   COMMUNITY_ORGANIZATIONS,
   COMMUNITY_ORIGINS,
   COMMUNITY_PARANORMAL_FOODS,
+  COMMUNITY_PARANORMAL_POWERS,
+  COMMUNITY_PETS,
   COMMUNITY_POWERS,
   COMMUNITY_RELICS,
   COMMUNITY_RITUALS,
   COMMUNITY_THREATS,
   COMMUNITY_TRAILS,
   COMMUNITY_VARIANT_THREATS,
+  drawBaralhoInfinitoCard,
+  ENTREGA5_AMMO,
+  ENTREGA6_ALLY_TEMPLATES,
+  ENTREGA7_ALLY_TEMPLATES,
+  ENTREGA8_ALLY_TEMPLATES,
+  ENTREGA8_CURSES,
+  ENTREGA8_DISEASES_AND_POISONS,
+  ENTREGA8_MODIFICATIONS,
+  ENTREGA9_ALLY_TEMPLATES,
+  ENTREGA9_DRONE_ALLY_TEMPLATES,
+  ENTREGA9_HELL_HUNTERS_ALLY_TEMPLATES,
+  ENTREGA5_GENERAL_EQUIPMENT,
+  ENTREGA5_ITEMS,
+  ENTREGA5_MODIFICATIONS,
+  ENTREGA5_OPTIONAL_RULES,
+  ENTREGA5_PARANORMAL_POWERS,
+  ENTREGA5_PETS,
+  ENTREGA5_PROTECTIONS,
+  ENTREGA5_RITUALS,
+  ENTREGA5_THREATS,
+  ENTREGA5_WEAPONS,
   OFFICIAL_SUPERIOR_FORMS,
 } from "@/data/supplements";
 import { ORGANIZATIONS, getOrganization } from "@/data/organizations";
@@ -644,9 +670,26 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
         getPassiveSkillModifiers({ ...baseAgent, originId: "experimento" }, "diplomacia")
       ).toEqual({ flatBonus: 0, diceModifier: -1 });
 
-      // Treinado pela Hell Hunters (NEX 25%): +2 PV fixo + floor(25/10)=2 => +4 PV
-      const hh = getAgentEffectiveVitals({ ...baseAgent, originId: "treinado_hell_hunters" });
-      expect(hh.maxPv - normal.maxPv).toBe(4);
+      // Treinado pela Hell Hunters (NEX 25%):
+      // - Ramo Luta/Fortitude: +2 PV em 5% + 2 (15%, 25%) = +4 PV
+      // - Ramo Pontaria/Reflexos: +1 PE em 5% + 2 (15%, 25%) = +3 PE
+      const hhPv = getAgentEffectiveVitals({
+        ...baseAgent,
+        originId: "as9_treinado_hell_hunters",
+      });
+      expect(hhPv.maxPv - normal.maxPv).toBe(4);
+      const hhPe = getAgentEffectiveVitals({
+        ...baseAgent,
+        originId: "as9_treinado_hell_hunters",
+        skills: {
+          ...baseAgent.skills,
+          luta: { attribute: "FOR", training: 0, bonus: 0 },
+          fortitude: { attribute: "VIG", training: 0, bonus: 0 },
+          pontaria: { attribute: "AGI", training: 5, bonus: 0 },
+          reflexos: { attribute: "AGI", training: 5, bonus: 0 },
+        },
+      });
+      expect(hhPe.maxPe - normal.maxPe).toBe(3);
     });
 
     it("aplica passivos automáticos de Trilhas (Casca Grossa, Operações Especiais, Técnico, Muambeiro, Bibliotecário 99%, Durão)", () => {
@@ -1102,7 +1145,145 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
 
     it("importa 100% das Entregas 1 e 2 com IDs prefixados, acopla forma Superior nos 4 rituais oficiais e evita colisões", () => {
       // Entrega 1
-      expect(COMMUNITY_ORIGINS).toHaveLength(4);
+      expect(
+        COMMUNITY_ORIGINS.filter((o) => o.source === "guia_confidencial_vol1")
+      ).toHaveLength(4);
+      // Entrega 4 — Grimório do Cataclisma v0.3 Parte 1
+      const gdcOrigins = COMMUNITY_ORIGINS.filter(
+        (o) => o.source === "grimorio_do_cataclisma"
+      );
+      expect(gdcOrigins).toHaveLength(24);
+      expect(COMMUNITY_ORIGINS).toHaveLength(40); // 4 GC1 + 24 GdC + 12 AS (#1 a #9)
+      const gdcClassPowers = COMMUNITY_CLASS_POWERS.filter(
+        (p) => p.source === "grimorio_do_cataclisma"
+      );
+      expect(gdcClassPowers).toHaveLength(51);
+      expect(gdcClassPowers.filter((p) => p.classId === "combatente")).toHaveLength(2);
+      expect(gdcClassPowers.filter((p) => p.classId === "especialista")).toHaveLength(6);
+      expect(gdcClassPowers.filter((p) => p.classId === "ocultista")).toHaveLength(5);
+      expect(gdcClassPowers.filter((p) => p.classId === "devoto")).toHaveLength(19);
+      expect(gdcClassPowers.filter((p) => p.classId === "predador")).toHaveLength(19);
+
+      // Entrega 5 — Grimório do Cataclisma v0.3 Parte 2
+      expect(ENTREGA5_WEAPONS).toHaveLength(20);
+      expect(ENTREGA5_AMMO).toHaveLength(8);
+      expect(ENTREGA5_PROTECTIONS).toHaveLength(7);
+      expect(ENTREGA5_GENERAL_EQUIPMENT).toHaveLength(39);
+      expect(
+        ENTREGA5_GENERAL_EQUIPMENT.filter((i) => i.type === "explosivo")
+      ).toHaveLength(10);
+      expect(
+        ENTREGA5_GENERAL_EQUIPMENT.filter((i) => i.type === "operacional")
+      ).toHaveLength(7);
+      expect(
+        ENTREGA5_GENERAL_EQUIPMENT.filter((i) => i.type === "paranormal")
+      ).toHaveLength(10);
+      const gdcMedicines = ENTREGA5_GENERAL_EQUIPMENT.filter(
+        (i) => i.type === "medicamento"
+      );
+      expect(gdcMedicines).toHaveLength(12);
+      expect(
+        gdcMedicines.every(
+          (m) =>
+            m.maxUses === 2 &&
+            m.currentUses === 2 &&
+            typeof m.riskGrade === "number" &&
+            m.riskGrade >= 0 &&
+            m.riskGrade <= 3
+        )
+      ).toBe(true);
+      expect(ENTREGA5_ITEMS).toHaveLength(74);
+      expect(
+        COMMUNITY_ITEMS.filter((i) => i.source === "grimorio_do_cataclisma")
+      ).toHaveLength(74);
+      expect(ENTREGA5_MODIFICATIONS).toHaveLength(23);
+      expect(ENTREGA5_PARANORMAL_POWERS).toHaveLength(22);
+      expect(
+        COMMUNITY_PARANORMAL_POWERS.filter(
+          (p) => p.source === "grimorio_do_cataclisma"
+        )
+      ).toHaveLength(22);
+      expect(ENTREGA5_RITUALS).toHaveLength(59);
+      expect(
+        COMMUNITY_RITUALS.filter((r) => r.source === "grimorio_do_cataclisma")
+      ).toHaveLength(59);
+      expect(ENTREGA5_PETS).toHaveLength(9);
+      expect(COMMUNITY_PETS).toHaveLength(9);
+      expect(COMMUNITY_PET_TEMPLATES).toHaveLength(9);
+      expect(ALLY_TEMPLATES).toHaveLength(58); // 6 oficiais + 43 AS (29 + 8 HH + 6 Drones) + 9 pets GdC
+      expect(ENTREGA5_THREATS).toHaveLength(1);
+      expect(ENTREGA5_THREATS[0].id).toBe("gdc_demonio_do_caos");
+      expect(ENTREGA5_THREATS[0].vd).toBe(60);
+      expect(ENTREGA5_THREATS[0].element).toBe("Energia");
+      expect(BARALHO_INFINITO_CARDS).toHaveLength(21);
+      expect(drawBaralhoInfinitoCard(() => 0).card.carta).toBe("A Morte"); // 1+1 = 2
+      expect(drawBaralhoInfinitoCard(() => 0.999).card.carta).toBe("Curinga"); // 12+12 = 24
+      expect(ENTREGA5_OPTIONAL_RULES).toHaveLength(9);
+
+      // Entrega 6 � Arquivos Secretos #1 e #2 (oficial)
+      const asOnly = <T extends { source?: string }>(l: T[]) =>
+        l.filter((i) => i.source === "arquivos_secretos");
+      expect(asOnly(COMMUNITY_ORIGINS)).toHaveLength(12);
+      expect(asOnly(COMMUNITY_TRAILS)).toHaveLength(7);
+      expect(asOnly(COMMUNITY_CLASS_POWERS)).toHaveLength(29);
+      expect(
+        asOnly(COMMUNITY_POWERS).filter(
+          (p) => (p as { category: string }).category === "geral"
+        )
+      ).toHaveLength(18);
+      expect(asOnly(COMMUNITY_PARANORMAL_POWERS)).toHaveLength(22);
+      expect(asOnly(COMMUNITY_RITUALS)).toHaveLength(8);
+      expect(asOnly(COMMUNITY_ITEMS)).toHaveLength(48);
+      expect(asOnly(COMMUNITY_THREATS)).toHaveLength(51);
+      expect(asOnly(COMMUNITY_OPTIONAL_RULES)).toHaveLength(15);
+      expect(asOnly(COMMUNITY_MODIFICATIONS)).toHaveLength(4);
+      expect(asOnly(COMMUNITY_CURSES)).toHaveLength(2);
+      expect(asOnly(COMMUNITY_CONDITIONS)).toHaveLength(2);
+      expect(ENTREGA7_ALLY_TEMPLATES).toHaveLength(15);
+      expect(
+        ENTREGA7_ALLY_TEMPLATES.filter((a) => a.kind === "pet")
+      ).toHaveLength(1);
+      expect(ENTREGA8_ALLY_TEMPLATES).toHaveLength(3);
+      expect(ENTREGA8_MODIFICATIONS).toHaveLength(1);
+      expect(ENTREGA8_CURSES).toHaveLength(2);
+      expect(ENTREGA8_DISEASES_AND_POISONS).toHaveLength(8);
+      expect(ENTREGA9_HELL_HUNTERS_ALLY_TEMPLATES).toHaveLength(8);
+      expect(ENTREGA9_DRONE_ALLY_TEMPLATES).toHaveLength(6);
+      expect(ENTREGA9_ALLY_TEMPLATES).toHaveLength(14);
+
+      // Vitalidade Sofrida (AS #3): PV Combatente = 24 + VIG inicial e 6 + VIG por NEX
+      expect(calculateVitals({ classId: "combatente", nex: 5, vig: 2, pre: 1, vitalidadeSofrida: true }).maxPv).toBe(26);
+      expect(calculateVitals({ classId: "combatente", nex: 25, vig: 2, pre: 1, vitalidadeSofrida: true }).maxPv).toBe(24 + 2 + 4 * 8);
+      expect(calculateVitals({ classId: "ocultista", nex: 25, vig: 2, pre: 1, vitalidadeSofrida: true }).maxPv).toBe(calculateVitals({ classId: "ocultista", nex: 25, vig: 2, pre: 1 }).maxPv);
+      expect(ENTREGA6_ALLY_TEMPLATES).toHaveLength(11);
+
+      const gdcTrails = COMMUNITY_TRAILS.filter(
+        (t) => t.source === "grimorio_do_cataclisma"
+      );
+      expect(gdcTrails).toHaveLength(25);
+      expect(gdcTrails.filter((t) => t.classId === "combatente")).toHaveLength(3);
+      expect(gdcTrails.filter((t) => t.classId === "especialista")).toHaveLength(3);
+      expect(gdcTrails.filter((t) => t.classId === "ocultista")).toHaveLength(3);
+      expect(gdcTrails.filter((t) => t.classId === "devoto")).toHaveLength(8);
+      expect(gdcTrails.filter((t) => t.classId === "predador")).toHaveLength(8);
+      expect(getClassById("devoto").trilhas).toHaveLength(8);
+      expect(getClassById("predador").trilhas).toHaveLength(8);
+
+      // Passivos das novas origens de Grimório do Cataclisma (Cientista, Piloto, Aposentado)
+      expect(getOriginById("gdc_cientista")?.efeitosPassivos?.periciaBonus?.ciencias).toBe(5);
+      expect(getOriginById("gdc_piloto")?.efeitosPassivos?.periciaBonus?.pilotagem).toBe(5);
+      expect(getOriginById("gdc_aposentado")?.efeitosPassivos?.metadePvInicial).toBe(true);
+      expect(getOriginById("gdc_aposentado")?.efeitosPassivos?.metadePeInicial).toBe(true);
+
+      // Predador: Marca da Maldição reduz em 1 o limite de itens Cat I
+      const loadPred = calculateLoadAndCategories({
+        forAttr: 2,
+        patente: "Recruta",
+        inventory: [],
+        classId: "predador",
+      });
+      expect(loadPred.categoryLimits[1]).toBe(1); // Recruta normal = 2 -> Predador = 1
+
       const extTrails = COMMUNITY_TRAILS.filter(
         (t) => t.source === "comunidade_avulsos"
       );
@@ -1132,11 +1313,17 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
       expect(
         COMMUNITY_CURSED_ITEMS.filter((i) => i.source === "mascaras_teatrais")
       ).toHaveLength(5);
-      expect(COMMUNITY_CONDITIONS.map((c) => c.id)).toEqual(["gc1_desorientado"]);
-      expect(COMMUNITY_OPTIONAL_RULES.map((r) => r.id)).toEqual([
-        "rs_regra_rituais_superiores",
-      ]);
+      expect(COMMUNITY_CONDITIONS.map((c) => c.id)).toEqual(["gc1_desorientado", "as3_apaixonado", "as3_tremulo"]);
+      expect(COMMUNITY_OPTIONAL_RULES).toHaveLength(25); // 1 (RS) + 9 (GdC) + 15 (AS)
+      expect(
+        COMMUNITY_OPTIONAL_RULES.some(
+          (r) => r.id === "rs_regra_rituais_superiores"
+        )
+      ).toBe(true);
       expect(COMMUNITY_THREATS.some((t) => t.id === "gc1_prematuro")).toBe(true);
+      expect(COMMUNITY_THREATS.some((t) => t.id === "gdc_demonio_do_caos")).toBe(
+        true
+      );
       expect(OFFICIAL_SUPERIOR_FORMS).toHaveLength(4);
 
       // Entrega 2 + 3 — Mistérios do Outro Lado (Partes 1 e 2)
@@ -1157,9 +1344,13 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
       expect(molItems.filter((i) => i.type === "paranormal")).toHaveLength(4);
       expect(molItems.filter((i) => i.type === "amaldicoado")).toHaveLength(53);
       expect(COMMUNITY_PARANORMAL_FOODS).toHaveLength(4);
-      expect(COMMUNITY_MODIFICATIONS).toHaveLength(3);
-      expect(COMMUNITY_CURSES).toHaveLength(4);
-      expect(COMMUNITY_CURSES.every((c) => c.element === "Medo")).toBe(true);
+      expect(COMMUNITY_MODIFICATIONS).toHaveLength(30); // 3 (MoL) + 23 (GdC) + 4 (AS)
+      expect(COMMUNITY_CURSES).toHaveLength(6); // 4 (MoL Medo) + 2 (AS #6 Morte)
+      expect(
+        COMMUNITY_CURSES.filter((c) => c.source === "misterios_do_outro_lado").every(
+          (c) => c.element === "Medo"
+        )
+      ).toBe(true);
       expect(COMMUNITY_ORGANIZATIONS).toHaveLength(5);
       expect(ORGANIZATIONS).toHaveLength(5);
       const molRituals = COMMUNITY_RITUALS.filter(
@@ -1168,15 +1359,15 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
       expect(molRituals).toHaveLength(14);
       expect(molRituals.filter((r) => r.isCorrentesDaRealidade)).toHaveLength(5);
 
-      // Entrega 3 — Ameaças inéditas (7), Variantes (44) e Relíquias (4)
-      expect(COMMUNITY_NEW_THREATS).toHaveLength(7);
+      // Entrega 3 + 5 + 6 + 7 + 8 + 9 — Ameaças inéditas (7 MoL + 1 GdC + 51 AS = 59), Variantes (44) e Relíquias (4)
+      expect(COMMUNITY_NEW_THREATS).toHaveLength(59);
       expect(COMMUNITY_VARIANT_THREATS).toHaveLength(44);
       expect(
         COMMUNITY_VARIANT_THREATS.every(
           (v) => v.isVariant === true && Boolean(v.baseCreatureName)
         )
       ).toBe(true);
-      expect(COMMUNITY_THREATS).toHaveLength(52); // 1 (GC1) + 7 inéditas + 44 variantes
+      expect(COMMUNITY_THREATS).toHaveLength(104); // 1 GC1 + 7 MoL + 44 variantes + 1 GdC + 51 AS
       expect(COMMUNITY_RELICS).toHaveLength(4);
       expect(
         COMMUNITY_RELICS.every(
@@ -1307,9 +1498,21 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
       ];
       for (const item of community) {
         const meta = SOURCE_META.find((s) => s.id === item.source);
+        if (item.source === "arquivos_secretos") {
+          expect(/^as[12345679]_/.test(item.id)).toBe(true);
+          continue;
+        }
         expect(meta?.idPrefix).toBeDefined();
         expect(item.id.startsWith(meta!.idPrefix!)).toBe(true);
       }
+
+      // Garante 0 IDs duplicados entre todas as 9 entregas importadas e os catálogos de aliados/doenças
+      const allImportedIds = [
+        ...community.map((x) => x.id),
+        ...ALLY_TEMPLATES.map((a) => a.id),
+        ...ENTREGA8_DISEASES_AND_POISONS.map((d) => d.id),
+      ];
+      expect(new Set(allImportedIds).size).toBe(allImportedIds.length);
 
       const officialIdSet = new Set([
         ...BASE_ORIGINS.map((o) => o.id),

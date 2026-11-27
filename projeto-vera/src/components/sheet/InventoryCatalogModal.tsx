@@ -724,6 +724,23 @@ export function InventoryCatalogModal({
                             </span>
                           </>
                         ) : null}
+                        {item.maxUses !== undefined && (
+                          <>
+                            <span>·</span>
+                            <span className="text-sky-300">
+                              Usos ({item.currentUses ?? item.maxUses}/
+                              {item.maxUses})
+                            </span>
+                          </>
+                        )}
+                        {item.riskGrade !== undefined && (
+                          <>
+                            <span>·</span>
+                            <span className="text-amber-300">
+                              G.R. {item.riskGrade}
+                            </span>
+                          </>
+                        )}
                         {item.element && (
                           <span
                             className={cn(
@@ -874,6 +891,27 @@ export function InventoryCatalogModal({
                           </span>
                         </div>
                       ) : null}
+                      {selectedItem.maxUses !== undefined && (
+                        <div className="rounded-sm border border-[#22222A] bg-[#0D0D11] p-3">
+                          <span className="text-[9px] uppercase tracking-wider text-[#6E6E7E] block">
+                            Usos
+                          </span>
+                          <span className="text-sm font-bold text-sky-300 tabular-nums">
+                            {selectedItem.currentUses ?? selectedItem.maxUses}/
+                            {selectedItem.maxUses}
+                          </span>
+                        </div>
+                      )}
+                      {selectedItem.riskGrade !== undefined && (
+                        <div className="rounded-sm border border-[#22222A] bg-[#0D0D11] p-3">
+                          <span className="text-[9px] uppercase tracking-wider text-[#6E6E7E] block">
+                            Grau de Risco
+                          </span>
+                          <span className="text-sm font-bold text-amber-300 tabular-nums">
+                            G.R. {selectedItem.riskGrade}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Full Description */}

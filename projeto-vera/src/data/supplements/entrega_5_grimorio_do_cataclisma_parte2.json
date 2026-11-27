@@ -1,0 +1,2484 @@
+{
+  "meta": {
+    "entrega": 5,
+    "titulo": "Grimório do Cataclisma v0.3 — Parte 2 (Armas, Proteções, Modificações, Explosivos, Itens, Flechas, Remédios, Poderes Paranormais, Rituais, Pets, Demônio do Caos e Regras Extras)",
+    "autores": "Gabrirul & Júpiter",
+    "source": "grimorio_do_cataclisma"
+  },
+  "armas": [
+    {
+      "id": "gdc_foicinha",
+      "nome": "Foicinha",
+      "tipo": "arma",
+      "proficiencia": "Simples",
+      "empunhadura": "Leve",
+      "categoria": 0,
+      "dano": "1d6",
+      "critico": "19/x2",
+      "alcance": "Curto",
+      "tipoDano": "Corte",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Arma ágil e de arremesso. Se acertar arremessada, ao retirá-la do corpo do alvo ele sofre +1d6 de dano."
+    },
+    {
+      "id": "gdc_espada_curta",
+      "nome": "Espada Curta",
+      "tipo": "arma",
+      "proficiencia": "Simples",
+      "empunhadura": "Uma Mão",
+      "categoria": 0,
+      "dano": "1d6/1d8",
+      "critico": "19/x3",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Corte",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Soma Agilidade no teste de ataque. Uma mão causa 1d6; duas mãos causa 1d8."
+    },
+    {
+      "id": "gdc_mangual",
+      "nome": "Mangual",
+      "tipo": "arma",
+      "proficiencia": "Simples",
+      "empunhadura": "Uma Mão",
+      "categoria": 1,
+      "dano": "1d8",
+      "critico": "20/x3",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Impacto",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Permite usar Técnica Secreta (Amplo) de Aniquilador (se já for Aniquilador, atinge +1 alvo adjacente adicional)."
+    },
+    {
+      "id": "gdc_manopla",
+      "nome": "Manopla",
+      "tipo": "arma",
+      "proficiencia": "Simples",
+      "empunhadura": "Uma Mão",
+      "categoria": 0,
+      "dano": "1d6",
+      "critico": "20/x3",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Impacto",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Dano letal. Fornece +2 na Defesa e RD 2 ao bloquear. Com um par de manoplas, gasta ação de movimento e 2 PE para fazer um ataque adicional."
+    },
+    {
+      "id": "gdc_chicote",
+      "nome": "Chicote",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Leve",
+      "categoria": 0,
+      "dano": "1d6",
+      "critico": "20/x2",
+      "alcance": "Curto",
+      "tipoDano": "Impacto",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Pode usar Acrobacia em vez de Luta para atacar; fornece +5 em Intimidação para ameaçar."
+    },
+    {
+      "id": "gdc_rapieira",
+      "nome": "Rapieira",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Uma Mão",
+      "categoria": 1,
+      "dano": "1d8",
+      "critico": "20/x3",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Perfuração",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Arma ágil. Alvo reduzido a 0 PV por ela tem a DT de salvamento aumentada em +5."
+    },
+    {
+      "id": "gdc_sabre_serrilhado",
+      "nome": "Sabre Serrilhado",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Uma Mão",
+      "categoria": 1,
+      "dano": "2d4",
+      "critico": "20/x2",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Corte",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Em acertos críticos, além de multiplicar os dados, adiciona uma quantidade de dados de dano igual à sua Força em vez de somá-la."
+    },
+    {
+      "id": "gdc_tridente",
+      "nome": "Tridente",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Uma Mão",
+      "categoria": 1,
+      "dano": "1d8/2d4",
+      "critico": "20/x2",
+      "alcance": "Curto",
+      "tipoDano": "Perfuração",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Uma mão 1d8; duas mãos 2d4. Alvo atingido testa Fortitude (DT igual ao dano causado) ou fica Fraco até o fim do próximo turno do agressor."
+    },
+    {
+      "id": "gdc_alabarda",
+      "nome": "Alabarda",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos",
+      "categoria": 2,
+      "dano": "1d12",
+      "critico": "20/x3",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Corte",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Ao acertar um crítico, pode mover o alvo em 3m."
+    },
+    {
+      "id": "gdc_lanca_montada",
+      "nome": "Lança Montada",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos",
+      "categoria": 2,
+      "dano": "1d12",
+      "critico": "18/x2",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Perfuração",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Em investida montada, deixa o alvo Sangrando. Contra alvo Machucado, causa +1d12 de dano."
+    },
+    {
+      "id": "gdc_mangual_pesado",
+      "nome": "Mangual Pesado",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos",
+      "categoria": 2,
+      "dano": "4d4",
+      "critico": "20/x2",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Impacto",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Em acerto crítico, arremessa o alvo até alcance curto (1d6 impacto extra a cada 3m se bater em superfície sólida)."
+    },
+    {
+      "id": "gdc_picareta",
+      "nome": "Picareta (GdC)",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos",
+      "categoria": 2,
+      "dano": "2d6",
+      "critico": "20/x3",
+      "alcance": "Corpo a corpo",
+      "tipoDano": "Perfuração",
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Rolar 6 em dado de dano deixa o alvo Sangrando; deixar Machucado ou Morrendo exige teste da regra de lesões."
+    },
+    {
+      "id": "gdc_funda",
+      "nome": "Funda",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Uma Mão (Disparo)",
+      "categoria": 1,
+      "dano": "1d8",
+      "critico": "19/x2",
+      "alcance": "Curto",
+      "tipoDano": "Balístico",
+      "espacos": 1,
+      "municao": "Esferas de Ferro",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Rolar 8 no dano permite recarregar como ação livre. Aceita projéteis improvisados com -1d20."
+    },
+    {
+      "id": "gdc_shuriken",
+      "nome": "Shuriken (GdC)",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Uma Mão (Arremesso)",
+      "categoria": 0,
+      "dano": "1d4",
+      "critico": "18/x3",
+      "alcance": "Curto",
+      "tipoDano": "Perfuração",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Pode arremessar até AGI unidades em cone de uma vez (teste único com -5 e -1d20 se lançar mais de uma)."
+    },
+    {
+      "id": "gdc_bumerangue",
+      "nome": "Bumerangue",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Uma Mão (Arremesso)",
+      "categoria": 1,
+      "dano": "1d6",
+      "critico": "19/x3",
+      "alcance": "Curto",
+      "tipoDano": "Corte",
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Se errar o alvo, retorna e pode ser apanhado com uma ação livre."
+    },
+    {
+      "id": "gdc_arcabuz",
+      "nome": "Arcabuz",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos (Fogo)",
+      "categoria": 1,
+      "dano": "3d6",
+      "critico": "18/x2",
+      "alcance": "Médio",
+      "tipoDano": "Balístico",
+      "espacos": 2,
+      "municao": "Balas Curtas",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Ignora qualquer RD proveniente de armaduras do alvo."
+    },
+    {
+      "id": "gdc_estilingue_tatico",
+      "nome": "Estilingue Tático",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos (Disparo)",
+      "categoria": 1,
+      "dano": "2d4",
+      "critico": "20/x4",
+      "alcance": "Curto",
+      "tipoDano": "Balístico",
+      "espacos": 1,
+      "municao": "Esferas de Ferro",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Aceita projéteis improvisados sofrendo -1d20 no teste."
+    },
+    {
+      "id": "gdc_mosquete",
+      "nome": "Mosquete",
+      "tipo": "arma",
+      "proficiencia": "Tática",
+      "empunhadura": "Duas Mãos (Fogo)",
+      "categoria": 2,
+      "dano": "4d4",
+      "critico": "20/x4",
+      "alcance": "Curto",
+      "tipoDano": "Balístico",
+      "espacos": 2,
+      "municao": "Esferas de Ferro",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Tiros de mosquete ignoram o bônus de armaduras leves na Defesa do alvo."
+    },
+    {
+      "id": "gdc_sniper_pesada",
+      "nome": "Sniper Pesada",
+      "tipo": "arma",
+      "proficiencia": "Pesada",
+      "empunhadura": "Duas Mãos (Fogo)",
+      "categoria": 4,
+      "dano": "3d12",
+      "critico": "19/x3",
+      "alcance": "Longo",
+      "tipoDano": "Balístico",
+      "espacos": 3,
+      "municao": "Balas Longas",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Tiros atravessam alvos Grandes ou menores acertando todos em linha reta. Veterano em Pontaria mirando recebe +5 na margem de ameaça e no ataque. Exige ação de movimento para recarregar todo turno (sem gastar pacote extra)."
+    },
+    {
+      "id": "gdc_lanca_granadas",
+      "nome": "Lança-Granadas (GdC)",
+      "tipo": "arma",
+      "proficiencia": "Pesada",
+      "empunhadura": "Duas Mãos (Fogo)",
+      "categoria": 3,
+      "dano": "8d6",
+      "critico": "20/x2",
+      "alcance": "Curto",
+      "tipoDano": "Fogo",
+      "espacos": 2,
+      "municao": "Granadas",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Atinge alvo e seres em raio de 6m (Reflexos DT Agi metade para secundários). Aceita qualquer granada carregada; recarga exige ação de movimento."
+    }
+  ],
+  "municoesEFlechas": [
+    {
+      "id": "gdc_esferas_ferro",
+      "nome": "Esferas de Ferro",
+      "tipo": "municao",
+      "categoria": 0,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Munição para Funda, Estilingue Tático e Mosquete. Mesma duração de balas curtas e aceita qualquer modificação de munição."
+    },
+    {
+      "id": "gdc_flecha_acido",
+      "nome": "Flechas Especiais — Ácido",
+      "tipo": "municao",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1d6 dano Químico; se falhar em Fortitude (DT Agi), o mesmo dano persiste por mais 2 rodadas."
+    },
+    {
+      "id": "gdc_flecha_atordoante",
+      "nome": "Flechas Especiais — Atordoantes",
+      "tipo": "municao",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Alvo testa Vontade (DT Agi) ou fica Atordoado por 1 rodada (imune pelo resto do dia se passar)."
+    },
+    {
+      "id": "gdc_flecha_elemental",
+      "nome": "Flechas Especiais — Elemental",
+      "tipo": "municao",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1d6 dano do elemento escolhido; Fortitude (DT Agi) ou condição (Morte: Enjoado; Sangue: Debilitado; Conhecimento: Esmorecido; Energia: Confuso)."
+    },
+    {
+      "id": "gdc_flecha_eletrica",
+      "nome": "Flechas Especiais — Elétrica",
+      "tipo": "municao",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1d6 dano de Eletricidade; Fortitude (DT Agi) ou fica Vulnerável."
+    },
+    {
+      "id": "gdc_flecha_explosiva",
+      "nome": "Flechas Especiais — Explosiva",
+      "tipo": "municao",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+3d6 dano de Fogo no alvo e em seres em 3m (Reflexos DT Agi metade para secundários)."
+    },
+    {
+      "id": "gdc_flecha_fogo",
+      "nome": "Flechas Especiais — Fogo",
+      "tipo": "municao",
+      "categoria": 0,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1d6 dano de Fogo; Reflexos (DT Agi) ou entra Em Chamas."
+    },
+    {
+      "id": "gdc_flecha_veneno",
+      "nome": "Flechas Especiais — Veneno",
+      "tipo": "municao",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Aplica veneno Peçonha Fraca no alvo."
+    }
+  ],
+  "protecoes": [
+    {
+      "id": "gdc_prot_ultra_leve",
+      "nome": "Proteção Ultra Leve",
+      "tipo": "protecao",
+      "defesa": 1,
+      "categoria": 0,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Não exige proficiência. Pode vestir múltiplas peças acumulando benefícios até um limite igual à sua Agilidade."
+    },
+    {
+      "id": "gdc_prot_armadura_combate",
+      "nome": "Armadura de Combate",
+      "tipo": "protecao",
+      "defesa": 7,
+      "categoria": 2,
+      "espacos": 4,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Exige proficiência em proteções leves e Limite de Crédito no mínimo Alto."
+    },
+    {
+      "id": "gdc_prot_cota_malha",
+      "nome": "Cota de Malha",
+      "tipo": "protecao",
+      "defesa": 12,
+      "rd": "Físico 5",
+      "categoria": 2,
+      "espacos": 7,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Proteção pesada. RD 5 a corte, perfuração, impacto e balístico; impõe -1d20 e -5 em perícias de carga."
+    },
+    {
+      "id": "gdc_prot_armadura_medieval",
+      "nome": "Armadura Medieval",
+      "tipo": "protecao",
+      "defesa": 15,
+      "rd": "Físico 10",
+      "categoria": 3,
+      "espacos": 10,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Proteção pesada. RD físico 10; impõe -2d20 em perícias de carga."
+    },
+    {
+      "id": "gdc_escudo_pequeno",
+      "nome": "Escudo Pequeno",
+      "tipo": "protecao",
+      "defesa": 1,
+      "rd": "Físico 1",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Uma mão, não exige proficiência; +1 Defesa e RD físico 1."
+    },
+    {
+      "id": "gdc_escudo_combate",
+      "nome": "Escudo de Combate",
+      "tipo": "protecao",
+      "defesa": 5,
+      "categoria": 2,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Uma mão (exige proficiência leve). Também conta como arma tática leve arremessável (Curto, 1d8 Impacto, x3); aceita modificações de arma ou proteção."
+    },
+    {
+      "id": "gdc_escudo_tatico",
+      "nome": "Escudo Tático",
+      "tipo": "protecao",
+      "defesa": 7,
+      "categoria": 2,
+      "espacos": 3,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Duas mãos (exige proficiência pesada). Pode ser fincado no chão fornecendo cobertura com RD 10."
+    }
+  ],
+  "modificacoes": [
+    {
+      "id": "gdc_mod_acorrentada",
+      "nome": "Acorrentada",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Permite ataques à distância (Curto) sem somar FOR/AGI; puxar de volta exige ação de movimento."
+    },
+    {
+      "id": "gdc_mod_duplicada",
+      "nome": "Duplicada",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "espacosBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Aumenta o dano em +1d6 do mesmo tipo e +1 espaço."
+    },
+    {
+      "id": "gdc_mod_empunhadura_especial",
+      "nome": "Empunhadura Especial",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1d20 em testes de ataque com a arma."
+    },
+    {
+      "id": "gdc_mod_lamina_especial",
+      "nome": "Lâmina Especial",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1 no multiplicador de crítico."
+    },
+    {
+      "id": "gdc_mod_ligeira",
+      "nome": "Ligeira",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "A arma se torna ágil (permite usar AGI em ataque e dano)."
+    },
+    {
+      "id": "gdc_mod_reforco_pesado",
+      "nome": "Reforço Pesado",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "espacosBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1 dado de dano do mesmo tipo e +1 espaço."
+    },
+    {
+      "id": "gdc_mod_versatil",
+      "nome": "Versátil",
+      "alvo": "arma_cac",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Adiciona um segundo tipo de dano (pode alternar ou dividir metade/metade)."
+    },
+    {
+      "id": "gdc_mod_lanterna_embutida",
+      "nome": "Lanterna Embutida",
+      "alvo": "arma_fogo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+2 em Percepção e Iniciativa e ilumina como lanterna."
+    },
+    {
+      "id": "gdc_mod_pente_alongado",
+      "nome": "Pente Alongado",
+      "alvo": "arma_fogo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Adiciona +1 cena à duração de cada pacote de munição."
+    },
+    {
+      "id": "gdc_mod_estilhacavel",
+      "nome": "Estilhaçável",
+      "alvo": "municao",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+5 no dano ao acertar."
+    },
+    {
+      "id": "gdc_mod_incendiaria",
+      "nome": "Incendiária",
+      "alvo": "municao",
+      "restricao": "Balas longas e cartuchos",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Deixa o alvo Em Chamas."
+    },
+    {
+      "id": "gdc_mod_pontiaguda",
+      "nome": "Pontiaguda",
+      "alvo": "municao",
+      "restricao": "Balas longas",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Deixa o alvo Sangrando."
+    },
+    {
+      "id": "gdc_mod_agil",
+      "nome": "Ágil",
+      "alvo": "explosivo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Ativa mina com ação de movimento."
+    },
+    {
+      "id": "gdc_mod_ampla",
+      "nome": "Ampla",
+      "alvo": "explosivo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Aumenta o raio da explosão em +3m (para 9m)."
+    },
+    {
+      "id": "gdc_mod_precisa",
+      "nome": "Precisa",
+      "alvo": "explosivo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+5 na DT para resistir à explosão."
+    },
+    {
+      "id": "gdc_mod_preparada",
+      "nome": "Preparada",
+      "alvo": "explosivo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Reduz em -5 a DT para instalar a mina."
+    },
+    {
+      "id": "gdc_mod_tatica_exp",
+      "nome": "Tática (Explosivo)",
+      "alvo": "explosivo",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Pode sacar o explosivo como ação livre."
+    },
+    {
+      "id": "gdc_mod_alca_especial",
+      "nome": "Alça Especial",
+      "alvo": "protecao",
+      "restricao": "Escudos",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+2 na Defesa e RD 2 ao bloquear com o escudo."
+    },
+    {
+      "id": "gdc_mod_chumbada",
+      "nome": "Chumbada",
+      "alvo": "protecao",
+      "restricao": "Proteções pesadas",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "RD 10 Químico e +1d20 contra efeitos químicos."
+    },
+    {
+      "id": "gdc_mod_espinhosa",
+      "nome": "Espinhosa",
+      "alvo": "protecao",
+      "restricao": "Exceto Ultra Leve e Escudo Pequeno",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Ao fazer manobra (Derrubar/Agarrar), causa 2d6 perfurante e Sangrando (Fortitude DT igual ao teste metade/evita)."
+    },
+    {
+      "id": "gdc_mod_estruturada",
+      "nome": "Estruturada",
+      "alvo": "protecao",
+      "restricao": "Exceto escudos",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "RD 2 contra Corte e Perfuração."
+    },
+    {
+      "id": "gdc_mod_imponente",
+      "nome": "Imponente",
+      "alvo": "protecao",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "+1d20 em Intimidação (Assustar/Coagir) e -1d20 em Diplomacia contra desconhecidos."
+    },
+    {
+      "id": "gdc_mod_pratica",
+      "nome": "Prática",
+      "alvo": "protecao",
+      "categoriaBonus": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Permite sacar um item pré-definido de até 2 espaços como ação livre."
+    }
+  ],
+  "equipamentosGerais": [
+    {
+      "id": "gdc_exp_caotica",
+      "nome": "Granada Caótica",
+      "tipo": "explosivo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Rola 2d6 e multiplica os dois valores: dano de Energia em seres/eletrônicos na área e Confuso (se ninguém ficar Confuso, você fica)."
+    },
+    {
+      "id": "gdc_exp_molotov",
+      "nome": "Coquetel Molotov",
+      "tipo": "explosivo",
+      "categoria": 0,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Movimento acende, padrão lança (4,5m raio): 5d6 Fogo e Em Chamas (crítico 20 natural: 10d6 Fogo + 1d6 Perfuração; inicia Incêndio)."
+    },
+    {
+      "id": "gdc_exp_gas_lacrimogeneo",
+      "nome": "Granada de Gás Lacrimogêneo",
+      "tipo": "explosivo",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Fumaça dura 3 rodadas: Cegos até 1 rodada após sair (Fortitude DT 20 anula)."
+    },
+    {
+      "id": "gdc_exp_gas_letal",
+      "nome": "Granada de Gás Letal",
+      "tipo": "explosivo",
+      "categoria": 3,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Fumaça 3 rodadas (Fortitude DT 25): 2d12 químico/rodada na área + 1d12 por 1d6 rodadas após sair e Enjoado (Medicina DT 25 encerra)."
+    },
+    {
+      "id": "gdc_exp_gnostica",
+      "nome": "Granada Gnóstica",
+      "tipo": "explosivo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "6d6 Conhecimento e Esmorecido na cena (sucesso: metade e Ofuscado 1 turno; se ninguém ficar Esmorecido, você sofre 1d6 mental)."
+    },
+    {
+      "id": "gdc_exp_incineraria",
+      "nome": "Granada Incinerária",
+      "tipo": "explosivo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "9d6 Fogo e Em Chamas difícil de apagar (exige ação completa para apagar)."
+    },
+    {
+      "id": "gdc_exp_mortifera",
+      "nome": "Granada Mortífera",
+      "tipo": "explosivo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "3d6 Morte na 1ª explosão + 6d6 Morte na rodada seguinte (quem leva ambas fica Lento e Alquebrado; gasta 1 PE por alvo; se ninguém levar ambas, envelhece 2 anos)."
+    },
+    {
+      "id": "gdc_exp_paralisante",
+      "nome": "Granada Paralisante",
+      "tipo": "explosivo",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Paralisados na rodada; depois Fortitude DT 20 ou Lentos e Frustrados na cena."
+    },
+    {
+      "id": "gdc_exp_sanguinaria",
+      "nome": "Granada Sanguinária",
+      "tipo": "explosivo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "4d6 Sangue (cada 6 explode em +1d6 extra) e Fortitude DT 20 ou Sangrando."
+    },
+    {
+      "id": "gdc_exp_ultra_fragmentacao",
+      "nome": "Granada de Ultra Fragmentação",
+      "tipo": "explosivo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "12d6 Perfuração (Reflexos DT Agi metade; Perito em Explosivos não exclui aliados)."
+    },
+    {
+      "id": "gdc_op_camera_espionagem",
+      "nome": "Câmera de Espionagem",
+      "tipo": "operacional",
+      "categoria": 1,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Grava até 12h; assistir concede +10 Percepção/Tática para planos no local e reduz dano de Presença Perturbadora pela metade."
+    },
+    {
+      "id": "gdc_op_drone",
+      "nome": "Drone",
+      "tipo": "operacional",
+      "categoria": 3,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Alcance longo, carrega 1 item de até 1 espaço (ação de movimento/turno para guiar)."
+    },
+    {
+      "id": "gdc_op_escuta",
+      "nome": "Escuta",
+      "tipo": "operacional",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Comunicação em alcance extremo (ação de movimento liga/desliga)."
+    },
+    {
+      "id": "gdc_op_lancador_rede",
+      "nome": "Lançador de Rede",
+      "tipo": "operacional",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Pontaria em área 4,5x4,5m deixa seres Grandes ou menores Enredados (Atletismo DT Agi solta)."
+    },
+    {
+      "id": "gdc_op_pistola_pem",
+      "nome": "Pistola PEM",
+      "tipo": "operacional",
+      "categoria": 3,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos (recarrega no interlúdio). Quebra eletrônicos em alcance médio na cena e causa 2d12 em criaturas tecnológicas."
+    },
+    {
+      "id": "gdc_op_rastreador",
+      "nome": "Rastreador",
+      "tipo": "operacional",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Alcance ilimitado conectado à rede (Crime vs Percepção para plantar; Percepção DT Int percebe)."
+    },
+    {
+      "id": "gdc_op_scanner_forense",
+      "nome": "Scanner Forense",
+      "tipo": "operacional",
+      "categoria": 3,
+      "espacos": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "1 uso/missão (ação completa + Ciências DT 20): revela pelo menos 1 pista forense analisável em Revisar Caso."
+    },
+    {
+      "id": "gdc_par_amuleto_elemento",
+      "nome": "Amuleto de (Elemento)",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Segurar (movimento) dá +5 na DT de rituais do elemento; falhar em testes do atributo do elemento faz perder 1 SAN."
+    },
+    {
+      "id": "gdc_par_bussola_oxidada",
+      "nome": "Bússola Oxidada",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 PE vincula a 1 alvo voluntário: aponta sempre para ele e faz você sentir o que ele sente em tempo real."
+    },
+    {
+      "id": "gdc_par_capacete_neural",
+      "nome": "Capacete de Proteção Neural",
+      "tipo": "paranormal",
+      "categoria": 3,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 PE e ação padrão dá +10 em Vontade contra invasões mentais (atrai criaturas de Energia)."
+    },
+    {
+      "id": "gdc_par_distracao_sobrenatural",
+      "nome": "Distração Sobrenatural de (Elemento)",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 PE e ação padrão: criaturas do elemento em alcance médio testam Percepção (DT Pre) ou ficam Fascinadas até o fim do próximo turno."
+    },
+    {
+      "id": "gdc_par_laser_infravermelho",
+      "nome": "Laser de Luz Infravermelha",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 PE e padrão: cria linha até alcance curto que detecta até seres espectrais; quem toca o item sofre -1 dado de Presença Perturbadora e não fica Desprevenido contra a criatura."
+    },
+    {
+      "id": "gdc_par_mochila_protons",
+      "nome": "Mochila de Prótons",
+      "tipo": "paranormal",
+      "categoria": 3,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 PE e padrão: reduz todas as RD não elementais de uma criatura paranormal para 0 até o fim do seu próximo turno."
+    },
+    {
+      "id": "gdc_par_monoculo_consciente",
+      "nome": "Monóculo Consciente",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "1 SAN na cena: lê qualquer idioma escrito e identifica há quanto tempo e se foi escrito por humano ou criatura."
+    },
+    {
+      "id": "gdc_par_relogio_distorcao",
+      "nome": "Relógio de Distorção Temporal",
+      "tipo": "paranormal",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Após 1 dia vestido: mostra hora real e paranormal; evita envelhecimento paranormal pagando 2 PE por ano evitado."
+    },
+    {
+      "id": "gdc_par_termometro_manifestacoes",
+      "nome": "Termômetro de Manifestações",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Movimento + 1 PE/rodada: +1d20 Percepção contra criaturas (mesmo invisíveis) e +5 Reflexos na rodada."
+    },
+    {
+      "id": "gdc_par_velas_ritualisticas",
+      "nome": "Velas Ritualísticas de (Elemento)",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Sustentam rituais do elemento automaticamente sem gastar PE/ações; para rituais não sustentados aumentam a DT em +2."
+    },
+    {
+      "id": "gdc_rem_adrenalina",
+      "nome": "Adrenalina (G.R. 3)",
+      "tipo": "medicamento",
+      "categoria": 2,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 3,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 3. Concede 1 ação extra de Movimento na cena."
+    },
+    {
+      "id": "gdc_rem_analgesico",
+      "nome": "Analgésico (G.R. 1)",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 1. Concede 2d6 PV temporários na cena."
+    },
+    {
+      "id": "gdc_rem_anestesia",
+      "nome": "Anestesia (G.R. 2)",
+      "tipo": "medicamento",
+      "categoria": 2,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 2. +1d20 em testes de Agilidade, Força e Vigor na cena."
+    },
+    {
+      "id": "gdc_rem_antibiotico",
+      "nome": "Antibiótico (GdC, G.R. 1)",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 1. Remove condição Enjoado."
+    },
+    {
+      "id": "gdc_rem_antidoto",
+      "nome": "Antídoto (GdC, G.R. 2)",
+      "tipo": "medicamento",
+      "categoria": 2,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 2,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 2. Remove condição Envenenado."
+    },
+    {
+      "id": "gdc_rem_antiviral",
+      "nome": "Antiviral (G.R. 1)",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 1. Reduz o estágio de qualquer doença em I."
+    },
+    {
+      "id": "gdc_rem_calmante",
+      "nome": "Calmante (G.R. 1)",
+      "tipo": "medicamento",
+      "categoria": 2,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 1. +1d20 em testes de Intelecto e Presença na cena."
+    },
+    {
+      "id": "gdc_rem_generico",
+      "nome": "Genérico (G.R. 1)",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 1. Remove qualquer condição de Sentidos."
+    },
+    {
+      "id": "gdc_rem_morfina",
+      "nome": "Morfina (G.R. 3)",
+      "tipo": "medicamento",
+      "categoria": 2,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 3,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 3. Cura 4d6 PV."
+    },
+    {
+      "id": "gdc_rem_pomada_queimadura",
+      "nome": "Pomada de Queimadura (G.R. 0)",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 0,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 0. Cura 3d6 PV apenas para danos de Fogo e Químico."
+    },
+    {
+      "id": "gdc_rem_psiquiatrico",
+      "nome": "Psiquiátrico (G.R. 3)",
+      "tipo": "medicamento",
+      "categoria": 2,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 3,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 3. Remove qualquer condição Mental ou de Medo."
+    },
+    {
+      "id": "gdc_rem_suplemento_energetico",
+      "nome": "Suplemento Energético (G.R. 1)",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 0.5,
+      "usos": 2,
+      "grauRisco": 1,
+      "source": "grimorio_do_cataclisma",
+      "descricao": "2 usos, G.R. 1. Remove qualquer condição de Fadiga."
+    }
+  ],
+  "poderesParanormais": [
+    {
+      "id": "gdc_pp_acostumar_elemento",
+      "nome": "Acostumar com (Elemento)",
+      "elemento": "Variável",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "RD mental 2 contra efeitos do elemento escolhido (exceto preço de itens amaldiçoados).",
+      "afinidade": "Aumenta para RD mental 5."
+    },
+    {
+      "id": "gdc_pp_conectar_elemento",
+      "nome": "Conectar a (Elemento)",
+      "elemento": "Variável",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "+5 em testes de resistência contra efeitos do elemento escolhido.",
+      "afinidade": "Aumenta para +10."
+    },
+    {
+      "id": "gdc_pp_consciencia_otimizada",
+      "nome": "Consciência Otimizada",
+      "elemento": "Conhecimento",
+      "preRequisito": "Conhecimento 2",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Com menos da metade da SAN, recebe +1 em INT ou PRE (não muda DT).",
+      "afinidade": "Aumenta o bônus para +2."
+    },
+    {
+      "id": "gdc_pp_manter_equilibrio",
+      "nome": "Manter Equilíbrio",
+      "elemento": "Conhecimento",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Em combate, pode rerrolar dados < 5 em testes de resistência (aceita o novo).",
+      "afinidade": "Rerrola dados < 10."
+    },
+    {
+      "id": "gdc_pp_mente_intacta",
+      "nome": "Mente Intacta",
+      "elemento": "Conhecimento",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Recebe +2 SAN por 5% de NEX (retroativo e progressivo).",
+      "afinidade": "+5 em Vontade e imunidade a condições mentais."
+    },
+    {
+      "id": "gdc_pp_segredos_ocultos",
+      "nome": "Segredos Ocultos",
+      "elemento": "Conhecimento",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Gasta +2 PE em rituais de Conhecimento para dispensar componentes (apenas fala).",
+      "afinidade": "Requer apenas concentração."
+    },
+    {
+      "id": "gdc_pp_sigilos_sinapticos",
+      "nome": "Sigilos Sinápticos",
+      "elemento": "Conhecimento",
+      "preRequisito": "Conhecimento 1",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "1x/cena, dano mental (exceto Presença Perturbadora) que zeraria sua SAN é reduzido à metade mantendo mínimo 1 SAN.",
+      "afinidade": "Anula o dano completamente (e reduz Presença Perturbadora à metade)."
+    },
+    {
+      "id": "gdc_pp_abduzido",
+      "nome": "Abduzido",
+      "elemento": "Energia",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "+1 RD mental por vez que Transcender, mas sofre 2 SAN (ignora RD) ao ser afetado por Energia.",
+      "afinidade": "+2 RD mental por Transcender e dano reduz para 1."
+    },
+    {
+      "id": "gdc_pp_manipular_tecnologia",
+      "nome": "Manipular Tecnologia",
+      "elemento": "Energia",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Gasta 2 PE + teste de Tecnologia para ativar/operar eletrônicos em alcance curto à distância.",
+      "afinidade": "+5 no teste."
+    },
+    {
+      "id": "gdc_pp_membros_ageis",
+      "nome": "Membros Ágeis",
+      "elemento": "Energia",
+      "preRequisito": "Energia 1",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "+3m de deslocamento e 1x/rodada saca item de até 2 espaços como ação livre.",
+      "afinidade": "+6m de deslocamento e saca itens de até 2 espaços como ação livre."
+    },
+    {
+      "id": "gdc_pp_revidar_automatico",
+      "nome": "Revidar Automático",
+      "elemento": "Energia",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "+5 Defesa ao Contra-atacar e +1 dado de dano se acertar o contra-ataque.",
+      "afinidade": "+10 na Defesa ao Contra-atacar."
+    },
+    {
+      "id": "gdc_pp_sabotar_regras",
+      "nome": "Sabotar Regras",
+      "elemento": "Energia",
+      "preRequisito": "Energia 2",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "1x/rodada, 2 PE força alvo em alcance médio a trocar 2d20 do teste por 2d12.",
+      "afinidade": "Troca todos os dados do teste do alvo por d12."
+    },
+    {
+      "id": "gdc_pp_aprendizado_rapido",
+      "nome": "Aprendizado Rápido",
+      "elemento": "Morte",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Em investigação, gasta 2 PE para +1d20 em perícia de INT em que não seja treinado.",
+      "afinidade": "+2d20 em perícias de INT ou PRE."
+    },
+    {
+      "id": "gdc_pp_cria_das_trevas",
+      "nome": "Cria das Trevas",
+      "elemento": "Morte",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Visão noturna, conjura rituais básicos no escuro e gasta -1 PE em itens paranormais no breu total.",
+      "afinidade": "Gasta -1 PE em rituais no escuro e pode conjurar formas avançadas."
+    },
+    {
+      "id": "gdc_pp_futuro_vislumbrado",
+      "nome": "Futuro Vislumbrado",
+      "elemento": "Morte",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "RD 5 contra Morte, Sangue e Conhecimento.",
+      "afinidade": "RD 10 incluindo Energia."
+    },
+    {
+      "id": "gdc_pp_manancial",
+      "nome": "Manancial",
+      "elemento": "Morte",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "1x/cena, quando alguém cura PV, ganha metade em PE temporários. Precisa tocar Lodo/espiral por cena ou fica Fraco e Frustrado até o interlúdio.",
+      "afinidade": "Pode ficar 1 dia sem tocar Lodo/espiral (e escolhe apenas Fraco ou Frustrado)."
+    },
+    {
+      "id": "gdc_pp_prolongar_morte",
+      "nome": "Prolongar a Morte",
+      "elemento": "Morte",
+      "preRequisito": "Morte 2",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "1x/cena, ao cair a 0 PV gasta 2 PE para ter 4 rodadas em Morrendo.",
+      "afinidade": "Testes para te salvar de Morrendo recebem +1d20."
+    },
+    {
+      "id": "gdc_pp_hematofagia",
+      "nome": "Hematofagia",
+      "elemento": "Sangue",
+      "preRequisito": "Sangue 1",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "1x/cena, beber sangue alheio cura 2d6 PV. Alimentar-se com sangue + Dormir quadruplica cura de PV.",
+      "afinidade": "1x/rodada e quintuplica cura de PV ao dormir."
+    },
+    {
+      "id": "gdc_pp_instinto_superior",
+      "nome": "Instinto Superior",
+      "elemento": "Sangue",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Proficiência em 1 arma à escolha (ou +1 margem de ameaça se já proficiente em tudo).",
+      "afinidade": "Reduz a categoria dessa arma em I."
+    },
+    {
+      "id": "gdc_pp_parede_indestrutivel",
+      "nome": "Parede Indestrutível",
+      "elemento": "Sangue",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "+5 contra manobras; se vencer, gasta reação para fazer manobra ou ataque desarmado no atacante.",
+      "afinidade": "+10 e usa ação livre em vez de reação."
+    },
+    {
+      "id": "gdc_pp_plasma_grosso",
+      "nome": "Plasma Grosso",
+      "elemento": "Sangue",
+      "preRequisito": "Sangue 2",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "Gasta 2 PE ao sofrer dano não paranormal para reduzir em 1d10 (excedente cura PV).",
+      "afinidade": "Reduz 2d10, incluindo dano de Sangue."
+    },
+    {
+      "id": "gdc_pp_tocado_pela_arte",
+      "nome": "Tocado pela Arte",
+      "elemento": "Sangue",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "RD 2 a Balístico, Corte, Perfuração, Impacto, Fogo, Químico e Sangue, mas perde 2 SAN máximas permanentemente.",
+      "afinidade": "RD 5 e inclui Morte."
+    }
+  ],
+  "rituais": [
+    {
+      "id": "gdc_inundar_sinapses",
+      "nome": "Inundar Sinapses",
+      "elemento": "Conhecimento",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "1d8+2 mental e Confuso (sucesso: metade e evita).",
+      "discente": "(+2 PE): Curto, até 3 seres, 2d8+4 mental e Confuso (sucesso: 1d4 Conhecimento). Requer 2º círculo.",
+      "verdadeiro": "(+7 PE): 4d8+8 mental + 2d8 Conhecimento (sucesso: metade). Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_maldicao_midas",
+      "nome": "Maldição de Midas",
+      "elemento": "Conhecimento",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 arma de fogo/disparo ou acessório eletrônico",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Transforma item em ouro maciço (fica quebrado na cena); quem o empunha sofre +2 dano mental ao receber dano de sanidade.",
+      "discente": "(+2 PE): Causa 1d4 mental/rodada a quem empunha. Requer 2º círculo.",
+      "verdadeiro": "(+5 PE): Alvo 1 ser (Fortitude parcial): 2d10+10 Conhecimento + 1d10/rodada e Enredado. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_reprogramacao_arma",
+      "nome": "Reprogramação de Arma",
+      "elemento": "Conhecimento",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 arma",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "+1 dado de dano e todo o dano vira Conhecimento.",
+      "discente": "(+3 PE): +2 margem de ameaça e +2 ataques. Requer 2º círculo.",
+      "verdadeiro": "(+7 PE): Alcance sobe 1 passo e +2 multiplicador de crítico. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_aurora_surreal",
+      "nome": "Aurora Surreal",
+      "elemento": "Energia",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão/Completa",
+      "alcance": "Longo",
+      "alvo": "3 barreiras (área 9m)",
+      "duracao": "Cena",
+      "resistencia": "Vontade",
+      "efeitoPadrao": "Olhar exige Vontade ou Confuso (sem usar Energia/Morte). Como ação completa: barreira protetora (1d6 Energia + 1d6 mental ao atravessar cada).",
+      "discente": "(+3 PE): 5 barreiras e 1d8 cada. Requer 2º círculo.",
+      "verdadeiro": "(+7 PE): Toque, 1 pessoa: RD 10 Energia/Morte e atacantes corpo a corpo sofrem 1d6 x 1d6 Energia. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_interferencia_existencial",
+      "nome": "Interferência Existencial",
+      "elemento": "Energia",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão ou Reação",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Instantânea",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Fica intangível (RD 20 mundano, atravessa paredes de 1,5m) OU reação reduz dano à metade (acumula com resistências).",
+      "discente": "(+2 PE): Você + 1 pessoa tocada; paredes até 3m.",
+      "verdadeiro": "(+5 PE): Você + até 2 pessoas; reação reduz dano a 0. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_sonorizacao_caotica",
+      "nome": "Sonorização Caótica",
+      "elemento": "Energia",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "Esfera 3m raio",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Projéteis atravessando a área erram; disparos de dentro sofrem -5 e -1 dado; todos dentro sofrem -1d20 em testes.",
+      "discente": "(+1 PE): Ondas de 6m deixam Vulnerável e condição terrível para rituais.",
+      "verdadeiro": "(+7 PE): Cena, 9m raio, 3d6 mental no fim do turno dentro. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_impor_sono",
+      "nome": "Impor Sono",
+      "elemento": "Morte",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "Cena",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Fatigado (Exausto se falhar por 5+). Ou movimento (curto) piora 1 passo a condição de sono no interlúdio.",
+      "discente": "(+3 PE): Curto, até 3 pessoas, 1 dia: Debilitados e Vulneráveis. Requer 2º círculo.",
+      "verdadeiro": "(+9 PE): Cai Inconsciente (dormindo) por 8h ou até ser acordado. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_melodia_acronica",
+      "nome": "Melodia Acrônica",
+      "elemento": "Morte",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "1 pessoa ou animal",
+      "duracao": "Cena",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "+10 em Diplomacia, Enganação, Intuição e Religião (ou Adestramento) contra o alvo.",
+      "discente": "(+2 PE): +1d20 em qualquer teste de Presença contra ele. Requer 2º círculo.",
+      "verdadeiro": "(+8 PE): Seres escolhidos, +15 (inclui Intimidação) e +2d20 em Presença. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_rejeitar_cicatrizacao",
+      "nome": "Rejeitar Cicatrização",
+      "elemento": "Morte",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "1 ser",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Alvo que recebeu Cicatrização na cena sofre 3d8+3 Morte e Enjoado 1 rodada (senão 1d6 Morte e Fraco; sucesso metade). Conjurador envelhece 1 ano e perde 1 PV permanente.",
+      "discente": "(+3 PE): 5d8+5 (ou 2d6). Requer 2º círculo.",
+      "verdadeiro": "(+9 PE): Médio, esfera 3m, sem resistência, 7d8+7 Morte em todos na área. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_atrelamento_sentimental",
+      "nome": "Atrelamento Sentimental",
+      "elemento": "Sangue",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "1 dia",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Impõe Obsessão (fica próximo/visível), Amor (obedece comandos pacíficos) ou Fome (causa 1d8 Sangue ignorando RD em si; 8 causa Sangrando). 2 sucessos seguidos encerram.",
+      "verdadeiro": "(+5 PE): Adiciona Ódio (+1 ação agredir atacando odiado) e Dor (1d8+2 Sangue em si e Fraco). Requer 2º círculo."
+    },
+    {
+      "id": "gdc_mutacao_demoniaca",
+      "nome": "Mutação Demoníaca",
+      "elemento": "Sangue",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Perde 1 PV (só descanso). Cria mutação (12 PV, RD 5, 1d6 Sangue): Amputar (dano máximo deixa Sangrando) ou Empalar (agarrado e Fatigado; falhar para sair causa 1d4 Sangue).",
+      "discente": "(+4 PE): 25 PV e 2d6 Sangue.",
+      "verdadeiro": "(+9 PE): 50 PV, RD 10, 2d10 Sangue ignorando RD. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gdc_condensar_nevoa",
+      "nome": "Condensar Névoa",
+      "elemento": "Medo",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "Nuvem 3m raio",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Camuflagem parcial; rituais na área exigem Ocultismo (PRE) vs Defesa do alvo para acertar.",
+      "discente": "(+3 PE): Camuflagem total e condição ruim para rituais. Requer 2º círculo.",
+      "verdadeiro": "(+7 PE): Condição terrível para rituais, RD paranormal 10 e todos ficam Cegos na área. Requer 3º círculo."
+    },
+    {
+      "id": "gdc_vislumbre_divino",
+      "nome": "Vislumbre Divino",
+      "elemento": "Medo",
+      "circulo": 1,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 criatura",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Requer grimório amaldiçoado com Medo. Cancela 1 habilidade ou ataque da criatura até o fim da cena (imune depois na cena)."
+    },
+    {
+      "id": "gdc_cristalizacao_dimensional",
+      "nome": "Cristalização Dimensional",
+      "elemento": "Energia",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "1 ser",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Alvo sofre 2d4 SAN e fica Petrificado por rodada (imune por 1d4 rodadas se passar).",
+      "discente": "(+3 PE): Até 2 seres, 3d6 SAN ou Energia (inclui objetos). Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): Alvos escolhidos, 6d6 Energia + 2d6 SAN e Petrificados. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_asas_icaro",
+      "nome": "Asas de Ícaro",
+      "elemento": "Conhecimento",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Permite voar até 9m de altura (dissipa se passar da altura ou sofrer dano de Sangue).",
+      "discente": "(+3 PE): Altura 18m. Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): Altura 24m e metade do dano de queda. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_corvos_odin",
+      "nome": "Corvos de Odin",
+      "elemento": "Conhecimento",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Cena",
+      "resistencia": "Reflexos DT 21",
+      "efeitoPadrao": "Cria 2 corvos (Def 15, 10 PV, RD 5): cada dá +2 Defesa e imunidade a Desprevenido; pode gastar um corvo para atacar causando 2d6 Conhecimento e impedindo Furtividade na cena (dissipar no fim da cena causa 2 mental/corvo).",
+      "discente": "(+4 PE): 3 corvos (+3 Defesa cada). Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): 5 corvos (+4 Defesa cada), 3d8 Conhecimento e clarão deixa Ofuscado 1 rodada. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_replicar_membros",
+      "nome": "Replicar Membros",
+      "elemento": "Conhecimento",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Escolha: Braços (+2 mãos para itens, saque livre, desarmado vira Conhecimento), Olhos (imune Desprevenido/Surpreendido/Cego, visão no escuro, +1d20 Percepção), Pele (+5 Defesa, RD 10 Conhecimento, RD 5 paranormal) ou Pernas (dobro do deslocamento, ignora terreno difícil, levantar livre).",
+      "discente": "(+3 PE): Cena, Toque, 1 aliado.",
+      "verdadeiro": "(+7 PE): Dois efeitos simultâneos."
+    },
+    {
+      "id": "gdc_retoque_paranormal",
+      "nome": "Retoque Paranormal",
+      "elemento": "Variável (Conhecimento, Energia, Morte ou Sangue)",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 objeto",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Objeto empunhado concede +5 em testes do atributo do elemento (Conhecimento INT, Energia AGI, Morte PRE, Sangue FOR/VIG).",
+      "discente": "(+3 PE): +1d20 nos testes. Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): Curto, +10 e funciona vestido sem precisar empunhar. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_astros_nut",
+      "nome": "Astros de Nut",
+      "elemento": "Energia",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "3 esferas (cada dá RD 3; arremessar livre causa 2d6 Energia e consome a esfera; atacantes corpo a corpo sofrem o dano consumindo 1 esfera).",
+      "discente": "(+3 PE): 4 esferas e 3d6. Requer 3º círculo.",
+      "verdadeiro": "(+5 PE): 4 esferas, RD 5 cada e 3d6. Requer 4º círculo."
+    },
+    {
+      "id": "gdc_modificar_sorte",
+      "nome": "Modificar Sorte",
+      "elemento": "Energia",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "3 testes",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Rola 2d4: nos próximos 3 testes rola essa quantidade de d20. Ao acabar, escolhe -10 no próximo teste ou 2 dano mental.",
+      "discente": "(+5 PE): Rola 1d4 x 5 para substituir seu bônus de treino nos próximos 3 testes (punição: -15 ou 3 mental).",
+      "verdadeiro": "(+7 PE): Como Discente, mas dura a cena toda."
+    },
+    {
+      "id": "gdc_abalo_temporal",
+      "nome": "Abalo Temporal",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 ser",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "No início do turno, falha em Vontade aumenta execução de todas as ações do alvo em 1 passo (2 sucessos seguidos encerram).",
+      "verdadeiro": "(+9 PE): Seres à escolha. Requer 4º círculo."
+    },
+    {
+      "id": "gdc_ceifar_apodrecido",
+      "nome": "Ceifar Apodrecido",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 arma CaC ou objeto até 2 espaços",
+      "duracao": "Até acertar",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Próximo acerto causa +4d8 Morte (2d8 na 2ª rodada, 1d8 na 3ª) e Enjoado. Manter o item após acabar deixa Frustrado na cena.",
+      "discente": "(+3 PE): 6d8 / 3d8 / 1d8.",
+      "verdadeiro": "(+7 PE): 4 rodadas: 10d8 / 5d8 / 2d8 / 1d8. Requer 3º círculo."
+    },
+    {
+      "id": "gdc_peconha_metifica",
+      "nome": "Peçonha Metífica",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 ser",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Envenena com Peçonha Potente (teste todo turno; falha por 5+ dura +2 rodadas).",
+      "discente": "(+5 PE): Curto, até 2 seres, aplica Estricnina. Requer 3º círculo.",
+      "verdadeiro": "(+9 PE): Médio, nuvem 3m sustentada: 3d12 por 1d8 rodadas e Enjoado. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_derreter_corpo",
+      "nome": "Derreter Corpo",
+      "elemento": "Sangue",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "VIG rodadas",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Vira poça de sangue (desl. 12m, RD física 15, imune a Sangue, dano de Morte dobrado; só pode se mover; padrão volta).",
+      "verdadeiro": "(+10 PE): Toque, 1 ser, sustentada, Fortitude anula."
+    },
+    {
+      "id": "gdc_espinhos_dolorosos",
+      "nome": "Espinhos Dolorosos",
+      "elemento": "Sangue",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "Cena",
+      "resistencia": "Fortitude anula",
+      "efeitoPadrao": "Deixa Imóvel; tentar sair (movimento) causa 1d8 Sangue se falhar e 1d8+2 ao conseguir sair.",
+      "discente": "(+5 PE): 1d10 ao tentar / 1d12+4 ao sair. Requer 3º círculo.",
+      "verdadeiro": "(+11 PE): Médio, até 3 seres, sem resistência, 2d12 / 1d20+10. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_sangue_quente",
+      "nome": "Sangue Quente",
+      "elemento": "Sangue",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "1 dia",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Recebe 6d6 (gasta até 3 por teste físico). Cada 6 rolado custa 3 PV (2+ seis deixa Machucado; zerar PV vira criatura).",
+      "discente": "(+4 PE): 12d6, cada 6 custa 6 PV. Requer 3º círculo.",
+      "verdadeiro": "(+9 PE): Reação, toque, 1 ser: rola 6d20 +6 no teste pagando 6 PV e 6 SAN. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_amaldicoar_medonho",
+      "nome": "Amaldiçoar Medonho",
+      "elemento": "Medo",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 arma CaC ou pacote de munição",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "+1d6 dano de Medo (ignora RD).",
+      "discente": "(+4 PE): +2d6. Requer 3º círculo.",
+      "verdadeiro": "(+9 PE): +4d6 e dano só curável com descanso. Requer 4º círculo."
+    },
+    {
+      "id": "gdc_medo_enigmatico",
+      "nome": "Medo Enigmático",
+      "elemento": "Medo",
+      "circulo": 2,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Define 1 membro como ponto fraco (Ocultismo vs DT Pre descobre). Ataques fora dele causam metade do dano (você perde metade dos PE gastos em SAN); ataques no ponto fraco causam dano cheio mas dão 1d6 mental ao atacante."
+    },
+    {
+      "id": "gdc_contencao_espelhada",
+      "nome": "Contenção Espelhada",
+      "elemento": "Conhecimento",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "Sustentada",
+      "resistencia": "Veja texto",
+      "efeitoPadrao": "Prende em caixa de espelhos (Ocultismo vs DT For agarra e causa 4d6 mental ou Conhecimento/turno; quebrar espelho exige 2 vitórias seguidas contra si mesmo).",
+      "verdadeiro": "(+6 PE): 1 ser, 1 dia, incapaz de agir, tocar espelho causa 2d6 Conhecimento e -1 SAN permanente. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_manipular_sombras",
+      "nome": "Manipular Sombras",
+      "elemento": "Conhecimento",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "Sombras na área",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Move, dobra/divide tamanho, escurece (camuflagem total mas Cego) ou clareia (-5 Furtividade) sombras.",
+      "discente": "(+4 PE): Médio, triplica/divide por 4, -10 Furtividade.",
+      "verdadeiro": "(+8 PE): Longo, seres escolhidos (Vontade anula): puxa para dimensão das sombras sem ações agressivas (1 mental/rodada no conjurador). Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_recuperar_consciencia",
+      "nome": "Recuperar Consciência",
+      "elemento": "Conhecimento",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Recupera 3d8+3 SAN, mas envelhece a mente em 1 ano.",
+      "discente": "(+4 PE): 5d8+5 SAN. Requer 4º círculo.",
+      "verdadeiro": "(+7 PE): Seres escolhidos, 8d8+8 SAN. Requer afinidade."
+    },
+    {
+      "id": "gdc_corrente_explosiva",
+      "nome": "Corrente Explosiva",
+      "elemento": "Energia",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "Área 6m + saltos",
+      "duracao": "Instantânea",
+      "resistencia": "Reflexos parcial",
+      "efeitoPadrao": "1d10x5 Energia na explosão inicial, salta para 2 alvos (1d8x3) e depois 4 alvos (1d6).",
+      "verdadeiro": "(+6 PE): Apenas alvos escolhidos e dobra multiplicadores (1d10x10, 1d8x6, 1d6x2). Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_psicodelia_disforme",
+      "nome": "Psicodelia Disforme",
+      "elemento": "Energia",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 ser",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Todo turno rola 1d6 para o alvo e 1d6 para você (1: +6d6 Energia / Enjoado; 2: +10 teste / Ofuscado; 3: Exausto / +1d10 PE; 4: Atordoado / +1 ação padrão; 5: Cego e Esmorecido / +10 Defesa; 6: cancela ritual / 13 mental ou Energia)."
+    },
+    {
+      "id": "gdc_convocar_comensais",
+      "nome": "Convocar Comensais",
+      "elemento": "Morte",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Médio",
+      "alvo": "Círculo 6m raio",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Invoca 4 Comensais indestrutíveis (desl. 12m): Mirrar (3d10 Morte), Envelhecer (2d10 anos) ou Drenar Potencial (3d6 PE).",
+      "discente": "(+4 PE): 6 Comensais. Requer 4º círculo.",
+      "verdadeiro": "(+11 PE): Extremo, 12m raio, sem resistência, 10 Comensais. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_pintura_do_fim",
+      "nome": "Pintura do Fim",
+      "elemento": "Morte",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "1 ser",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Falha deixa Apavorado, Esmorecido, Fascinado, Imóvel e Vulnerável até passar em Vontade (a partir da 2ª rodada, alvo e conjurador sofrem 2d6 mental/turno; se o alvo morrer, conjurador sofre 5d4 mental e perde PE)."
+    },
+    {
+      "id": "gdc_raizes_putrefes",
+      "nome": "Raízes Pútrefes",
+      "elemento": "Morte",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "Círculo 6m raio",
+      "duracao": "Sustentada",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Terreno difícil; falha fica Enredado mas ganha RD 10 e RD Morte 20 (sofre dobro de Energia e Balístico). Sair da área causa 8d8 Morte (metade se passou). Dissipar com alguém dentro causa 4d8 Morte e envelhece 1d10+N anos no conjurador.",
+      "discente": "(+5 PE): 8d8+8 (metade 4d8+4), RD 15. Requer 4º círculo.",
+      "verdadeiro": "(+9 PE): Longo, 10d10+10 (metade 8d8+8), RD Morte 30. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gdc_jardim_carmesim",
+      "nome": "Jardim Carmesim",
+      "elemento": "Sangue",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "Círculo 9m raio",
+      "duracao": "Sustentada",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Terreno difícil; falha sofre dobro de dano de Sangue e fica Fascinado; ataques CaC na área causam Sangrando. Sair causa 3d6 Sangue (rolar 18 / 6-6-6 cai Morrendo). Dissipa rituais de Morte na área."
+    },
+    {
+      "id": "gdc_vermes_parasitados",
+      "nome": "Vermes Parasitados",
+      "elemento": "Sangue",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "3d10 Sangue e Enjoado no dia; repete o mesmo dano por rodada até ficar Machucado/Morrendo, passar em Fortitude ou receber cura de Morte.",
+      "discente": "(+3 PE): Também fica Imóvel 1 rodada.",
+      "verdadeiro": "(+8 PE): Controla as ações do alvo na 1ª rodada (não suicidas). Requer 4º círculo."
+    },
+    {
+      "id": "gdc_vinculo_destinado",
+      "nome": "Vínculo Destinado",
+      "elemento": "Sangue",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 ser",
+      "duracao": "Cena",
+      "resistencia": "Fortitude anula",
+      "efeitoPadrao": "RD Sangue 10 para ambos; curas, condições, vantagens e desvantagens são espelhadas; podem dividir dano Mental/Conhecimento em acordo.",
+      "verdadeiro": "(+7 PE): Ação de movimento concede +1d10 no próximo teste de FOR ou AGI. Requer 4º círculo."
+    },
+    {
+      "id": "gdc_voodoo_sanguinario",
+      "nome": "Voodoo Sanguinário",
+      "elemento": "Sangue",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Pessoal",
+      "alvo": "1 ser",
+      "duracao": "Veja texto",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Cria boneco de sangue do alvo: cravar agulha causa 7d4 Sangue (só cura paranormal) e 1 condição à escolha (exceto Inconsciente/Morrendo/Enlouquecendo)."
+    },
+    {
+      "id": "gdc_conter_realidade",
+      "nome": "Conter Realidade",
+      "elemento": "Medo",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Imunidade a dano paranormal, mas não pode usar rituais, poderes paranormais ou itens amaldiçoados.",
+      "verdadeiro": "(+5 PE): Curto, esfera 3m, cena; impede seres do Outro Lado/afinidade de entrar, mas causa 1d4 mental/rodada em você por ser dentro. Requer 4º círculo."
+    },
+    {
+      "id": "gdc_desejar_medo",
+      "nome": "Desejar o Medo",
+      "elemento": "Medo",
+      "circulo": 3,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 ser",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Alvo só pode usar rituais/itens de Medo (outros elementos têm condição terrível e perdem PE gastos em SAN).",
+      "discente": "(+4 PE): Até 2 seres.",
+      "verdadeiro": "(+7 PE): Até 3 seres, curto, RD paranormal 10 e +10 resistências. Requer 4º círculo."
+    },
+    {
+      "id": "gdc_julgamento_magisterio",
+      "nome": "Julgamento do Magistério",
+      "elemento": "Conhecimento",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "5 rodadas",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Leva ambos ao julgamento das Máscaras: mentiras causam 7d10 Conhecimento (+1d10 por mentira extra); silêncio ou falta de perguntas causa 2d10 Conhecimento; zerar PV condena eternamente à Seita das Máscaras.",
+      "verdadeiro": "(+9 PE): Extremo, múltiplas pessoas, 7 rodadas, +1 dado por humano extra; zerar PV inexiste (exceto o último). Requer afinidade."
+    },
+    {
+      "id": "gdc_oblivio",
+      "nome": "Oblívio",
+      "elemento": "Conhecimento",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "12d12+12 mental (sucesso: 3d12 e esquece a cena); zerar SAN apaga todas as memórias, habilidades, rituais e NEX (vira Amnésico NEX 0%).",
+      "discente": "(+4 PE): 16d12+16 (resistido 4d12).",
+      "verdadeiro": "(+9 PE): Curto, 20d12+20 (resistido 5d12+10). Requer afinidade."
+    },
+    {
+      "id": "gdc_reparar_regras",
+      "nome": "Reparar Regras",
+      "elemento": "Conhecimento",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Livre",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "1 rodada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Recebe 1 habilidade de trilha de NEX 99% por 1 rodada, mas reduz 1 grau de treinamento em (INT) perícias e perde metade dos PE gastos em SAN permanente (zerar SAN vira Silhueta).",
+      "verdadeiro": "(+8 PE): Completa, permanente: aprende 1 poder paranormal permanentemente (já com afinidade se do seu elemento). Requer afinidade."
+    },
+    {
+      "id": "gdc_incinerar_alma",
+      "nome": "Incinerar Alma",
+      "elemento": "Energia",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "3 rodadas",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Falha rola 1d6 cumulativo: (1) aplica 2d6 em outro alvo; (2) Em Chamas 3d6 Energia/rodada; (3) 3d6 mental/rodada; (4) rola 1d8 na sequência 04130211 somando 3 dígitos em dano de Energia; (5) explosão 8d6 Energia em 6m; (6) apaga chamas ou cura 55 PV.",
+      "discente": "(+5 PE): Médio, 5 rodadas.",
+      "verdadeiro": "(+10 PE): Sem resistência. Requer afinidade."
+    },
+    {
+      "id": "gdc_mudanca_gravitacional",
+      "nome": "Mudança Gravitacional",
+      "elemento": "Energia",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 ser Grande ou menor / objeto até 10 espaços",
+      "duracao": "Cena",
+      "resistencia": "Reflexos anula",
+      "efeitoPadrao": "Direcionar Gravidade (queda direcionada), Comprimir (6d6 impacto + Lento + puxa itens em 3m) ou Reduzir (dobro deslocamento, +1 passo alcance, +1d20 AGI).",
+      "discente": "(+5 PE): +10d8 dano de Energia.",
+      "verdadeiro": "(+9 PE): Seres escolhidos, longo, adiciona Zerar Gravidade (cubo 24m, -2d20 físicos, condição terrível para rituais). Requer afinidade."
+    },
+    {
+      "id": "gdc_raio_zeus",
+      "nome": "Raio de Zeus",
+      "elemento": "Energia",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Cria arma arremessável (1 espaço)",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Quem toca sofre 12d6 Energia (+8d12 eletricidade e Inconsciente em local aberto); reação puxa de volta; zerar PV dá apenas 1 rodada para salvar.",
+      "verdadeiro": "(+9 PE): 12d10 Energia, 4d10x13 eletricidade e -1 atributo no alvo. Requer afinidade."
+    },
+    {
+      "id": "gdc_transformacao_ignea",
+      "nome": "Transformação Ígnea",
+      "elemento": "Energia",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 chama até Grande",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Transforma fogo em lava: atravessar 2d6 Energia irredutível; terminar turno 10d6 Energia + Em Chamas progressivo (+1d6/rodada); move 9m livre.",
+      "verdadeiro": "(+5 PE): Cubo de 3m de lado móvel em 6m/rodada. Requer afinidade."
+    },
+    {
+      "id": "gdc_era_movedica",
+      "nome": "Era Movediça",
+      "elemento": "Morte",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Médio",
+      "alvo": "Círculo 9m raio",
+      "duracao": "Sustentada",
+      "resistencia": "Reflexos parcial",
+      "efeitoPadrao": "Terreno difícil; falha fica Lento e envelhece 1d6 anos (3 rodadas seguidas na área causa +1d10 Morte e puxa 1,5m ao centro).",
+      "verdadeiro": "(+6 PE): 12m raio, cena, envelhece 1d10 anos + dobro em dano de Morte e DT sobe +2 por falha. Requer afinidade."
+    },
+    {
+      "id": "gdc_parasita_paradoxal",
+      "nome": "Parasita Paradoxal",
+      "elemento": "Morte",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 pessoa ou objeto até 5 espaços",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "8d10 Morte + 10d8 mental (zerar PV/SAN apaga da linha do tempo causando 3d12 mental em conhecidos; Machucado apaga 1 membro; Perturbado desaprende ritual/poder; se alvo passar, conjurador envelhece pela diferença).",
+      "verdadeiro": "(+10 PE): Até 2 seres, 10d12 Morte + 12d10 mental. Requer afinidade."
+    },
+    {
+      "id": "gdc_ressurreicao_forcada",
+      "nome": "Ressurreição Forçada",
+      "elemento": "Morte",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Reação",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "1 rodada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Ao cair a 0 PV, casulo de lodo restaura 100% PV e SAN, sacrificando permanentemente PE máximos iguais ao custo do ritual.",
+      "verdadeiro": "(+5 PE): Curto, 1 aliado; além dos PE, conjurador envelhece 10 anos. Requer afinidade."
+    },
+    {
+      "id": "gdc_besta_controlada",
+      "nome": "Besta Controlada",
+      "elemento": "Sangue",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "Cria besta de sangue",
+      "duracao": "Veja texto",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "50 PV + PV transferidos, sua Defesa/RD (efeitos nela afetam você). Ações: Golpear (6d20+15, 6d8+6 Sangue, decepa membro em 0 PV), Aproximar, Afastar, Proteger ou Sacrificar (transfere PV restantes)."
+    },
+    {
+      "id": "gdc_brutalizar_arma",
+      "nome": "Brutalizar Arma",
+      "elemento": "Sangue",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 pessoa (arma de 1 mão)",
+      "duracao": "Permanente",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Funde arma à carne: +5 margem de ameaça, crítico x5, +5 ataque/dano, impossível desarmar; mas aplica Febre Hemorrágica Estágio I toda cena e custa 2 PV (só descanso) por uso."
+    },
+    {
+      "id": "gdc_explodir_sangue",
+      "nome": "Explodir Sangue",
+      "elemento": "Sangue",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "10d20 Sangue (só cura de Sangue ou Cuidados Prolongados; falha por 5+ Sangrando +1d6 cumulativo/rodada; zerar PV explode sem salvação).",
+      "verdadeiro": "(+6 PE): Até 2 seres, 15d20 Sangue. Requer afinidade."
+    },
+    {
+      "id": "gdc_conjuração_do_medo",
+      "nome": "Conjuração do Medo",
+      "elemento": "Medo",
+      "circulo": 4,
+      "exclusivoTrilha": "Rigoroso",
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Curto",
+      "alvo": "Círculo 30m raio",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Todos na área só podem usar objetos e rituais de Medo; criaturas sem Medo não podem usar nenhuma habilidade."
+    },
+    {
+      "id": "gdc_ilusao_de_medo",
+      "nome": "Ilusão de Medo",
+      "elemento": "Medo",
+      "circulo": 4,
+      "exclusivoTrilha": "Ilusionista",
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Falha reduz SAN a 0 e deixa Enlouquecendo (ferida mental incurável se sobreviver); sucesso sofre 8d10 mental e Apavorado 1 rodada."
+    },
+    {
+      "id": "gdc_reparar_membrana",
+      "nome": "Reparar Membrana",
+      "elemento": "Medo",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Completa",
+      "alcance": "Ilimitado",
+      "alvo": "Esfera 12km raio",
+      "duracao": "Permanente",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Repara a Membrana em 1 nível na área, sacrificando permanentemente metade de seus PV, PE ou SAN máximos, ou 1 ponto de atributo."
+    },
+    {
+      "id": "gdc_trazendo_o_medo",
+      "nome": "Trazendo o Medo",
+      "elemento": "Medo",
+      "circulo": 4,
+      "source": "grimorio_do_cataclisma",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Todos que te virem testam Vontade (DT Pre) ou ficam Apavorados até o fim do seu próximo turno (3 sucessos seguidos dão imunidade no dia)."
+    }
+  ],
+  "petsCompanheiros": [
+    {
+      "id": "gdc_pet_cao_guarda",
+      "nome": "Cão de Guarda",
+      "categoriaPet": "Domesticado",
+      "tamanho": "Médio",
+      "defesa": 13,
+      "pv": 12,
+      "deslocamento": "9m",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 1,
+        "INT": 1,
+        "PRE": 1,
+        "VIG": 2
+      },
+      "ataque": "Mordida 1d20+5 (1d6+1 corte)",
+      "habilidade": "Derrubar (Livre): ao acertar mordida, tenta derrubar com +1d20.",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_gato_rua",
+      "nome": "Gato de Rua",
+      "categoriaPet": "Domesticado",
+      "tamanho": "Pequeno",
+      "defesa": 15,
+      "pv": 10,
+      "deslocamento": "12m",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 0,
+        "INT": 1,
+        "PRE": 1,
+        "VIG": 2
+      },
+      "ataque": "Arranhão 3d20 (1d4+3 corte)",
+      "habilidade": "Rasgar (Livre): ataque extra com +1d20 que deixa Sangrando.",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_pequeno_roedor",
+      "nome": "Pequeno Roedor",
+      "categoriaPet": "Domesticado",
+      "tamanho": "Minúsculo",
+      "defesa": 17,
+      "pv": 6,
+      "deslocamento": "9m",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 1,
+        "INT": 1,
+        "PRE": 3,
+        "VIG": 0
+      },
+      "ataque": "Roer 2d20+5 (1d3+1 corte)",
+      "habilidade": "Doença Inerte (Livre): crítico aplica Febre Hemorrágica (Fortitude DT 15 evita).",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_ave_rapina",
+      "nome": "Ave de Rapina",
+      "categoriaPet": "Domado",
+      "tamanho": "Pequeno",
+      "defesa": 15,
+      "pv": 10,
+      "deslocamento": "Voo 12m",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 1,
+        "INT": 1,
+        "PRE": 1,
+        "VIG": 2
+      },
+      "ataque": "Rasante 3d20+5 (1d6+3 corte) / Bicada x2 1d20+5 (1d4+1 perfuração)",
+      "habilidade": "Voo Alto (Livre): voa após acertar ganhando +2 Defesa.",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_guaxinim",
+      "nome": "Guaxinim",
+      "categoriaPet": "Domado",
+      "tamanho": "Pequeno",
+      "defesa": 16,
+      "pv": 8,
+      "deslocamento": "9m",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 1,
+        "INT": 2,
+        "PRE": 1,
+        "VIG": 1
+      },
+      "ataque": "Garrada x2 4d20+5 (1d6+4 corte)",
+      "habilidade": "Furtar (Livre): ao acertar, desarma (4d20+8) e traz o item até você.",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_macaco",
+      "nome": "Macaco",
+      "categoriaPet": "Domado",
+      "tamanho": "Pequeno",
+      "defesa": 14,
+      "pv": 8,
+      "deslocamento": "9m (escalada 6m)",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 1,
+        "INT": 3,
+        "PRE": 1,
+        "VIG": 1
+      },
+      "ataque": "Arranhão x2 1d20+5 (1d4+1 corte) / Objeto Arremessado Curto 2d20+5 (1d6+2 balístico)",
+      "habilidade": "Ardiloso (Livre): acertar arranhão dá +5 Defesa e resistências contra o alvo até próximo turno.",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_jiboia",
+      "nome": "Jibóia",
+      "categoriaPet": "Exótico",
+      "tamanho": "Grande",
+      "defesa": 11,
+      "pv": 12,
+      "deslocamento": "9m",
+      "atributos": {
+        "AGI": 1,
+        "FOR": 3,
+        "INT": 1,
+        "PRE": 2,
+        "VIG": 2
+      },
+      "ataque": "Bote 3d20+10 (1d6+3 corte)",
+      "habilidade": "Enrolar (Livre, 3d20+7) e Constringir (2d6+6 impacto/turno em agarrado).",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_lagarto",
+      "nome": "Lagarto",
+      "categoriaPet": "Exótico",
+      "tamanho": "Médio",
+      "defesa": 12,
+      "pv": 14,
+      "deslocamento": "12m",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 1,
+        "INT": 1,
+        "PRE": 2,
+        "VIG": 3
+      },
+      "ataque": "Mordida 2d20+10 (1d8+2 corte)",
+      "habilidade": "Couro Grosso (RD 2 + 1d6 químico em crítico) OU Camuflado (esconde livre após atacar; próximo golpe crítico 17/x3).",
+      "source": "grimorio_do_cataclisma"
+    },
+    {
+      "id": "gdc_pet_marsupial",
+      "nome": "Marsupial",
+      "categoriaPet": "Exótico",
+      "tamanho": "Pequeno",
+      "defesa": 14,
+      "pv": 12,
+      "deslocamento": "9m",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 1,
+        "INT": 2,
+        "PRE": 2,
+        "VIG": 2
+      },
+      "ataque": "Mordida 2d20+8 (2d3+1 corte)",
+      "habilidade": "Proteção Fétida (gás deixa Enjoado em curto, Fort DT 17) OU Garras Afiadas (ataque extra deixa Sangrando).",
+      "source": "grimorio_do_cataclisma"
+    }
+  ],
+  "ameacas": [
+    {
+      "id": "gdc_demonio_do_caos",
+      "nome": "Demônio do Caos",
+      "vd": 60,
+      "elemento": "Energia",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "grimorio_do_cataclisma",
+      "presencaPerturbadora": {
+        "dt": 15,
+        "dano": "4d4 mental",
+        "imuneNex": 35
+      },
+      "sentidos": {
+        "percepcao": "1d20",
+        "iniciativa": "4d20+10",
+        "especiais": [
+          "Visão no escuro"
+        ]
+      },
+      "defesa": 22,
+      "resistenciasTestes": {
+        "fortitude": "2d20+5",
+        "reflexos": "4d20+5",
+        "vontade": "1d20"
+      },
+      "pv": 100,
+      "imunidades": "Dano de Fogo e Em Chamas",
+      "resistenciasDano": "Corte e Perfuração 5; Energia e Balístico 10",
+      "vulnerabilidades": "Conhecimento",
+      "atributos": {
+        "AGI": 4,
+        "FOR": 2,
+        "INT": 1,
+        "PRE": 0,
+        "VIG": 2
+      },
+      "deslocamento": "9m",
+      "ataques": [
+        {
+          "nome": "Toque Quente",
+          "alcance": "Corpo a corpo x2",
+          "teste": "2d20+5",
+          "dano": "2d8 Energia"
+        },
+        {
+          "nome": "Ventania Flamejante",
+          "alcance": "Curto",
+          "teste": "4d20+10",
+          "dano": "2d6+6 Fogo"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Incandescido",
+          "descricao": "Alvo agarrado sofre +1d6 Fogo/rodada e fica Em Chamas (Fortitude DT 15 metade/evita)."
+        },
+        {
+          "nome": "Alastrante",
+          "descricao": "Objetos/locais inflamáveis em chamas por 3+ rodadas iniciam incêndio (1,5m/rodada)."
+        },
+        {
+          "nome": "Abafado",
+          "descricao": "Preso em local sem oxigênio sofre 10 de dano por rodada."
+        },
+        {
+          "nome": "Agarrão (Livre)",
+          "descricao": "Acertar Toque Quente permite agarrar alvo Médio ou menor (2d20+10)."
+        },
+        {
+          "nome": "QUEIMAAAAAAAA! (Completa)",
+          "descricao": "Alcance curto sofre 8d6 Fogo e Em Chamas (Reflexos DT 20 metade/evita; cobertura +5); o Demônio perde PV iguais ao dano causado."
+        }
+      ]
+    }
+  ],
+  "baralhoInfinito": [
+    {
+      "valor": "2",
+      "carta": "A Morte",
+      "efeito": "Entra em Morrendo."
+    },
+    {
+      "valor": "3",
+      "carta": "O Pacto",
+      "efeito": "+20 PV temporários."
+    },
+    {
+      "valor": "4",
+      "carta": "A Ampulheta",
+      "efeito": "+1 Ação Completa."
+    },
+    {
+      "valor": "5",
+      "carta": "O Sol",
+      "efeito": "Todos os seres ao redor sofrem 3d10 pontos de dano mental."
+    },
+    {
+      "valor": "6",
+      "carta": "O Fogo",
+      "efeito": "Quebra todos os itens amaldiçoados."
+    },
+    {
+      "valor": "7",
+      "carta": "O Sussurro",
+      "efeito": "Você tem uma resposta de uma pergunta que quiser."
+    },
+    {
+      "valor": "8",
+      "carta": "O Infinito",
+      "efeito": "Pegue outra carta."
+    },
+    {
+      "valor": "9",
+      "carta": "O Relógio",
+      "efeito": "Perde 5% de NEX."
+    },
+    {
+      "valor": "10",
+      "carta": "O Escudo",
+      "efeito": "+5 RD a dano."
+    },
+    {
+      "valor": "11",
+      "carta": "O Trono",
+      "efeito": "-2 em um Atributo."
+    },
+    {
+      "valor": "12",
+      "carta": "O Ritual",
+      "efeito": "Invoca uma criatura VD 100 aleatória."
+    },
+    {
+      "valor": "13",
+      "carta": "A Espada",
+      "efeito": "+5 em testes de ataque."
+    },
+    {
+      "valor": "14",
+      "carta": "O Pergaminho",
+      "efeito": "+1 em um Atributo."
+    },
+    {
+      "valor": "15",
+      "carta": "A Lápide",
+      "efeito": "-1 rodada em Morrendo."
+    },
+    {
+      "valor": "16",
+      "carta": "O Anel",
+      "efeito": "+5 PE temporários."
+    },
+    {
+      "valor": "17",
+      "carta": "A Maldição",
+      "efeito": "Você recebe uma maldição aleatória."
+    },
+    {
+      "valor": "18",
+      "carta": "O Diabo",
+      "efeito": "+5 em testes de resistência."
+    },
+    {
+      "valor": "19",
+      "carta": "O Azar",
+      "efeito": "Todos os seres ao redor sofrem 3d10 pontos de dano de Medo."
+    },
+    {
+      "valor": "20",
+      "carta": "O Crânio",
+      "efeito": "+1 rodada em Morrendo."
+    },
+    {
+      "valor": "21",
+      "carta": "A Máscara",
+      "efeito": "Entra em Enlouquecendo."
+    },
+    {
+      "valor": "22-24",
+      "carta": "Curinga",
+      "efeito": "Nada acontece."
+    }
+  ],
+  "regrasExtras": [
+    {
+      "id": "gdc_reg_espolios",
+      "nome": "Espólios Paranormais",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Ocultismo (AGI/FOR) DT 15 (+1 espólio a cada +5 acima; máx: Minúsculo 1, Pequeno 2, Médio 3, Grande 5, Enorme 10, Colossal 20). 5 espólios ocupam 1 espaço. Trocáveis por itens paranormais/amaldiçoados (-1 categoria) ou Juramentação (10 espólios: +1d8 elemental em arma por 3 cenas)."
+    },
+    {
+      "id": "gdc_reg_invocar_criatura",
+      "nome": "Invocar Criatura",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Veterano em Ocultismo gasta 2 ações completas: VD 10–100 (DT 25, Estável), VD 110–200 (DT 30, Danificada), VD 210–300 (DT 35, Danificada), VD 310–400 (DT 40, Arruinada). Afinidade +2d20; opressor -2d20."
+    },
+    {
+      "id": "gdc_reg_transcender_amenizado",
+      "nome": "Transcender Amenizado",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Em qualquer nível de NEX, abre mão do ganho de SAN para dobrar os ganhos de PV por VIG e PE por PRE, ou aprender rituais de itens amaldiçoados acumulados."
+    },
+    {
+      "id": "gdc_reg_arremessar_granadas",
+      "nome": "Arremessando Granadas",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Exige Pontaria DT 20 (+5 em terreno difícil). A cada 5 pontos abaixo da DT desvia 3m em direção 1d8."
+    },
+    {
+      "id": "gdc_reg_curativos_rapidos",
+      "nome": "Curativos Rápidos",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Treinado em Medicina + Kit (ação padrão, DT 15): cura 1d6 PV (+1 PE por uso extra; +1 PE para +1d6 a cada 20% NEX)."
+    },
+    {
+      "id": "gdc_reg_ala_medica",
+      "nome": "Ala Médica da Ordem",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "6h de tratamento (máx. 2 agentes/equipe; 1 dia cura 100%): Recruta 3d10, Operador 3d12+3, Agente Especial 4d12+4, Oficial 5d12+5, Elite 5d20+10."
+    },
+    {
+      "id": "gdc_reg_desastres",
+      "nome": "Desastres (Falha com 1)",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Falhar no teste rolando 1 em qualquer dado gera desastre: Fogo (trava 1d4 rodadas), Disparo (atinge aliado próximo), CaC (arma sofre o próprio dano), Granada (cai nos seus pés), Ritual (efeito contrário), Acalmar/Socorros (-1 rodada de salvamento)."
+    },
+    {
+      "id": "gdc_reg_hordas",
+      "nome": "Hordas Paranormais",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Criaturas VD <= 20 causam 1d6 (+1d6/rodada) em todos. Derrotar exige sucessos (1 combinação perícia+atributo por rodada): Pequena (DT 14, 10 suc), Média (DT 16, 15 suc), Grande (DT 18, 20 suc), Enorme (DT 20, 25 suc)."
+    },
+    {
+      "id": "gdc_reg_condecoracoes",
+      "nome": "Condecorações de Equipe",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Obtidas voltando com todos vivos e 20+ PP em uma missão: Heróis (+1 perícia treinada e +1 item Cat I), Mestres (-1 cat em 1 acessório/operacional e +1 item Cat II), Lendas (+1 atributo permanente e +1 item Cat III)."
+    }
+  ]
+}

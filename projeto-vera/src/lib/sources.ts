@@ -30,7 +30,7 @@ export const SOURCE_LABELS: Record<ContentSource, string> = {
   sobrevivendo_ao_horror: "SaH",
   arquivos_secretos: "Arq. Secretos",
   misterios_do_outro_lado: "Mistérios do Outro Lado",
-  grimorio_do_cataclisma: "Cataclisma",
+  grimorio_do_cataclisma: "Grimório do Cataclisma",
   guia_confidencial_vol1: "Guia Conf. I",
   mascaras_teatrais: "Máscaras Teatrais",
   rituais_superiores: "Rituais Superiores",

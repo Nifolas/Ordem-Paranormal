@@ -45,31 +45,137 @@ import {
   ENTREGA3_THREATS,
   ENTREGA3_VARIANT_THREATS,
 } from "./entrega3Loader";
-import { COMMUNITY_CLASSES } from "./grimorioCataclisma";
+import {
+  ENTREGA4_CLASSES as COMMUNITY_CLASSES,
+  ENTREGA4_CLASS_POWERS,
+  ENTREGA4_NEX_99_PLUS,
+  ENTREGA4_ORIGINS,
+  ENTREGA4_TRAILS,
+  ROLETA_MALUCA_OUTCOMES,
+  rollRoletaMaluca,
+  type Nex99PlusRuleEntry,
+  type RoletaMalucaOutcome,
+} from "./entrega4Loader";
+import {
+  BARALHO_INFINITO_CARDS,
+  drawBaralhoInfinitoCard,
+  ENTREGA5_AMMO,
+  ENTREGA5_GENERAL_EQUIPMENT,
+  ENTREGA5_ITEMS,
+  ENTREGA5_MODIFICATIONS,
+  ENTREGA5_OPTIONAL_RULES,
+  ENTREGA5_PARANORMAL_POWERS,
+  ENTREGA5_PETS,
+  ENTREGA5_PROTECTIONS,
+  ENTREGA5_RITUALS,
+  ENTREGA5_THREATS,
+  ENTREGA5_WEAPONS,
+  type BaralhoInfinitoCard,
+  type CompanionPetEntry,
+} from "./entrega5Loader";
+import {
+  ENTREGA6_ALLIES,
+  ENTREGA6_ALLY_TEMPLATES,
+  ENTREGA6_CLASS_POWERS,
+  ENTREGA6_EQUIPMENT,
+  ENTREGA6_GENERAL_POWERS,
+  ENTREGA6_OPTIONAL_RULES,
+  ENTREGA6_ORIGINS,
+  ENTREGA6_PARANORMAL_POWERS,
+  ENTREGA6_RITUALS,
+  ENTREGA6_THREATS,
+  ENTREGA6_TRAILS,
+  type Entrega6AllyEntry,
+} from "./entrega6Loader";
+import {
+  ENTREGA7_ALLY_TEMPLATES,
+  ENTREGA7_CLASS_POWERS,
+  ENTREGA7_CONDITIONS,
+  ENTREGA7_EQUIPMENT,
+  ENTREGA7_GENERAL_POWERS,
+  ENTREGA7_MODIFICATIONS,
+  ENTREGA7_OPTIONAL_RULES,
+  ENTREGA7_ORIGINS,
+  ENTREGA7_PARANORMAL_POWERS,
+  ENTREGA7_RITUALS,
+  ENTREGA7_THREATS,
+  ENTREGA7_TRAILS,
+} from "./entrega7Loader";
+import {
+  ENTREGA8_ALLY_TEMPLATES,
+  ENTREGA8_CLASS_POWERS,
+  ENTREGA8_CURSES,
+  ENTREGA8_DISEASES_AND_POISONS,
+  ENTREGA8_EQUIPMENT,
+  ENTREGA8_GENERAL_POWERS,
+  ENTREGA8_MODIFICATIONS,
+  ENTREGA8_OPTIONAL_RULES,
+  ENTREGA8_ORIGINS,
+  ENTREGA8_PARANORMAL_POWERS,
+  ENTREGA8_RITUALS,
+  ENTREGA8_THREATS,
+  ENTREGA8_TRAILS,
+  type DiseaseOrPoisonEntry,
+} from "./entrega8Loader";
+import {
+  ENTREGA9_ALLY_TEMPLATES,
+  ENTREGA9_CLASS_POWERS,
+  ENTREGA9_DRONE_ALLY_TEMPLATES,
+  ENTREGA9_EQUIPMENT,
+  ENTREGA9_HELL_HUNTERS_ALLY_TEMPLATES,
+  ENTREGA9_OPTIONAL_RULES,
+  ENTREGA9_ORIGINS,
+  ENTREGA9_RITUALS,
+  ENTREGA9_THREATS,
+  ENTREGA9_TRAILS,
+} from "./entrega9Loader";
 
 /**
- * Registro central de conteúdo de suplementos da comunidade.
- * Registra automaticamente todo o conteúdo das Entregas 1, 2 e 3 sem jamais
- * sobrescrever registros oficiais.
+ * Registro central de conteúdo de suplementos da comunidade e pacotes extras
+ * de Arquivos Secretos (#1 a #9). Nunca sobrescreve registros oficiais.
  */
-export const COMMUNITY_ORIGINS: OriginDefinition[] = [...ENTREGA1_ORIGINS];
+export const COMMUNITY_ORIGINS: OriginDefinition[] = [
+  ...ENTREGA1_ORIGINS,
+  ...ENTREGA4_ORIGINS,
+  ...ENTREGA6_ORIGINS,
+  ...ENTREGA7_ORIGINS,
+  ...ENTREGA8_ORIGINS,
+  ...ENTREGA9_ORIGINS,
+];
 
 export const COMMUNITY_TRAILS: TrailDefinition[] = [
   ...ENTREGA1_TRAILS,
   ...ENTREGA2_TRAILS,
+  ...ENTREGA4_TRAILS,
+  ...ENTREGA6_TRAILS,
+  ...ENTREGA7_TRAILS,
+  ...ENTREGA8_TRAILS,
+  ...ENTREGA9_TRAILS,
 ];
 
 export const COMMUNITY_CLASS_POWERS: PowerDefinition[] = [
   ...ENTREGA1_CLASS_POWERS,
   ...ENTREGA2_CLASS_POWERS,
+  ...ENTREGA4_CLASS_POWERS,
+  ...ENTREGA6_CLASS_POWERS,
+  ...ENTREGA7_CLASS_POWERS,
+  ...ENTREGA8_CLASS_POWERS,
+  ...ENTREGA9_CLASS_POWERS,
 ];
 
 export const COMMUNITY_GENERAL_POWERS: PowerDefinition[] = [
   ...ENTREGA1_GENERAL_POWERS,
+  ...ENTREGA6_GENERAL_POWERS,
+  ...ENTREGA7_GENERAL_POWERS,
+  ...ENTREGA8_GENERAL_POWERS,
 ];
 
 export const COMMUNITY_PARANORMAL_POWERS: PowerDefinition[] = [
   ...ENTREGA1_PARANORMAL_POWERS,
+  ...ENTREGA5_PARANORMAL_POWERS,
+  ...ENTREGA6_PARANORMAL_POWERS,
+  ...ENTREGA7_PARANORMAL_POWERS,
+  ...ENTREGA8_PARANORMAL_POWERS,
 ];
 
 export const COMMUNITY_POWERS: PowerDefinition[] = [
@@ -81,18 +187,32 @@ export const COMMUNITY_POWERS: PowerDefinition[] = [
 export const COMMUNITY_RITUALS: AgentRitual[] = [
   ...ENTREGA1_RITUALS,
   ...ENTREGA2_RITUALS,
+  ...ENTREGA5_RITUALS,
+  ...ENTREGA6_RITUALS,
+  ...ENTREGA7_RITUALS,
+  ...ENTREGA8_RITUALS,
+  ...ENTREGA9_RITUALS,
 ];
 
 export const COMMUNITY_CURSED_ITEMS: InventoryItem[] = [
   ...ENTREGA1_CURSED_ITEMS,
   ...ENTREGA2_EQUIPMENT.filter((it) => it.type === "amaldicoado"),
   ...ENTREGA3_ITEMS.filter((it) => it.type === "amaldicoado"),
+  ...ENTREGA6_EQUIPMENT.filter((it) => it.type === "amaldicoado"),
+  ...ENTREGA7_EQUIPMENT.filter((it) => it.type === "amaldicoado"),
+  ...ENTREGA8_EQUIPMENT.filter((it) => it.type === "amaldicoado"),
+  ...ENTREGA9_EQUIPMENT.filter((it) => it.type === "amaldicoado"),
 ];
 
 export const COMMUNITY_ITEMS: InventoryItem[] = [
   ...ENTREGA1_CURSED_ITEMS,
   ...ENTREGA2_EQUIPMENT,
   ...ENTREGA3_ITEMS,
+  ...ENTREGA5_ITEMS,
+  ...ENTREGA6_EQUIPMENT,
+  ...ENTREGA7_EQUIPMENT,
+  ...ENTREGA8_EQUIPMENT,
+  ...ENTREGA9_EQUIPMENT,
 ];
 
 export const COMMUNITY_PARANORMAL_FOODS: ParanormalFoodEntry[] = [
@@ -101,9 +221,15 @@ export const COMMUNITY_PARANORMAL_FOODS: ParanormalFoodEntry[] = [
 
 export const COMMUNITY_MODIFICATIONS: ModificationDefinition[] = [
   ...ENTREGA2_MODIFICATIONS,
+  ...ENTREGA5_MODIFICATIONS,
+  ...ENTREGA7_MODIFICATIONS,
+  ...ENTREGA8_MODIFICATIONS,
 ];
 
-export const COMMUNITY_CURSES: CurseDefinition[] = [...ENTREGA2_CURSES];
+export const COMMUNITY_CURSES: CurseDefinition[] = [
+  ...ENTREGA2_CURSES,
+  ...ENTREGA8_CURSES,
+];
 
 export const COMMUNITY_ORGANIZATIONS: RawOrganizationEntry[] = [
   ...ENTREGA2_ORGANIZATIONS,
@@ -111,31 +237,93 @@ export const COMMUNITY_ORGANIZATIONS: RawOrganizationEntry[] = [
 
 export const COMMUNITY_CONDITIONS: ConditionDefinition[] = [
   ...ENTREGA1_CONDITIONS,
+  ...ENTREGA7_CONDITIONS,
+];
+
+export const COMMUNITY_DISEASES_AND_POISONS: DiseaseOrPoisonEntry[] = [
+  ...ENTREGA8_DISEASES_AND_POISONS,
 ];
 
 export const COMMUNITY_OPTIONAL_RULES: OptionalRuleDefinition[] = [
   ...ENTREGA1_OPTIONAL_RULES,
+  ...ENTREGA5_OPTIONAL_RULES,
+  ...ENTREGA6_OPTIONAL_RULES,
+  ...ENTREGA7_OPTIONAL_RULES,
+  ...ENTREGA8_OPTIONAL_RULES,
+  ...ENTREGA9_OPTIONAL_RULES,
 ];
 
 export const COMMUNITY_THREATS: Threat[] = [
   ...ENTREGA1_THREATS,
   ...ENTREGA3_THREATS,
+  ...ENTREGA5_THREATS,
+  ...ENTREGA6_THREATS,
+  ...ENTREGA7_THREATS,
+  ...ENTREGA8_THREATS,
+  ...ENTREGA9_THREATS,
 ];
 
-export const COMMUNITY_NEW_THREATS: Threat[] = [...ENTREGA3_NEW_THREATS];
+export const COMMUNITY_NEW_THREATS: Threat[] = [
+  ...ENTREGA3_NEW_THREATS,
+  ...ENTREGA5_THREATS,
+  ...ENTREGA6_THREATS,
+  ...ENTREGA7_THREATS,
+  ...ENTREGA8_THREATS,
+  ...ENTREGA9_THREATS,
+];
 
 export const COMMUNITY_VARIANT_THREATS: Threat[] = [...ENTREGA3_VARIANT_THREATS];
 
 export const COMMUNITY_RELICS: RelicDefinition[] = [...ENTREGA3_RELICS];
 
+export const ARQUIVOS_SECRETOS_ALLIES: Entrega6AllyEntry[] = [...ENTREGA6_ALLIES];
+
+export const COMMUNITY_PETS: CompanionPetEntry[] = [...ENTREGA5_PETS];
+
 export const OFFICIAL_SUPERIOR_FORMS: OfficialSuperiorFormEntry[] = [
   ...ENTREGA1_SUPERIOR_FORMS,
 ];
 
-export { COMMUNITY_CLASSES };
+export const COMMUNITY_NEX_99_PLUS: Nex99PlusRuleEntry[] = [
+  ...ENTREGA4_NEX_99_PLUS,
+];
+
+export {
+  BARALHO_INFINITO_CARDS,
+  COMMUNITY_CLASSES,
+  drawBaralhoInfinitoCard,
+  ENTREGA5_AMMO,
+  ENTREGA5_GENERAL_EQUIPMENT,
+  ENTREGA5_ITEMS,
+  ENTREGA5_MODIFICATIONS,
+  ENTREGA5_OPTIONAL_RULES,
+  ENTREGA5_PARANORMAL_POWERS,
+  ENTREGA5_PETS,
+  ENTREGA5_PROTECTIONS,
+  ENTREGA5_RITUALS,
+  ENTREGA5_THREATS,
+  ENTREGA5_WEAPONS,
+  ENTREGA6_ALLY_TEMPLATES,
+  ENTREGA7_ALLY_TEMPLATES,
+  ENTREGA8_ALLY_TEMPLATES,
+  ENTREGA8_CURSES,
+  ENTREGA8_DISEASES_AND_POISONS,
+  ENTREGA8_MODIFICATIONS,
+  ENTREGA9_ALLY_TEMPLATES,
+  ENTREGA9_DRONE_ALLY_TEMPLATES,
+  ENTREGA9_HELL_HUNTERS_ALLY_TEMPLATES,
+  ROLETA_MALUCA_OUTCOMES,
+  rollRoletaMaluca,
+};
 export type {
+  BaralhoInfinitoCard,
   ClassDefinition,
+  CompanionPetEntry,
+  DiseaseOrPoisonEntry,
+  Entrega6AllyEntry,
+  Nex99PlusRuleEntry,
   OfficialSuperiorFormEntry,
   ParanormalFoodEntry,
   RawOrganizationEntry,
+  RoletaMalucaOutcome,
 };

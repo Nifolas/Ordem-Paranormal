@@ -1,0 +1,1554 @@
+{
+  "meta": {
+    "entrega": 4,
+    "titulo": "Grimório do Cataclisma v0.3 — Parte 1 (24 Origens, 2 Novas Classes: Devoto e Predador, 51 Poderes de Classe, 25 Trilhas e Regras NEX 99%+)",
+    "autores": "Gabrirul & Júpiter",
+    "source": "grimorio_do_cataclisma"
+  },
+  "origens": [
+    {
+      "id": "gdc_agente_secreto",
+      "nome": "Agente Secreto (GdC)",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Investigação",
+        "Tática"
+      ],
+      "poder": {
+        "nome": "Shaken, Not Stirred",
+        "descricao": "Você recebe +5 em testes de Investigação e Enganação contra alvos que estejam Indiferentes à sua presença."
+      }
+    },
+    {
+      "id": "gdc_amigo_dos_animais",
+      "nome": "Amigo dos Animais (GdC)",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Adestramento",
+        "Percepção"
+      ],
+      "poder": {
+        "nome": "Meu Melhor Amigo",
+        "descricao": "Você possui um companheiro animal e recebe +5 em Adestramento com ele. Ao usar a ação Relaxar em um interlúdio com o animal, você e todos que relaxarem recebem +2 pontos de Sanidade."
+      }
+    },
+    {
+      "id": "gdc_aposentado",
+      "nome": "Aposentado",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Profissão",
+        "Ocultismo"
+      ],
+      "poder": {
+        "nome": "Dias de Glória",
+        "descricao": "Você começa o jogo com +5% de NEX, porém inicia com metade dos pontos de Vida e de Esforço normais da classe escolhida."
+      },
+      "efeitosPassivos": {
+        "nexBonus": 5,
+        "metadePvInicial": true,
+        "metadePeInicial": true
+      }
+    },
+    {
+      "id": "gdc_apostador",
+      "nome": "Apostador",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Intuição",
+        "Percepção"
+      ],
+      "poder": {
+        "nome": "Blefe Perfeito",
+        "descricao": "Pode gastar 2 PE para receber +5 em um teste de Enganação ou Crime (em testes de Ocultar)."
+      }
+    },
+    {
+      "id": "gdc_bombeiro",
+      "nome": "Bombeiro",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Atletismo",
+        "Tática"
+      ],
+      "poder": {
+        "nome": "Herói do Fogo",
+        "descricao": "1x/cena, pode gastar 2 PE para remover a condição Em Chamas de si ou de um aliado adjacente. Além disso, diminui a categoria de um Item Operacional em I."
+      }
+    },
+    {
+      "id": "gdc_cacador",
+      "nome": "Caçador (GdC)",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Vontade",
+        "Pontaria"
+      ],
+      "poder": {
+        "nome": "Doce Vingança",
+        "descricao": "Escolha uma arma de disparo ou de fogo; ela recebe a modificação Tática ou Discreta sem aumentar sua categoria."
+      }
+    },
+    {
+      "id": "gdc_cientista",
+      "nome": "Cientista",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Ciências",
+        "Tecnologia"
+      ],
+      "poder": {
+        "nome": "Experimental",
+        "descricao": "Recebe +5 em testes de Ciências. Além disso, pode gastar 2 PE para ganhar +1d20 em testes de Percepção, Intuição e Investigação."
+      },
+      "efeitosPassivos": {
+        "periciaBonus": {
+          "Ciências": 5
+        }
+      }
+    },
+    {
+      "id": "gdc_circense",
+      "nome": "Circense",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Reflexos",
+        "Percepção"
+      ],
+      "poder": {
+        "nome": "Mestre do Picadeiro",
+        "descricao": "Pode gastar 2 PE para receber +5 em Reflexos ao esquivar de um golpe que não seja de dano em área."
+      }
+    },
+    {
+      "id": "gdc_comissario_governo",
+      "nome": "Comissário do Governo",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Enganação",
+        "Investigação"
+      ],
+      "poder": {
+        "nome": "Cumprindo Ordens",
+        "descricao": "1x/cena, pode gastar 2 PE para receber +10 em um teste para encontrar pistas. Além disso, a ação Revisar Caso em interlúdios não consome uma de suas ações."
+      }
+    },
+    {
+      "id": "gdc_criador_conteudo",
+      "nome": "Criador de Conteúdo",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Atualidades",
+        "Tecnologia"
+      ],
+      "poder": {
+        "nome": "Enquadramento Perfeito",
+        "descricao": "1x/missão, pode gravar uma cena e utilizá-la como pista adicional ao final da missão para aumentar o ganho de Pontos de Prestígio."
+      }
+    },
+    {
+      "id": "gdc_estilista",
+      "nome": "Estilista",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Profissão",
+        "Atualidades"
+      ],
+      "poder": {
+        "nome": "Vestida para Matar",
+        "descricao": "Vestimentas e Bandoleira contam como uma categoria abaixo para você."
+      }
+    },
+    {
+      "id": "gdc_fanatico",
+      "nome": "Fanático",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Religião",
+        "Ocultismo"
+      ],
+      "poder": {
+        "nome": "Fora da Realidade",
+        "descricao": "Recebe resistência a dano mental igual à sua Presença. Ao usar a ação Acalmar, adiciona sua Presença na cura."
+      },
+      "efeitosPassivos": {
+        "rdMentalPorPre": 1
+      }
+    },
+    {
+      "id": "gdc_ferreiro",
+      "nome": "Ferreiro",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Profissão",
+        "Atletismo"
+      ],
+      "poder": {
+        "nome": "Afiar Lâminas",
+        "descricao": "Gasta 1 ação de interlúdio para consertar uma arma quebrada ou aprimorar uma intacta, concedendo +1 dado de dano do mesmo tipo na próxima cena de combate."
+      }
+    },
+    {
+      "id": "gdc_hacker",
+      "nome": "Hacker",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Crime",
+        "Tecnologia"
+      ],
+      "poder": {
+        "nome": "Quebrar Sistema",
+        "descricao": "Recebe +5 em testes de Tecnologia enquanto estiver hackeando. Sempre que invadir um novo sistema, recebe +1d20 no próximo teste de INT ou uma pista extra a critério do mestre."
+      }
+    },
+    {
+      "id": "gdc_inventor",
+      "nome": "Inventor",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Intuição",
+        "Tecnologia"
+      ],
+      "poder": {
+        "nome": "Eureca!",
+        "descricao": "Um item inventado (exceto arma ou proteção) conta como uma categoria abaixo; se for de uso único, pode gastar 2 PE e 1 ação de interlúdio para reaproveitá-lo."
+      }
+    },
+    {
+      "id": "gdc_maestro",
+      "nome": "Maestro",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Artes",
+        "Ocultismo"
+      ],
+      "poder": {
+        "nome": "Melodia Paranormal",
+        "descricao": "Soma sua Presença ao limite de rituais conhecidos e começa o jogo com 1 ritual extra de um círculo que possa conjurar."
+      }
+    },
+    {
+      "id": "gdc_magico",
+      "nome": "Mágico",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Crime",
+        "Enganação"
+      ],
+      "poder": {
+        "nome": "Coelho da Cartola",
+        "descricao": "Você pode ativar um Poder Paranormal ou Item Amaldiçoado gastando 1 ponto a menos de PE."
+      }
+    },
+    {
+      "id": "gdc_medium",
+      "nome": "Médium",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Diplomacia",
+        "Ocultismo"
+      ],
+      "poder": {
+        "nome": "Conexões do Além",
+        "descricao": "1x/cena, pode gastar 2 PE para receber +1d20 em um teste de perícia (exceto Luta, Pontaria e Ocultismo)."
+      }
+    },
+    {
+      "id": "gdc_nato",
+      "nome": "Nato",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Intuição",
+        "Vontade"
+      ],
+      "poder": {
+        "nome": "Desde o Início",
+        "descricao": "Começa com 1 poder paranormal à escolha, mas inicia com 0% de NEX como Mundano (se a missão iniciar em NEX maior, começa sempre 1 nível abaixo dos aliados)."
+      }
+    },
+    {
+      "id": "gdc_nomade",
+      "nome": "Nômade",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Sobrevivência",
+        "Crime"
+      ],
+      "poder": {
+        "nome": "Aprendizados Mundanos",
+        "descricao": "Você pode adicionar o valor do seu Intelecto em testes cujo atributo-base seja Agilidade."
+      }
+    },
+    {
+      "id": "gdc_piloto",
+      "nome": "Piloto",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Pilotagem",
+        "Percepção"
+      ],
+      "poder": {
+        "nome": "Em Ritmo de Fuga",
+        "descricao": "Recebe +5 em todos os testes de Pilotagem. Ao dirigir um veículo, pode gastar 2 PE para percorrer a distância da viagem em metade do tempo padrão."
+      },
+      "efeitosPassivos": {
+        "periciaBonus": {
+          "Pilotagem": 5
+        }
+      }
+    },
+    {
+      "id": "gdc_professor",
+      "nome": "Professor",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Ciências",
+        "Diplomacia"
+      ],
+      "poder": {
+        "nome": "Aluno Nota 10",
+        "descricao": "1x/cena, gasta 2 PE para ensinar a um aliado uma perícia em que você seja treinado; ele conta como treinado nela até o fim da cena."
+      }
+    },
+    {
+      "id": "gdc_prometido",
+      "nome": "Prometido",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Intuição",
+        "Ocultismo"
+      ],
+      "poder": {
+        "nome": "Profecia",
+        "descricao": "Sempre que resistir a um efeito paranormal, recebe PE temporários iguais à sua Presença (devem ser gastos até o fim do próximo turno ou desaparecem)."
+      }
+    },
+    {
+      "id": "gdc_selvagem",
+      "nome": "Selvagem",
+      "source": "grimorio_do_cataclisma",
+      "pericias": [
+        "Iniciativa",
+        "Sobrevivência"
+      ],
+      "poder": {
+        "nome": "Instinto Aguçado",
+        "descricao": "Recebe +1 em AGI, FOR ou VIG (pode passar do limite inicial de 3, mas nunca de 5). Porém, seu Intelecto inicial tem limite máximo igual a 1 (pode ser aumentado depois no jogo)."
+      }
+    }
+  ],
+  "classes": [
+    {
+      "id": "devoto",
+      "nome": "Devoto",
+      "source": "grimorio_do_cataclisma",
+      "pvInicial": 14,
+      "pvPorNex": 2,
+      "peInicial": 3,
+      "pePorNex": 3,
+      "sanInicial": 18,
+      "sanPorNex": 4,
+      "periciasFixas": [
+        "Religião",
+        "Diplomacia"
+      ],
+      "periciasEscolhaBase": 4,
+      "grauTreinamentoBase": 4,
+      "proficiencias": [
+        "Armas simples"
+      ],
+      "habilidadesBase": [
+        {
+          "marco": "5%",
+          "nome": "Abençoar",
+          "descricao": "Escolha 3 perícias treinadas (exceto Luta, Pontaria e Ocultismo). Quando um aliado testar uma delas, gasta 2 PE para +1d6 (NEX 40%: 4 PE para +1d8; NEX 75%: 6 PE para +1d10)."
+        },
+        {
+          "marco": "5%",
+          "nome": "Disruptura",
+          "descricao": "Conjura rituais: 1º círculo em NEX 5%, 2º em 25%, 3º em 55%, 4º em 85%. Começa com 2 rituais de 1º círculo e aprende +1 ritual sempre que desbloqueia um novo círculo (não contam no limite)."
+        }
+      ],
+      "nex99Plus": "A cada +5% de NEX após 99%, recebe +1d4 em todos os danos paranormais e +1 no limite de PE para conjurar rituais (não afeta DT), além de PV/PE/SAN normais."
+    },
+    {
+      "id": "predador",
+      "nome": "Predador",
+      "source": "grimorio_do_cataclisma",
+      "pvInicial": 18,
+      "pvPorNex": 4,
+      "peInicial": 2,
+      "pePorNex": 3,
+      "sanInicial": 14,
+      "sanPorNex": 3,
+      "periciasFixasEscolha": [
+        [
+          "Luta",
+          "Pontaria"
+        ],
+        [
+          "Percepção",
+          "Sobrevivência"
+        ]
+      ],
+      "periciasEscolhaBase": 3,
+      "grauTreinamentoBase": 3,
+      "proficiencias": [
+        "Armas simples",
+        "Armas táticas"
+      ],
+      "habilidadesBase": [
+        {
+          "marco": "5%",
+          "nome": "Marca da Maldição",
+          "descricao": "Começa com 1 arma, proteção ou utensílio amaldiçoado à escolha. Falhar em testes do atributo da maldição causa 1 ponto de dano de Sanidade. Seu limite de itens de Categoria I diminui em 1."
+        },
+        {
+          "marco": "5%",
+          "nome": "Presa Marcada",
+          "descricao": "Gasta 2 PE para marcar 1 alvo: no 1º turno todos causam +1d6 dano extra (exceto rituais) nele; a partir do 2º turno apenas você mantém o bônus até o alvo morrer. Escala: 25% (3 PE, +1d8), 55% (4 PE, +1d10), 85% (5 PE, +1d12)."
+        }
+      ],
+      "nex99Plus": "A cada +5% de NEX após 99%, aumenta em +1 os benefícios de Alimentar-se, Dormir e Relaxar no interlúdio, além de PV/PE/SAN normais."
+    }
+  ],
+  "poderesClasse": [
+    {
+      "id": "gdc_ataque_volatil",
+      "nome": "Ataque Volátil",
+      "classe": "combatente",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "FOR 3, treinado em Luta",
+      "custoPe": 2,
+      "descricao": "Gasta 2 PE ao atacar com arma corpo a corpo de duas mãos para somar o dobro da Força no dano e receber +1 na margem de ameaça."
+    },
+    {
+      "id": "gdc_golpe_devastador",
+      "nome": "Golpe Devastador",
+      "classe": "combatente",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 2,
+      "descricao": "Após acertar um golpe corpo a corpo, gasta 2 PE para realizar uma manobra de derrubar contra o mesmo alvo como ação livre."
+    },
+    {
+      "id": "gdc_acostumado",
+      "nome": "Acostumado",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "NEX 30%",
+      "descricao": "Após enfrentar o mesmo tipo de criatura 3 vezes, reduz o dano mental da Presença Perturbadora dela à metade (e a 0 se passar no teste), mesmo sem o NEX de imunidade."
+    },
+    {
+      "id": "gdc_esforco_compensado",
+      "nome": "Esforço Compensado",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 3,
+      "descricao": "1x/cena, gasta 3 PE para receber +2d20 em um teste baseado em Intelecto."
+    },
+    {
+      "id": "gdc_gambiarra_aceitavel",
+      "nome": "Gambiarra Aceitável",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "AGI 2, treinado em Crime ou Sobrevivência",
+      "custoPe": 2,
+      "descricao": "1x/cena, gasta ação completa e 2 PE para montar uma arma improvisada especial que funciona como arma corpo a corpo ou de disparo simples até o fim da cena."
+    },
+    {
+      "id": "gdc_perito_elemental",
+      "nome": "Perito Elemental",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "PRE 2, treinado em Ocultismo",
+      "descricao": "Recebe resistência 5 a um elemento à escolha e aprende 1 ritual desse elemento (de círculo que possa conjurar, fora do limite)."
+    },
+    {
+      "id": "gdc_profissao_da_vida",
+      "nome": "Profissão da Vida",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 1,
+      "descricao": "1x/cena, gasta +1 PE para dobrar o efeito do seu poder de origem."
+    },
+    {
+      "id": "gdc_pronto_pra_tudo",
+      "nome": "Pronto pra Tudo",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Escolha um Item Operacional; sua categoria é reduzida em I."
+    },
+    {
+      "id": "gdc_laminas_complexas",
+      "nome": "Lâminas Complexas",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "NEX 30%",
+      "descricao": "Recebe proficiência em armas táticas corpo a corpo de uma mão; conjurar Amaldiçoar Arma nelas custa -1 PE."
+    },
+    {
+      "id": "gdc_meditacao",
+      "nome": "Meditação",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "PRE 3, Veterano em Vontade",
+      "descricao": "Gasta 1 ação de interlúdio para aumentar em 1 passo a recuperação de PE se Dormir no mesmo interlúdio."
+    },
+    {
+      "id": "gdc_mente_inabalavel",
+      "nome": "Mente Inabalável",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Recebe +1d20 em testes de Presença Perturbadora e de O Custo do Paranormal ao conjurar rituais."
+    },
+    {
+      "id": "gdc_preparar_flagelo",
+      "nome": "Preparar Flagelo",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "VIG 2",
+      "custoPe": 2,
+      "descricao": "1x/cena, gasta 2 PE e 1 SAN para receber 2d8 PV temporários."
+    },
+    {
+      "id": "gdc_sexto_sentido",
+      "nome": "Sexto Sentido",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "PRE 3",
+      "descricao": "Você soma sua Presença na Defesa."
+    },
+    {
+      "id": "gdc_dev_agua_benta",
+      "nome": "Água Benta",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "NEX 60%, Afinidade",
+      "custoPe": 2,
+      "descricao": "1x/missão, gasta 2 PE e um interlúdio inteiro para amaldiçoar um acessório ou arma com uma maldição do elemento de sua afinidade (devolve ao retornar à Ordem)."
+    },
+    {
+      "id": "gdc_dev_amuleto_sagrado",
+      "nome": "Amuleto Sagrado",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "PRE 3, treinado em Vontade",
+      "descricao": "Recebe resistência a dano mental igual ao dobro da sua Presença."
+    },
+    {
+      "id": "gdc_dev_ultima_ceia",
+      "nome": "A Última Ceia",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "NEX 45%",
+      "custoPe": 3,
+      "descricao": "Gasta 3 PE (não recuperáveis nesse interlúdio) para todos realizarem Alimentar-se sem gastar ações do interlúdio."
+    },
+    {
+      "id": "gdc_dev_barganha_entidade",
+      "nome": "Barganha com a Entidade",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "Treinado em Investigação, NEX 30%",
+      "custoPe": 2,
+      "descricao": "1x/cena, gasta 2 PE e 1 SAN para receber +5 e +1d20 em um teste para procurar pistas."
+    },
+    {
+      "id": "gdc_dev_baseado_na_fe",
+      "nome": "Baseado na Fé",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "INT 2",
+      "custoPe": 2,
+      "descricao": "1x/rodada, gasta 2 PE para substituir qualquer teste (exceto Luta, Pontaria e Ocultismo) por Religião com Intelecto."
+    },
+    {
+      "id": "gdc_dev_batina_especial",
+      "nome": "Batina Especial",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Uma vestimenta ou utensílio à escolha tem sua categoria reduzida em I."
+    },
+    {
+      "id": "gdc_dev_bencao_maldita",
+      "nome": "Benção Maldita",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 4,
+      "descricao": "1x/rodada, gasta reação e 4 PE para impor -2d20 no próximo teste de um alvo."
+    },
+    {
+      "id": "gdc_dev_blasfemia",
+      "nome": "Blasfêmia",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Recebe +5 em testes de Intuição ou Enganação."
+    },
+    {
+      "id": "gdc_dev_concentracao_forcada",
+      "nome": "Concentração Forçada",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "INT 2, PRE 2",
+      "descricao": "Penalidades de concentração ao conjurar rituais caem 1 nível (Terrível -> Ruim -> Nenhuma)."
+    },
+    {
+      "id": "gdc_dev_copia_perfeita",
+      "nome": "Cópia Perfeita",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "NEX 75%",
+      "descricao": "1x/cena, replica perfeitamente uma habilidade ou poder de classe usado por um aliado na mesma cena (pagando custos normais)."
+    },
+    {
+      "id": "gdc_dev_identificacao_profana",
+      "nome": "Identificação Profana",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 2,
+      "descricao": "Usa Religião no lugar de Ocultismo para reconhecer itens paranormais; ação completa e 2 PE concedem +10 para identificar objetos e rituais."
+    },
+    {
+      "id": "gdc_dev_livramento",
+      "nome": "Livramento",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 2,
+      "descricao": "1x/missão, sacrifica 2 PE e 2 SAN para livrar-se imediatamente dos efeitos de um item amaldiçoado (não poderá mais usá-lo)."
+    },
+    {
+      "id": "gdc_dev_livro_do_paraiso",
+      "nome": "Livro do Paraíso",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Cria um grimório; 1x/cena gasta ação completa lendo-o para recuperar seu limite de PE em SAN ou em PE (escolhe ao ativar)."
+    },
+    {
+      "id": "gdc_dev_postura_defensiva",
+      "nome": "Postura Defensiva",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Soma seu Intelecto na Defesa e recebe +1d20 em testes de resistência."
+    },
+    {
+      "id": "gdc_dev_projetil_submundo",
+      "nome": "Projétil do Submundo",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "AGI 2, treinado em Ocultismo",
+      "descricao": "Aprende a criar o selo de Amaldiçoar Arma de um elemento à escolha, aplicável apenas em armas de fogo."
+    },
+    {
+      "id": "gdc_dev_protecao_superior",
+      "nome": "Proteção Superior",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "AGI 2",
+      "descricao": "Proficiência em Proteções Leves; vestindo-a recebe RD físico 3 e +1 Defesa adicionais."
+    },
+    {
+      "id": "gdc_dev_recuperacao_rapida",
+      "nome": "Recuperação Rápida",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 2,
+      "descricao": "1x/cena, gasta reação e 2 PE para remover de si uma condição mental ou de sentidos."
+    },
+    {
+      "id": "gdc_dev_reliquia_ungida",
+      "nome": "Relíquia Ungida",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "FOR 3",
+      "descricao": "Proficiência em 1 arma tática corpo a corpo de uma mão; a primeira maldição nela aumenta sua categoria em apenas I."
+    },
+    {
+      "id": "gdc_dev_remanejar_espaco",
+      "nome": "Remanejar Espaço",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Recebe +2 espaços de inventário."
+    },
+    {
+      "id": "gdc_pred_ambidestro",
+      "nome": "Ambidestro",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "AGI 3, treinado em Luta e Pontaria",
+      "descricao": "Empunhando duas armas (ao menos uma leve e uma de disparo/fogo), ao usar Agredir faz 2 ataques (1 com cada) sofrendo -1d20 em ataques até o próximo turno."
+    },
+    {
+      "id": "gdc_pred_arapuca",
+      "nome": "Arapuca",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Furtivo contra uma criatura, gasta ação completa observando-a para receber +5 em todos os testes de perícia contra ela até o fim do próximo turno."
+    },
+    {
+      "id": "gdc_pred_calcanhar_aquiles",
+      "nome": "Calcanhar de Aquiles",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Quando faz um ataque contra uma criatura gastando PE nele, seus ataques contra ela recebem +1 na margem de ameaça."
+    },
+    {
+      "id": "gdc_pred_camuflado",
+      "nome": "Camuflado",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "AGI 2, NEX 30%",
+      "custoPe": 2,
+      "descricao": "Gasta 2 PE para usar Furtividade e se esconder mesmo sem cobertura, ficando sob camuflagem total."
+    },
+    {
+      "id": "gdc_pred_chuva_de_sangue",
+      "nome": "Chuva de Sangue",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "AGI 4, Ambidestro, NEX 60%",
+      "custoPe": 2,
+      "descricao": "Ao usar Ambidestro, pode pagar 2 PE para fazer um ataque adicional com sua arma primária."
+    },
+    {
+      "id": "gdc_pred_companhia_animal",
+      "nome": "Companhia Animal",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "Treinado em Adestramento",
+      "descricao": "Possui um animal companheiro e recebe +1d20 e +5 em Adestramento com ele."
+    },
+    {
+      "id": "gdc_pred_emboscada",
+      "nome": "Emboscada",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "Treinado em Iniciativa, NEX 30%",
+      "custoPe": 2,
+      "descricao": "Na primeira rodada de combate, gasta 2 PE para realizar uma ação padrão adicional."
+    },
+    {
+      "id": "gdc_pred_estamina_feroz",
+      "nome": "Estamina Feroz",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 2,
+      "descricao": "Gasta 2 PE para aumentar seu deslocamento em +6m por 1 rodada."
+    },
+    {
+      "id": "gdc_pred_estocada",
+      "nome": "Estocada",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "Ambidestro, NEX 30%",
+      "custoPe": 3,
+      "descricao": "Empunhando duas armas corpo a corpo em uma investida, gasta 3 PE para atacar também com a arma secundária."
+    },
+    {
+      "id": "gdc_pred_ervas_medicinais",
+      "nome": "Ervas Medicinais",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Ação completa e X PE (máx. INT) em si ou aliado adjacente: cada PE cura 2d4 PV ou remove 1 condição (exceto Morrendo/Enlouquecendo)."
+    },
+    {
+      "id": "gdc_pred_imparavel",
+      "nome": "Imparável",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "Inquieto, AGI 2, NEX 75%",
+      "descricao": "Ao usar Inquieto, os bônus aumentam para +5 em Defesa e Reflexos e +1d12 em dano."
+    },
+    {
+      "id": "gdc_pred_inimigo_elemento",
+      "nome": "Inimigo de (Elemento)",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Escolha um elemento (pode escolher até 2x); contra criaturas desse elemento, dobra quaisquer dados de bônus de dano."
+    },
+    {
+      "id": "gdc_pred_inquieto",
+      "nome": "Inquieto",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "NEX 30%",
+      "descricao": "Sem usar proteções, ao mover-se 9m+ recebe +2 Defesa e Reflexos e +1d6 no dano corpo a corpo até o início do próximo turno."
+    },
+    {
+      "id": "gdc_pred_mestre_armadilhas",
+      "nome": "Mestre das Armadilhas",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Monta armadilhas de caça como ação de movimento (1 espaço cada)."
+    },
+    {
+      "id": "gdc_pred_olho_de_aguia",
+      "nome": "Olho de Águia",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Recebe +1d20 em testes de Percepção contra criaturas em até alcance longo."
+    },
+    {
+      "id": "gdc_pred_oportunista",
+      "nome": "Oportunista",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Recebe +1d20 em ataques e +1 dado de dano contra alvos caídos, desprevenidos, flanqueados ou indefesos."
+    },
+    {
+      "id": "gdc_pred_preciso",
+      "nome": "Preciso",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "preRequisito": "INT 2",
+      "descricao": "Soma seu Intelecto nas rolagens de dano com armas leves ou ágeis."
+    },
+    {
+      "id": "gdc_pred_raspao",
+      "nome": "Raspão",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "custoPe": 1,
+      "descricao": "Ao errar um ataque, gasta 1 PE para causar 1d6 de dano do tipo da arma (escala: 2 PE/2d6 em NEX 35%; 3 PE/3d6 em NEX 70%)."
+    },
+    {
+      "id": "gdc_pred_seguir_rastros",
+      "nome": "Seguir Rastros",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "descricao": "Recebe +1d20 em Sobrevivência e usa Sobrevivência no lugar de Ocultismo para identificar criaturas."
+    }
+  ],
+  "trilhas": [
+    {
+      "id": "gdc_assassino",
+      "nome": "Assassino",
+      "classe": "combatente",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Ataque Mortal",
+          "descricao": "Escolha uma arma corpo a corpo ou de arremesso: ganha 1 modificação sem aumentar categoria e +2 em testes de ataque."
+        },
+        {
+          "marco": "40%",
+          "nome": "Arma Letal",
+          "descricao": "A arma escolhida ganha +1x no multiplicador de crítico e você pode finalizar alvos com ação padrão (em vez de completa)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Sem Misericórdia",
+          "descricao": "Pode amaldiçoar a arma 1x sem subir categoria; soma o dobro da Força no dano corpo a corpo."
+        },
+        {
+          "marco": "99%",
+          "nome": "Fatality",
+          "descricao": "Ao causar Dano Massivo, pode fazer ataque livre para decepar membro (-1 atributo permanente) OU gastar 2 PE para derrubar e deixar Morrendo com 1 rodada a menos."
+        }
+      ]
+    },
+    {
+      "id": "gdc_ninja",
+      "nome": "Ninja",
+      "classe": "combatente",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Organização",
+          "descricao": "Agrupa 5 unidades de uma arma de arremesso (até 1 espaço) ocupando o espaço de apenas 1."
+        },
+        {
+          "marco": "40%",
+          "nome": "Disciplina",
+          "descricao": "Ignora terreno difícil, +5 em Furtividade e soma Agilidade ao bloquear."
+        },
+        {
+          "marco": "65%",
+          "nome": "Habilidades Atléticas",
+          "descricao": "Gasta 2 PE por 1 rodada: Esquiva Perfeita (+5 Reflexos/Esquiva e RD 2 vs disparos), Golpe Letal (+1d10 impacto letal desarmado e +5 Luta) ou Movimentos Rápidos (sem penalidade em Furtividade após atacar; Fintar com movimento e +5 Enganação)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Demônio das Sombras",
+          "descricao": "Imune a Desprevenido e Flanqueado. Ao chegar a 0 PV (exceto lesão grave/paranormal), continua lutando testando Fortitude/rodada até falhar ou sofrer dano (não pode ser finalizado)."
+        }
+      ]
+    },
+    {
+      "id": "gdc_pugilista",
+      "nome": "Pugilista",
+      "classe": "combatente",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Combatente Marcial",
+          "descricao": "Recebe Artista Marcial (se pegar novamente, +1 dado de dano de impacto)."
+        },
+        {
+          "marco": "40%",
+          "nome": "Resiliente",
+          "descricao": "Soma Vigor na Defesa e em RD física (corte, impacto, balístico, perfurante). Ataques desarmados/soqueira têm crítico 18/x2."
+        },
+        {
+          "marco": "65%",
+          "nome": "Socos Furiosos",
+          "descricao": "Ao acertar desarmado/soqueira, gasta 2 PE (4 PE no 3º, 6 PE no 4º...) para ataques extras no mesmo alvo."
+        },
+        {
+          "marco": "99%",
+          "nome": "Garra Inquebrável",
+          "descricao": "+2 margem de ameaça desarmado. Errar ataque desarmado/soqueira acumula +1d20 e +1x crítico no próximo golpe até acertar."
+        }
+      ]
+    },
+    {
+      "id": "gdc_blaster",
+      "nome": "Blaster",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Mais Explosões",
+          "descricao": "Escolha uma granada: -1 categoria e -1 espaço. Gasta 2 PE para +5 no teste de lançamento."
+        },
+        {
+          "marco": "40%",
+          "nome": "Mais Potência",
+          "descricao": "Gasta 2 rodadas e 2 PE para evoluir granadas (Incendiária -> Incinerária; Atordoante -> Paralisante; Fumaça -> Gás Lacrimogêneo; Fragmentação -> Ultra Fragmentação) ou +5 DT se não usar as especiais."
+        },
+        {
+          "marco": "65%",
+          "nome": "Pólvora Especial",
+          "descricao": "Gasta 2 PE para criar explosivos sem teste e pode aplicar 1 modificação em um explosivo por vez sem aumentar categoria."
+        },
+        {
+          "marco": "99%",
+          "nome": "Efeito Borboleta",
+          "descricao": "1x/cena, ação completa e 4 PE para lançar 2 granadas (+1 PE exclui aliado) OU ação padrão para detonar todos os seus explosivos em +3m de raio (quem zerar PV morre instantaneamente)."
+        }
+      ]
+    },
+    {
+      "id": "gdc_detetive",
+      "nome": "Detetive (GdC)",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Faro Especial",
+          "descricao": "1x/cena, ação padrão e 2 PE para +5 em Investigação/Percepção, ou 4 PE para ação extra de procurar pistas."
+        },
+        {
+          "marco": "40%",
+          "nome": "Revasculhar",
+          "descricao": "Gasta 2 PE para procurar pistas em local já investigado (+1 PE reduz DT em -5)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Pesquisa Forense",
+          "descricao": "1x/rodada, ação completa e 3 PE encontra todas as pistas do local sem teste; com Utensílio de Investigação + 5 PE encontra pista forense oculta."
+        },
+        {
+          "marco": "99%",
+          "nome": "Elementar Meu Caro",
+          "descricao": "1x/rodada, ao ser ajudado em procurar pistas, gasta 3 PE para ambos guardarem +1d20 em teste futuro do mesmo atributo (limite acumulado = INT)."
+        }
+      ]
+    },
+    {
+      "id": "gdc_psicologo",
+      "nome": "Psicólogo",
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "especial": "Requer treinamento em Diplomacia.",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Palavras Amigas",
+          "descricao": "Ação completa e 2 PE cura 2d6 SAN de aliado adjacente (+1d6 por +1 PE nos NEX 40%, 65% e 99%)."
+        },
+        {
+          "marco": "40%",
+          "nome": "Trabalhar Trauma",
+          "descricao": "Interlúdio inteiro e 2 PE torna aliado adjacente imune a 1 condição (exceto Morrendo/Enlouquecendo) até o próximo interlúdio."
+        },
+        {
+          "marco": "65%",
+          "nome": "Disposição",
+          "descricao": "Perturbado ganha +5 Vontade (1x/cena). Sempre que curar SAN de aliado, ambos ganham RD mental 5 até seu próximo turno."
+        },
+        {
+          "marco": "99%",
+          "nome": "Recuperação Imediata",
+          "descricao": "1x/cena, ação completa e 8 PE traz de volta à realidade um aliado que enlouqueceu na mesma cena e dá RD mental 10 na cena."
+        }
+      ]
+    },
+    {
+      "id": "gdc_ilusionista",
+      "nome": "Ilusionista",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Truque de Mestre",
+          "descricao": "1x/cena, +2 PE ao conjurar: humanos não treinados em Ocultismo testam Vontade (DT PRE) ou ficam Confusos na cena (sucesso: Vulneráveis e -1d20 contra seus rituais por 1 rodada)."
+        },
+        {
+          "marco": "40%",
+          "nome": "Carta na Manga",
+          "descricao": "+2 PE oculta qual ritual está conjurando e aumenta a área em +1,5m ou +1 alvo."
+        },
+        {
+          "marco": "65%",
+          "nome": "Escapismo",
+          "descricao": "+5 Furtividade e Enganação vs não hostis. 1x/cena, ação padrão e 4 PE sai da visão de um alvo (+10 Furtividade contra ele; +4 PE causa dano máximo em ritual contra alvo desprevenido)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Ilusão de Medo",
+          "descricao": "Você aprende o ritual Ilusão de Medo."
+        }
+      ]
+    },
+    {
+      "id": "gdc_improvisador",
+      "nome": "Improvisador",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Gambiarra Paranormal",
+          "descricao": "Utensílio de Ocultismo ocupa -1 espaço. Ação padrão + Ocultismo DT 15 improvisa componentes ritualísticos para a cena."
+        },
+        {
+          "marco": "40%",
+          "nome": "Seguindo a Receita",
+          "descricao": "Gasta 4 PE e interlúdio inteiro para improvisar 1 item amaldiçoado especial de uso único."
+        },
+        {
+          "marco": "65%",
+          "nome": "Mão na Roda",
+          "descricao": "1x/missão (interlúdio inteiro), amaldiçoa 1 item com maldição do elemento de afinidade (fica incapaz de usar itens do elemento opressor)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Usando o Medo",
+          "descricao": "Você aprende o ritual Usando o Medo."
+        }
+      ]
+    },
+    {
+      "id": "gdc_rigoroso",
+      "nome": "Rigoroso",
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Conjuração Perfeita",
+          "descricao": "Pode aumentar o tempo de execução de um ritual em 1 passo para somar sua Presença na DT de resistência."
+        },
+        {
+          "marco": "40%",
+          "nome": "Conjuração Centrada",
+          "descricao": "Pode gastar ação de movimento em vez de 1 PE para sustentar rituais; +2 PE ao conjurar reduz perda de SAN à metade."
+        },
+        {
+          "marco": "65%",
+          "nome": "Conjuração Eficaz",
+          "descricao": "Soma Presença ao limite de rituais conhecidos; dobrar o custo de PE dobra área/alvos ou aumenta alcance em 1 passo."
+        },
+        {
+          "marco": "99%",
+          "nome": "Conjuração do Medo",
+          "descricao": "Você aprende o ritual Conjuração do Medo."
+        }
+      ]
+    },
+    {
+      "id": "gdc_corrompido",
+      "nome": "Corrompido",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Descrente",
+          "descricao": "RD mental igual a PRE + INT e +1d20 em testes de resistência de Vontade."
+        },
+        {
+          "marco": "40%",
+          "nome": "Amaldiçoando",
+          "descricao": "1x/cena, 4 PE e 1 SAN: amaldiçoa 1 item na cena sem subir categoria OU amaldiçoa inimigo (Von DT PRE: +2 PE em custos e -1d20 em resistências paranormais na cena)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Transferir Mentiras",
+          "descricao": "Sacrifica 10 SAN permanentes: 1x/rodada gasta 2 PE para transferir metade de um dano balístico ou paranormal (exceto Medo/Conhecimento) para um ser em alcance curto."
+        },
+        {
+          "marco": "99%",
+          "nome": "Arauto do Caos (Roleta Maluca)",
+          "descricao": "Saques são livres. Ações em combate seguem 1d6: (1) Suporte +10 ou -5 Def; (2) Ação completa sem sentido ou 1d10 mental; (3) Ataque à distância +2 dados ou 1d20 em si; (4) Ritual sem perder SAN ou -1d20 PRE/INT; (5) Ataque CaC +10 ou -1d20 FOR/AGI/VIG; (6) Age livre com +1d20."
+        }
+      ]
+    },
+    {
+      "id": "gdc_eldritch",
+      "nome": "Eldritch",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Olhar Congelante",
+          "descricao": "+5 e +1d20 em Intimidação; alvo resiste com Vontade e, se falhar, fica Apavorado."
+        },
+        {
+          "marco": "40%",
+          "nome": "Desespero Eterno",
+          "descricao": "1x/rodada, 1 PE: alvo testa Vontade (DT PRE + Enganação) ou fica Pasmo e sofre (PRE)d12 dano mental (sucesso metade e evita)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Presença Sufocante",
+          "descricao": "+1d10 contra Presença Perturbadora. 4 PE livre no 1º turno: todos no local testam Vontade (DT PRE) ou sofrem 3d6 mental e Indefeso na rodada (sucesso metade e Alquebrado na cena)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Invocar o Abismo",
+          "descricao": "Após 1º uso, PV/PE/SAN máximos caem pela metade. 1x/cena: Ecoar Sussurros (alvo cai a 1 SAN incurável mundanamente), Estilhaçar Barreira (+5% NEX; se 100% vira criatura VD 180-200 ou Degolificada) ou Consumir Energia Potencial (zera PE do alvo na cena)."
+        }
+      ]
+    },
+    {
+      "id": "gdc_exorcista",
+      "nome": "Exorcista (GdC)",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Quebrar Frenesi",
+          "descricao": "1x/cena, usa Religião com FOR (+5) para Acalmar tirando de Enlouquecendo, mas causa dano desarmado no alvo."
+        },
+        {
+          "marco": "40%",
+          "nome": "Repulsor",
+          "descricao": "Ação padrão e 2 PE repele criaturas de 1 elemento (não te atacam), mas atrai criaturas do elemento opressor."
+        },
+        {
+          "marco": "65%",
+          "nome": "Tratamento Forçado",
+          "descricao": "Ação padrão e 2 PE remove todas as condições mentais e de sentidos de um alvo e cura 1d10 SAN."
+        },
+        {
+          "marco": "99%",
+          "nome": "Expulsão",
+          "descricao": "Aprende Oblívio ou Inexistir (fora do limite); 1x/cena conjura forma padrão sem gastar PE, mas exige acertar um golpe no alvo."
+        }
+      ]
+    },
+    {
+      "id": "gdc_insaciavel",
+      "nome": "Insaciável",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Vampirismo",
+          "descricao": "2 PE em ataque desarmado (mordida) contra humano ou animal: causa 1d8 dano e recupera o mesmo valor em PV."
+        },
+        {
+          "marco": "40%",
+          "nome": "Sede de Sangue",
+          "descricao": "2 ações completas para devorar criatura derrotada: sacrifica 1 SAN permanente, fica Enjoado na cena e ganha 10 PE temporários no dia."
+        },
+        {
+          "marco": "65%",
+          "nome": "Hora do Banquete",
+          "descricao": "Ação de movimento e 2 PE: criaturas em médio sofrem -1d20 em resistências (seu elemento ganha +2d20; elemento oprimido sofre -2d20 em tudo)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Besta Paranormal",
+          "descricao": "Sacrifica 2 SAN permanentes ao consumir criatura, pessoa ou animal para recuperar todos os PV."
+        }
+      ]
+    },
+    {
+      "id": "gdc_obcecado",
+      "nome": "Obcecado",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "O Chamado",
+          "descricao": "Escolha 1 elemento: recebe +5 em testes de O Custo do Paranormal para rituais desse elemento."
+        },
+        {
+          "marco": "40%",
+          "nome": "Vórtex",
+          "descricao": "Custo de rituais do elemento escolhido reduz em valor igual à sua Presença e ganha +1d20 para resistir a rituais desse elemento."
+        },
+        {
+          "marco": "65%",
+          "nome": "Discípulo Fiel",
+          "descricao": "Aprende +2 rituais do elemento escolhido (fora do limite)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Um com o Elemento",
+          "descricao": "Todos os seus rituais do elemento escolhido (inclusive formas avançadas) causam dano e efeitos máximos."
+        }
+      ]
+    },
+    {
+      "id": "gdc_receptaculo",
+      "nome": "Receptáculo",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Primeiros Passos",
+          "descricao": "1x/cena, ação padrão e 2 PE: rola 1d6; de 1 a 5 o Outro Lado responde com essa quantidade de palavras; 6 perde 1 SAN."
+        },
+        {
+          "marco": "40%",
+          "nome": "Influência Paranormal",
+          "descricao": "Escolha 1 atributo fixo: gasta 3 PE para +2d20 em testes dele (+1 PE para +5)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Filho do Elemento",
+          "descricao": "+1 no atributo do elemento de afinidade (Sangue FOR/VIG, Morte PRE, Energia AGI, Conhecimento INT), podendo passar de 5."
+        },
+        {
+          "marco": "99%",
+          "nome": "Divindade",
+          "descricao": "Dobra PV e PE, ganha +1 poder paranormal de afinidade, +3 espaços, +3 Defesa e coloca (INT) perícias Expert em Mestre (+20). Contudo, SAN cai ao inicial da classe e não reduz danos mentais."
+        }
+      ]
+    },
+    {
+      "id": "gdc_seguidor",
+      "nome": "Seguidor",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Ouvindo a Palavra",
+          "descricao": "Soma Presença em O Custo do Paranormal e em danos paranormais."
+        },
+        {
+          "marco": "40%",
+          "nome": "Espalhe a Palavra",
+          "descricao": "+5 em testes de PRE falando de seu salvador; gasta 4 PE para +1d20 ou +1d4 cura em Acalentar."
+        },
+        {
+          "marco": "65%",
+          "nome": "Dedicação",
+          "descricao": "RD mental 10; gasta 2 PE para reduzir efeito paranormal à metade sem rolar resistência."
+        },
+        {
+          "marco": "99%",
+          "nome": "Discípulo",
+          "descricao": "Sacrifica 1 SAN permanente: na cena, enquanto no mesmo local que 1 pessoa escolhida, você não cai abaixo de 1 PV ou 1 SAN e todo dano sofrido é transferido para ela."
+        }
+      ]
+    },
+    {
+      "id": "gdc_templario",
+      "nome": "Templário",
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Fúria Maldita",
+          "descricao": "+2 margem de ameaça corpo a corpo; cada crítico aumenta seu limite de PE em +1 na cena."
+        },
+        {
+          "marco": "40%",
+          "nome": "Um por Um",
+          "descricao": "Ao finalizar um inimigo, gasta 3 PE para +1 dado de dano e +2 margem de ameaça no próximo ataque em alcance curto."
+        },
+        {
+          "marco": "65%",
+          "nome": "Assassino Frenético",
+          "descricao": "Ao finalizar um ser, todos com linha de visão em alcance longo testam Vontade (DT PRE) ou ficam Pasmos (sucesso: Apavorados)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Executor",
+          "descricao": "Gasta 2 PE (+5 PE por passo extra, máx +3) para aumentar multiplicador de crítico, OU 5 PE para dano máximo em crítico."
+        }
+      ]
+    },
+    {
+      "id": "gdc_arqueiro",
+      "nome": "Arqueiro",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Otimização",
+          "descricao": "Escolha 1 arco ou balestra: -1 espaço e +2 na margem de ameaça."
+        },
+        {
+          "marco": "40%",
+          "nome": "Precisão",
+          "descricao": "+5 em Pontaria ao mirar com arco/balestra; gasta 2 PE mirado para +1 dado de dano."
+        },
+        {
+          "marco": "65%",
+          "nome": "Presteza Infalível",
+          "descricao": "Movimento carrega e padrão dispara até 3 tiros em cone (-1d20 em cada teste com 2 tiros; -2d20 com 3 tiros)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Na Mosca",
+          "descricao": "Ganha 2 modificações grátis na arma. 1x/rodada, 3 PE para tiro preciso aplicando penalidade anatômica (cego, +1x crítico, metade do desl. etc.)."
+        }
+      ]
+    },
+    {
+      "id": "gdc_audaz",
+      "nome": "Audaz",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Grito de Guerra",
+          "descricao": "1 PE para Diplomacia ou Intimidação contra Vontade em alcance curto (falha sofre efeito e recebe +1d20 no próximo teste)."
+        },
+        {
+          "marco": "40%",
+          "nome": "Iniciativa Precipitada",
+          "descricao": "Escolhe livremente quando agir na 1ª rodada do combate (depois segue a rolagem normal)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Adrenalina Feroz",
+          "descricao": "+2d20 em testes arriscados; sucesso mantém o bônus pelos próximos 3 testes, falha deixa Frustrado até o próximo interlúdio."
+        },
+        {
+          "marco": "99%",
+          "nome": "Tudo ou Nada",
+          "descricao": "2 PE em teste social para +2d20: sucesso sobe atitude em 2 passos (+1d6 SAN em Acalmar); falha reduz atitude em 2 passos com todo o grupo."
+        }
+      ]
+    },
+    {
+      "id": "gdc_batedor",
+      "nome": "Batedor",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Caça Fresca",
+          "descricao": "+3m de deslocamento; no 1º turno faz 2 ataques contra ser menor que você."
+        },
+        {
+          "marco": "40%",
+          "nome": "Duelo Injusto",
+          "descricao": "Em combate 1x1 recebe +1d20 em ataques e +1 dado de dano (perde se outro ser entrar na luta)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Aproveitar Carcaça",
+          "descricao": "Ao finalizar um ser, ação padrão e 2 PE para ganhar 2x limite de PE em PV temporários na cena."
+        },
+        {
+          "marco": "99%",
+          "nome": "Instinto Animal",
+          "descricao": "Imune a penalidades de clima/calor/frio (exceto furacão/tornado), ignora terreno difícil e escalada/natação iguais ao deslocamento normal."
+        }
+      ]
+    },
+    {
+      "id": "gdc_bruxo",
+      "nome": "Bruxo",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Sinais Paranormais",
+          "descricao": "Aprende 1 ritual entre Eletrocussão, Armadura de Sangue, Perturbação, Definhar ou Cinerária (em 65% aprende outro ou libera Discente/Verdadeiro do primeiro)."
+        },
+        {
+          "marco": "40%",
+          "nome": "Monstros e Humanos",
+          "descricao": "Designa 1 arma para criaturas e 1 para humanos; usando a arma certa, +1 no multiplicador de crítico."
+        },
+        {
+          "marco": "65%",
+          "nome": "Sobre-Humano",
+          "descricao": "+1 em FOR, VIG ou AGI (pode passar de 5) e recebe visão noturna."
+        },
+        {
+          "marco": "99%",
+          "nome": "Sangue Frio",
+          "descricao": "Cura Acelerada 5 na 1ª vez que ficar Machucado na cena. Gasta 2 PE antes de atacar para dobrar o dano contra criaturas até 1 tamanho maior."
+        }
+      ]
+    },
+    {
+      "id": "gdc_cacador_recompensas",
+      "nome": "Caçador de Recompensas",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "especial": "Requer treinamento em Pontaria.",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Alvo na Mira",
+          "descricao": "Sua arma de fogo ganha Mira Laser, Mira Telescópica ou Visão de Calor grátis (sem subir categoria); mirar concede +1d20 no ataque."
+        },
+        {
+          "marco": "40%",
+          "nome": "Equipamento Externo",
+          "descricao": "Recebe +1 item adicional da maior categoria permitida pela sua patente."
+        },
+        {
+          "marco": "65%",
+          "nome": "Membro da Guilda",
+          "descricao": "1x/missão, convoca um Aliado de qualquer tipo até o próximo interlúdio."
+        },
+        {
+          "marco": "99%",
+          "nome": "Inspiração Frenética",
+          "descricao": "Após abater um alvo, o próximo acerto causa dano máximo como se fosse acerto crítico."
+        }
+      ]
+    },
+    {
+      "id": "gdc_executor",
+      "nome": "Executor",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Rasteamento Preciso",
+          "descricao": "+5 em Sobrevivência para rastrear (+1d20 se conhecer o alvo) sem penalidade de deslocamento."
+        },
+        {
+          "marco": "40%",
+          "nome": "Perscrutar Alvo",
+          "descricao": "Observar alvo sem ser notado por 3+ rodadas concede +1d20 em ataques e investigação contra ele."
+        },
+        {
+          "marco": "65%",
+          "nome": "Habilidades de Caça",
+          "descricao": "Gasta 2 PE: Manipulação Vocal (+10 Enganação imitando voz), Passos Silenciosos (+3m furtivo sem penalidade) ou Código de Honra (dobra dados extras contra alvos desprevenidos/incapacitados)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Vigilante",
+          "descricao": "Primeiro ataque contra humano/animal rastreado desprevenido causa Dano Massivo automático; contra criatura reduz 1 atributo dela em -1 na cena."
+        }
+      ]
+    },
+    {
+      "id": "gdc_renegado",
+      "nome": "Renegado",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "especial": "Requer treinamento em Ocultismo.",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Maldição Inerte",
+          "descricao": "Escolhe 1 poder paranormal sem perder o ganho de SAN do nível, mas precisa gastar 2 PE e 1 SAN toda cena para ativá-lo."
+        },
+        {
+          "marco": "40%",
+          "nome": "Sangue Contaminado",
+          "descricao": "Aprende 3 rituais de 1 elemento; em O Custo do Paranormal, falha sacrifica 1 SAN e sucesso perde PE iguais ao custo."
+        },
+        {
+          "marco": "65%",
+          "nome": "Evocar Pragas",
+          "descricao": "3 PE e 1 SAN em alcance curto por 1 rodada: Atonia (-1 dado dano), Azaração (-1d20 testes), Catatonia (-5 Defesa), Epifania (-5 RD não elemental) ou Necrose (sem cura)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Despertado",
+          "descricao": "RD mental 10 (inclusive em rituais), aprende +2 rituais e +10 em testes de Invocação de Criaturas."
+        }
+      ]
+    },
+    {
+      "id": "gdc_sobrevivente",
+      "nome": "Sobrevivente (GdC)",
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "especial": "Requer treinamento em Sobrevivência.",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Armas Criativas",
+          "descricao": "Sem penalidade em armas improvisadas, +1 dado de dano com elas e gasta 1 PE para +2 em perícia compatível."
+        },
+        {
+          "marco": "40%",
+          "nome": "Mestre das Matas",
+          "descricao": "Ignora terreno difícil; 1x/cena gasta 2 PE para substituir qualquer teste por Sobrevivência com +1d20."
+        },
+        {
+          "marco": "65%",
+          "nome": "Terreno Propício",
+          "descricao": "Escolha Urbano ou Natural: nesse terreno recebe +5 em Acrobacia, Atletismo, Furtividade, Percepção e Sobrevivência, e gasta 2 PE para somar AGI novamente na Defesa na cena."
+        },
+        {
+          "marco": "99%",
+          "nome": "Vocação Remanescente",
+          "descricao": "Sucessos (exceto Ocultismo) dão +1d20 no próximo teste; falhar com o bônus concede metade do limite de PE em PV ou PE temporários. Dormir conta sempre como descanso luxuoso."
+        }
+      ]
+    }
+  ],
+  "regrasNex99Plus": [
+    {
+      "classe": "combatente",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "A cada +5% após 99%: +1 Defesa e +1d4 em todos os danos não paranormais, além de PV/PE/SAN."
+    },
+    {
+      "classe": "especialista",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "A cada +5% após 99%: torna-se treinado ou sobe 1 grau de treinamento em 1 perícia, além de PV/PE/SAN."
+    },
+    {
+      "classe": "ocultista",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "A cada +5% após 99%: aprende 1 novo ritual à escolha (exceto Medo exclusivo de trilha), além de PV/PE/SAN."
+    },
+    {
+      "classe": "devoto",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "A cada +5% após 99%: +1d4 em todos os danos paranormais e +1 no limite de PE para rituais, além de PV/PE/SAN."
+    },
+    {
+      "classe": "predador",
+      "source": "grimorio_do_cataclisma",
+      "efeito": "A cada +5% após 99%: +1 nos benefícios de Alimentar-se, Dormir e Relaxar no interlúdio, além de PV/PE/SAN."
+    }
+  ]
+}

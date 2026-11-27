@@ -11,6 +11,7 @@ import {
   Flame,
   Minus,
   Plus,
+  Search,
   Sparkles,
   Upload,
 } from "lucide-react";
@@ -162,6 +163,9 @@ export default function NovoAgenteWizardPage() {
   >("percepcao");
   const [selectedPowerIds, setSelectedPowerIds] = useState<string[]>([]);
   const [selectedRitualIds, setSelectedRitualIds] = useState<string[]>([]);
+  const [originSearch, setOriginSearch] = useState("");
+  const [powerSearch, setPowerSearch] = useState("");
+  const [ritualSearch, setRitualSearch] = useState("");
 
   const toggleSource = (src: ContentSource) => {
     setEnabledSources((prev) => {
@@ -433,6 +437,10 @@ export default function NovoAgenteWizardPage() {
     const initialResistances: Record<string, number> = {};
     if (eff?.rdMentalPorInt && attributes.INT > 0) {
       initialResistances.Mental = attributes.INT * eff.rdMentalPorInt;
+    }
+    if (eff?.rdMentalPorPre && attributes.PRE > 0) {
+      initialResistances.Mental =
+        (initialResistances.Mental ?? 0) + attributes.PRE * eff.rdMentalPorPre;
     }
     if (eff?.rdGeral && eff.rdGeral > 0) {
       initialResistances.Geral = eff.rdGeral;
@@ -913,64 +921,133 @@ export default function NovoAgenteWizardPage() {
       {/* ================= STEP 3: ORIGEM ================= */}
       {step === 3 && (
         <Card className="p-6 space-y-4">
-          <div>
-            <h2 className="text-base font-bold text-zinc-100">Escolha sua Origem</h2>
-            <p className="text-xs text-zinc-400">
-              Aplica automaticamente 2 perícias treinadas e o poder de origem (incluindo bônus passivos).
-            </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#22222A] pb-3">
+            <div>
+              <h2 className="font-display text-base font-bold text-[#F4F4F5]">
+                Escolha sua Origem ({filteredOrigins.length} disponíveis)
+              </h2>
+              <p className="text-xs text-[#8E8E9E] mt-0.5">
+                Aplica automaticamente as perícias treinadas e o poder de origem (incluindo bônus passivos).
+              </p>
+            </div>
+            <div className="relative w-full sm:w-72">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
+              <Input
+                value={originSearch}
+                onChange={(e) => setOriginSearch(e.target.value)}
+                placeholder="Buscar origem, perícia ou poder..."
+                className="h-8 pl-8 text-xs"
+              />
+            </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {filteredOrigins.map((origin) => {
-              const selected = selectedOrigin.id === origin.id;
-              return (
-                <button
-                  key={origin.id}
-                  type="button"
-                  onClick={() => setOriginId(origin.id)}
-                  className={cn(
-                    "rounded-md border p-4 text-left transition-colors flex flex-col justify-between gap-2",
-                    selected
-                      ? "border-[#F4F4F5] bg-[#16161C]"
-                      : "border-[#22222A] bg-[#0D0D11] hover:border-[#32323E]"
-                  )}
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm font-bold text-zinc-100">{origin.name}</h3>
-                      <div className="flex items-center gap-1 shrink-0">
+          <div className="flex flex-col gap-2.5">
+            {filteredOrigins
+              .filter((origin) => {
+                const q = originSearch.trim().toLowerCase();
+                if (!q) return true;
+                return (
+                  origin.name.toLowerCase().includes(q) ||
+                  origin.powerName.toLowerCase().includes(q) ||
+                  origin.powerDescription.toLowerCase().includes(q) ||
+                  origin.description.toLowerCase().includes(q) ||
+                  origin.trainedSkills.some((sk) =>
+                    (SKILLS_BY_KEY[sk]?.name ?? sk).toLowerCase().includes(q)
+                  )
+                );
+              })
+              .map((origin) => {
+                const selected = selectedOrigin.id === origin.id;
+                const showNarrativeDesc =
+                  origin.description &&
+                  origin.description.trim() !== origin.powerDescription.trim();
+                return (
+                  <button
+                    key={origin.id}
+                    type="button"
+                    onClick={() => setOriginId(origin.id)}
+                    className={cn(
+                      "w-full rounded-md border border-l-[3px] px-4 py-3.5 text-left transition-colors space-y-2.5",
+                      selected
+                        ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
+                        : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+                    )}
+                  >
+                    {/* Header Row: Name + Perícias + Fonte */}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <span
+                          className={cn(
+                            "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
+                            selected
+                              ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                              : "border-[#32323E] bg-[#09090B] text-transparent"
+                          )}
+                        >
+                          <Check className="h-3 w-3" />
+                        </span>
+                        <h3 className="font-display text-[15px] font-bold text-[#F4F4F5]">
+                          {origin.name}
+                        </h3>
                         <SourceBadge source={origin.source} />
-                        <Badge variant="outline" className="text-[9px]">
+                        <span className="font-mono text-[10px] text-[#6E6E7E]">
                           {SOURCE_LABELS[origin.source ?? "livro_basico"]}
-                        </Badge>
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {origin.trainedSkills.map((sk) => (
+                          <Badge
+                            key={sk}
+                            variant="purple"
+                            className="font-mono text-[10px]"
+                          >
+                            {SKILLS_BY_KEY[sk]?.name ?? sk}
+                          </Badge>
+                        ))}
+                        {origin.trainedSkillNotes?.map((note, idx) => (
+                          <Badge
+                            key={idx}
+                            variant="outline"
+                            className="font-mono text-[10px] text-[#D4D4D8]"
+                          >
+                            {note}
+                          </Badge>
+                        ))}
                       </div>
                     </div>
+
                     {origin.prerequisites && (
-                      <p className="mt-1 font-mono text-[10px] text-amber-300">
+                      <p className="font-mono text-[11px] text-amber-300">
                         Pré-requisito: {origin.prerequisites}
                       </p>
                     )}
-                    <p className="mt-1 text-[11px] text-zinc-400 line-clamp-2">
-                      {origin.description}
-                    </p>
-                  </div>
 
-                  <div className="pt-2 border-t border-[#20202C] space-y-1">
-                    <div className="flex flex-wrap gap-1">
-                      {origin.trainedSkills.map((sk) => (
-                        <Badge key={sk} variant="purple" className="text-[10px]">
-                          {SKILLS_BY_KEY[sk]?.name ?? sk}
-                        </Badge>
-                      ))}
+                    {showNarrativeDesc && (
+                      <p className="text-xs text-[#A1A1AA] leading-relaxed">
+                        {origin.description}
+                      </p>
+                    )}
+
+                    {/* Power & Full Description Below */}
+                    <div className="rounded-sm border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5 space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-purple-300">
+                          PODER DE ORIGEM · {origin.powerName}
+                        </span>
+                        {(origin.powerPeCost ?? 0) > 0 && (
+                          <span className="font-mono text-[10px] text-amber-300">
+                            ({origin.powerPeCost} PE)
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-[13px] text-[#D4D4D8] leading-relaxed">
+                        {origin.powerDescription}
+                      </p>
                     </div>
-                    <p className="text-[11px] text-zinc-300">
-                      <strong className="text-purple-300">{origin.powerName}:</strong>{" "}
-                      <span className="text-zinc-400">{origin.powerDescription}</span>
-                    </p>
-                  </div>
-                </button>
-              );
-            })}
+                  </button>
+                );
+              })}
           </div>
         </Card>
       )}
@@ -978,16 +1055,20 @@ export default function NovoAgenteWizardPage() {
       {/* ================= STEP 4: CLASSE & TRILHA ================= */}
       {step === 4 && (
         <Card className="p-6 space-y-6">
-          <div>
-            <h2 className="text-base font-bold text-zinc-100">
-              Classe {trilhaUnlocked ? "& Trilha" : "(Trilha desbloqueia em NEX 10% / Estágio 2)"}
+          <div className="border-b border-[#22222A] pb-3">
+            <h2 className="font-display text-base font-bold text-[#F4F4F5]">
+              Classe{" "}
+              {trilhaUnlocked
+                ? "& Trilha"
+                : "(Trilha desbloqueia em NEX 10% / Estágio 2)"}
             </h2>
-            <p className="text-xs text-zinc-400">
-              Define PV, PE, SAN, PD, proficiências e habilidades principais do personagem.
+            <p className="text-xs text-[#8E8E9E] mt-0.5">
+              Define PV, PE, SAN, PD, proficiências e habilidades base do personagem.
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
+          {/* Single-Column Vertical Class List */}
+          <div className="flex flex-col gap-3">
             {ALL_CLASSES.filter((c) =>
               mode === "sobrevivente"
                 ? c.id === "sobrevivente"
@@ -1008,35 +1089,87 @@ export default function NovoAgenteWizardPage() {
                     setSelectedRitualIds([]);
                   }}
                   className={cn(
-                    "rounded-md border p-4 text-left transition-colors space-y-2",
+                    "w-full rounded-md border border-l-[3px] px-4 py-4 text-left transition-colors space-y-3",
                     selected
-                      ? "border-[#F4F4F5] bg-[#16161C]"
-                      : "border-[#22222A] bg-[#0D0D11] hover:border-[#32323E]"
+                      ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
+                      : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
                   )}
                 >
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-bold text-zinc-100">{cls.name}</h3>
-                    <Badge variant="outline" className="font-mono text-[10px]">
-                      PV {cls.initialPv}+VIG
-                    </Badge>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <span
+                        className={cn(
+                          "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
+                          selected
+                            ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                            : "border-[#32323E] bg-[#09090B] text-transparent"
+                        )}
+                      >
+                        <Check className="h-3 w-3" />
+                      </span>
+                      <h3 className="font-display text-base font-bold text-[#F4F4F5]">
+                        {cls.name}
+                      </h3>
+                      <SourceBadge source={cls.source} />
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-1.5 font-mono text-[10px]">
+                      <Badge variant="outline">
+                        PV {cls.initialPv}+VIG (+{cls.pvPerLevel}+VIG/NEX)
+                      </Badge>
+                      <Badge variant="outline">
+                        PE {cls.initialPe}+PRE (+{cls.pePerLevel}+PRE/NEX)
+                      </Badge>
+                      <Badge variant="outline">
+                        SAN {cls.initialSan} (+{cls.sanPerLevel}/NEX)
+                      </Badge>
+                    </div>
                   </div>
-                  <p className="text-[11px] text-zinc-400">{cls.description}</p>
-                  <div className="pt-2 border-t border-[#20202C] font-mono text-[10px] text-zinc-400 space-y-0.5">
-                    <p>PE: {cls.initialPe}+PRE (+{cls.pePerLevel}+PRE) • SAN: {cls.initialSan} (+{cls.sanPerLevel})</p>
-                    <p>Perícias: {cls.defaultSkillCount}</p>
-                    <p>Proficiências: {cls.baseProficiencies}</p>
+
+                  {/* Description directly below title */}
+                  <p className="text-[13px] text-[#D4D4D8] leading-relaxed">
+                    {cls.description}
+                  </p>
+
+                  {/* Base Ability & Proficiencies Box */}
+                  <div className="rounded-sm border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5 space-y-1.5 text-xs">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-[#A1A1AA]">
+                      <span>
+                        <strong className="text-[#F4F4F5]">Perícias:</strong>{" "}
+                        {cls.defaultSkillCount}
+                      </span>
+                      <span>
+                        <strong className="text-[#F4F4F5]">
+                          Proficiências:
+                        </strong>{" "}
+                        {cls.baseProficiencies}
+                      </span>
+                    </div>
+                    <p className="text-[12px] text-[#D4D4D8] leading-relaxed pt-1 border-t border-[#181820]">
+                      <strong className="font-mono text-[10px] uppercase tracking-wider text-purple-300">
+                        HABILIDADE BASE · {cls.baseAbility.name}:
+                      </strong>{" "}
+                      {cls.baseAbility.description}
+                    </p>
                   </div>
                 </button>
               );
             })}
           </div>
 
-          {/* Trail Selection */}
-          <div className="space-y-3 pt-2 border-t border-[#242432]">
+          {/* Single-Column Vertical Trail Selection */}
+          <div className="space-y-3 pt-4 border-t border-[#22222A]">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-zinc-100">
-                Trilha de {selectedClass.name}
-              </h3>
+              <div>
+                <h3 className="font-display text-sm font-bold text-[#F4F4F5]">
+                  Trilha de {selectedClass.name} ({availableTrails.length}{" "}
+                  disponíveis)
+                </h3>
+                <p className="text-xs text-[#8E8E9E]">
+                  Cada trilha concede habilidades progressivas em NEX 10%, 40%,
+                  65% e 99%.
+                </p>
+              </div>
               {!trilhaUnlocked && (
                 <Badge variant="warning" className="text-[10px]">
                   {effectiveClassId === "sobrevivente"
@@ -1047,7 +1180,7 @@ export default function NovoAgenteWizardPage() {
             </div>
 
             {trilhaUnlocked ? (
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="flex flex-col gap-2.5">
                 {availableTrails.map((t) => {
                   const selected = trilhaId === t.id;
                   return (
@@ -1056,19 +1189,64 @@ export default function NovoAgenteWizardPage() {
                       type="button"
                       onClick={() => setTrilhaId(selected ? null : t.id)}
                       className={cn(
-                        "rounded-md border p-3.5 text-left transition-colors space-y-1.5",
+                        "w-full rounded-md border border-l-[3px] px-4 py-3.5 text-left transition-colors space-y-2.5",
                         selected
-                          ? "border-[#F4F4F5] bg-[#16161C]"
-                          : "border-[#22222A] bg-[#0D0D11] hover:border-[#32323E]"
+                          ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
+                          : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
                       )}
                     >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-bold text-zinc-100">{t.name}</span>
-                        <Badge variant="outline" className="text-[9px]">
-                          {t.abilitiesByNex[0]?.name}
-                        </Badge>
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2.5 flex-wrap">
+                          <span
+                            className={cn(
+                              "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
+                              selected
+                                ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                                : "border-[#32323E] bg-[#09090B] text-transparent"
+                            )}
+                          >
+                            <Check className="h-3 w-3" />
+                          </span>
+                          <span className="font-display text-[15px] font-bold text-[#F4F4F5]">
+                            {t.name}
+                          </span>
+                          <SourceBadge source={t.source} />
+                          <span className="font-mono text-[10px] text-[#6E6E7E]">
+                            {SOURCE_LABELS[t.source ?? "livro_basico"]}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1">
+                          {t.abilitiesByNex.map((ab) => (
+                            <Badge
+                              key={`${t.id}-${ab.nex}`}
+                              variant="outline"
+                              className="font-mono text-[10px]"
+                            >
+                              {effectiveClassId === "sobrevivente"
+                                ? `Est. ${ab.nex}`
+                                : `${ab.nex}%`}{" "}
+                              · {ab.name}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
-                      <p className="text-[11px] text-zinc-400">{t.description}</p>
+
+                      <div className="space-y-1.5 rounded-sm border border-[#1E1E26] bg-[#0A0A0E] px-3.5 py-2.5">
+                        {t.abilitiesByNex.map((ab) => (
+                          <p
+                            key={`${t.id}-desc-${ab.nex}`}
+                            className="text-[12.5px] text-[#D4D4D8] leading-relaxed"
+                          >
+                            <strong className="font-mono text-[10px] uppercase tracking-wider text-purple-300">
+                              {effectiveClassId === "sobrevivente"
+                                ? `ESTÁGIO ${ab.nex}`
+                                : `NEX ${ab.nex}%`}{" "}
+                              — {ab.name}:
+                            </strong>{" "}
+                            {ab.description}
+                          </p>
+                        ))}
+                      </div>
                     </button>
                   );
                 })}
@@ -1076,7 +1254,10 @@ export default function NovoAgenteWizardPage() {
             ) : (
               <p className="text-xs text-zinc-500">
                 Você poderá escolher sua Trilha na ficha assim que atingir{" "}
-                {effectiveClassId === "sobrevivente" ? "o Estágio 2" : "NEX 10%"}.
+                {effectiveClassId === "sobrevivente"
+                  ? "o Estágio 2"
+                  : "NEX 10%"}
+                .
               </p>
             )}
           </div>
@@ -1238,46 +1419,90 @@ export default function NovoAgenteWizardPage() {
           {/* Powers unlocked by NEX */}
           {milestones.classPowersCount > 0 && (
             <Card className="p-6 space-y-4">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#22222A] pb-3">
                 <div>
-                  <h2 className="text-base font-bold text-zinc-100">
+                  <h2 className="font-display text-base font-bold text-zinc-100">
                     Poderes por NEX ({nex}%)
                   </h2>
                   <p className="text-xs text-zinc-400">
-                    Escolha até {milestones.classPowersCount} poder(es) de Classe, Gerais ou Transcender.
+                    Escolha até {milestones.classPowersCount} poder(es) de Classe, Gerais ou Paranormais.
                   </p>
                 </div>
-                <Badge variant="purple" className="font-mono">
-                  {selectedPowerIds.length} / {milestones.classPowersCount}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <div className="relative w-full sm:w-64">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
+                    <Input
+                      value={powerSearch}
+                      onChange={(e) => setPowerSearch(e.target.value)}
+                      placeholder="Filtrar poderes..."
+                      className="h-8 pl-8 text-xs"
+                    />
+                  </div>
+                  <Badge variant="purple" className="font-mono shrink-0">
+                    {selectedPowerIds.length} / {milestones.classPowersCount}
+                  </Badge>
+                </div>
               </div>
-              <div className="grid gap-2.5 sm:grid-cols-2 max-h-72 overflow-y-auto pr-1">
-                {availablePowers.map((pw) => {
-                  const picked = selectedPowerIds.includes(pw.id);
-                  return (
-                    <button
-                      key={pw.id}
-                      type="button"
-                      onClick={() => togglePower(pw.id)}
-                      className={cn(
-                        "rounded-md border p-3 text-left transition-colors space-y-1",
-                        picked
-                          ? "border-[#F4F4F5] bg-[#16161C]"
-                          : "border-[#22222A] bg-[#0D0D11] hover:border-[#32323E]"
-                      )}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-bold text-zinc-100">{pw.name}</span>
-                        <Badge variant="outline" className="text-[9px] uppercase">
-                          {pw.category}
-                        </Badge>
-                      </div>
-                      <p className="text-[11px] text-zinc-400 line-clamp-2">
-                        {pw.description}
-                      </p>
-                    </button>
-                  );
-                })}
+              <div className="flex flex-col gap-2 max-h-96 overflow-y-auto pr-1">
+                {availablePowers
+                  .filter((pw) => {
+                    const q = powerSearch.trim().toLowerCase();
+                    if (!q) return true;
+                    return (
+                      pw.name.toLowerCase().includes(q) ||
+                      pw.description.toLowerCase().includes(q) ||
+                      pw.category.toLowerCase().includes(q) ||
+                      (pw.prerequisites?.toLowerCase().includes(q) ?? false)
+                    );
+                  })
+                  .map((pw) => {
+                    const picked = selectedPowerIds.includes(pw.id);
+                    return (
+                      <button
+                        key={pw.id}
+                        type="button"
+                        onClick={() => togglePower(pw.id)}
+                        className={cn(
+                          "w-full rounded-md border border-l-[3px] px-4 py-3 text-left transition-colors space-y-1.5",
+                          picked
+                            ? "border-[#F4F4F5] border-l-[#F4F4F5] bg-[#16161C]"
+                            : "border-[#22222A] border-l-[#32323E] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+                        )}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={cn(
+                                "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
+                                picked
+                                  ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                                  : "border-[#32323E] bg-[#09090B] text-transparent"
+                              )}
+                            >
+                              <Check className="h-3 w-3" />
+                            </span>
+                            <span className="font-display text-sm font-bold text-[#F4F4F5]">
+                              {pw.name}
+                            </span>
+                            <SourceBadge source={pw.source} />
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            {pw.prerequisites && (
+                              <span className="font-mono text-[10px] text-amber-300">
+                                Req: {pw.prerequisites}
+                              </span>
+                            )}
+                            <Badge variant="outline" className="text-[9px] uppercase font-mono">
+                              {pw.category}
+                            </Badge>
+                          </div>
+                        </div>
+                        <p className="text-[12.5px] text-[#D4D4D8] leading-relaxed">
+                          {pw.description}
+                        </p>
+                      </button>
+                    );
+                  })}
               </div>
             </Card>
           )}
@@ -1285,12 +1510,15 @@ export default function NovoAgenteWizardPage() {
           {/* Initial Rituals for Ocultista / Devoto */}
           {(effectiveClassId === "ocultista" || effectiveClassId === "devoto") && (
             <Card className="p-6 space-y-4">
-              <div className="flex items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#22222A] pb-3">
                 <div className="flex items-center gap-2">
                   <Flame className="h-4 w-4 text-purple-400" />
                   <div>
-                    <h2 className="text-base font-bold text-zinc-100">
-                      Rituais Iniciais de {effectiveClassId === "devoto" ? "Devoto (Disruptura)" : "Ocultista"}
+                    <h2 className="font-display text-base font-bold text-zinc-100">
+                      Rituais Iniciais de{" "}
+                      {effectiveClassId === "devoto"
+                        ? "Devoto (Disruptura)"
+                        : "Ocultista"}
                     </h2>
                     <p className="text-xs text-zinc-400">
                       {effectiveClassId === "devoto"
@@ -1300,46 +1528,86 @@ export default function NovoAgenteWizardPage() {
                     </p>
                   </div>
                 </div>
-                <Badge variant="purple" className="font-mono">
-                  {selectedRitualIds.length} / {initialRitualQuota}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <div className="relative w-full sm:w-64">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
+                    <Input
+                      value={ritualSearch}
+                      onChange={(e) => setRitualSearch(e.target.value)}
+                      placeholder="Filtrar rituais..."
+                      className="h-8 pl-8 text-xs"
+                    />
+                  </div>
+                  <Badge variant="purple" className="font-mono shrink-0">
+                    {selectedRitualIds.length} / {initialRitualQuota}
+                  </Badge>
+                </div>
               </div>
 
-              <div className="grid gap-2.5 sm:grid-cols-2 max-h-72 overflow-y-auto pr-1">
-                {availableRituals.map((rit) => {
-                  const picked = selectedRitualIds.includes(rit.id);
-                  const st = ELEMENT_STYLES[rit.element];
-                  return (
-                    <button
-                      key={rit.id}
-                      type="button"
-                      onClick={() => toggleRitual(rit.id)}
-                      className={cn(
-                        "rounded-md border p-3 text-left transition-colors space-y-1",
-                        picked
-                          ? "border-[#F4F4F5] bg-[#16161C]"
-                          : "border-[#22222A] bg-[#0D0D11] hover:border-[#32323E]"
-                      )}
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-bold text-zinc-100">
-                          {rit.name}
-                        </span>
-                        <div className="flex items-center gap-1">
-                          <span className={cn("rounded border px-1.5 py-0.5 text-[9px]", st.badge)}>
-                            {rit.element}
-                          </span>
-                          <Badge variant="outline" className="font-mono text-[9px]">
-                            {rit.circle}ºC
-                          </Badge>
+              <div className="flex flex-col gap-2 max-h-96 overflow-y-auto pr-1">
+                {availableRituals
+                  .filter((rit) => {
+                    const q = ritualSearch.trim().toLowerCase();
+                    if (!q) return true;
+                    return (
+                      rit.name.toLowerCase().includes(q) ||
+                      rit.description.toLowerCase().includes(q) ||
+                      rit.element.toLowerCase().includes(q)
+                    );
+                  })
+                  .map((rit) => {
+                    const picked = selectedRitualIds.includes(rit.id);
+                    const st = ELEMENT_STYLES[rit.element];
+                    return (
+                      <button
+                        key={rit.id}
+                        type="button"
+                        onClick={() => toggleRitual(rit.id)}
+                        className={cn(
+                          "w-full rounded-md border border-l-[3px] px-4 py-3 text-left transition-colors space-y-1.5",
+                          st.borderLeft,
+                          picked
+                            ? "border-[#F4F4F5] bg-[#16161C]"
+                            : "border-[#22222A] bg-[#0D0D11] hover:border-[#32323E] hover:bg-[#111117]"
+                        )}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span
+                              className={cn(
+                                "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border font-mono text-[10px]",
+                                picked
+                                  ? "border-[#F4F4F5] bg-[#F4F4F5] text-[#09090B]"
+                                  : "border-[#32323E] bg-[#09090B] text-transparent"
+                              )}
+                            >
+                              <Check className="h-3 w-3" />
+                            </span>
+                            <span className="font-display text-sm font-bold text-[#F4F4F5]">
+                              {rit.name}
+                            </span>
+                            <SourceBadge source={rit.source} />
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span
+                              className={cn(
+                                "rounded border px-1.5 py-0.5 font-mono text-[10px]",
+                                st.badge
+                              )}
+                            >
+                              {rit.element}
+                            </span>
+                            <Badge variant="outline" className="font-mono text-[10px]">
+                              {rit.circle}º Círculo
+                            </Badge>
+                          </div>
                         </div>
-                      </div>
-                      <p className="text-[11px] text-zinc-400 line-clamp-2">
-                        {rit.description}
-                      </p>
-                    </button>
-                  );
-                })}
+                        <p className="text-[12.5px] text-[#D4D4D8] leading-relaxed">
+                          {rit.description}
+                        </p>
+                      </button>
+                    );
+                  })}
               </div>
             </Card>
           )}

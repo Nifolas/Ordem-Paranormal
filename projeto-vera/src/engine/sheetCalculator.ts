@@ -389,6 +389,8 @@ export function calculateVitals(params: {
   transcenderCount?: number;
   halfInitialSan?: boolean;
   permanentSanLoss?: number;
+  /** Poder Vitalidade Sofrida (AS #3): Combatente com PV inicial 24 + VIG e +6 + VIG por NEX. */
+  vitalidadeSofrida?: boolean;
   /** Ordo Calamitas: penalidade fixa de SAN por Transcender (em vez de zerar o ganho do nível). */
   transcenderSanPenaltyPerCount?: number;
 }): {
@@ -411,6 +413,7 @@ export function calculateVitals(params: {
     transcenderCount = 0,
     halfInitialSan = false,
     permanentSanLoss = 0,
+    vitalidadeSofrida = false,
     transcenderSanPenaltyPerCount,
   } = params;
 
@@ -438,7 +441,11 @@ export function calculateVitals(params: {
     const peGainPerLevel = Math.max(1, prog.pePerLevel + pre);
     const pdGainPerLevel = Math.max(1, prog.pdPerLevel + pre);
 
-    maxPv = Math.max(1, prog.initialPv + vig + k * pvGainPerLevel);
+    if (vitalidadeSofrida && classId === "combatente") {
+      maxPv = Math.max(1, 24 + vig + k * Math.max(1, 6 + vig));
+    } else {
+      maxPv = Math.max(1, prog.initialPv + vig + k * pvGainPerLevel);
+    }
     maxPe = Math.max(1, prog.initialPe + pre + k * peGainPerLevel);
     maxPd = Math.max(1, prog.initialPd + pre + k * pdGainPerLevel);
 
@@ -556,6 +563,15 @@ export function getPassiveSkillModifiers(
  * Origin passives (Cultista Arrependido, Desgarrado, Vítima, Universitário, Mergulhador),
  * and Trail passives (Tropa de Choque Casca Grossa, Bibliotecário 99%, Durão Estágio 2/3).
  */
+export function hasVitalidadeSofrida(agent: Agent): boolean {
+  if (agent.classId !== "combatente") return false;
+  return (agent.abilities ?? []).some(
+    (a) =>
+      a.id === "as3_vitalidade_sofrida" ||
+      a.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim() === "vitalidade sofrida"
+  );
+}
+
 export function getAgentEffectiveVitals(agent: Agent) {
   const origin = getOriginById(agent.originId);
   const eff = origin?.efeitosPassivos;
@@ -578,23 +594,63 @@ export function getAgentEffectiveVitals(agent: Agent) {
     transcenderCount,
     halfInitialSan,
     permanentSanLoss: agent.permanentSanLoss ?? 0,
+    vitalidadeSofrida: hasVitalidadeSofrida(agent),
     transcenderSanPenaltyPerCount: getTranscenderSanPenaltyPerCount(
       agent.organization
     ),
   });
 
   // Origin passives
-  let bonusPv = eff?.pvFixo ?? 0;
+  const prog = CLASS_PROGRESSION[agent.classId];
+  const halfPvPenalty = eff?.metadePvInicial
+    ? Math.floor(prog.initialPv / 2)
+    : 0;
+  const halfPePenalty = eff?.metadePeInicial
+    ? Math.floor(prog.initialPe / 2)
+    : 0;
+
+  let bonusPv = (eff?.pvFixo ?? 0) - halfPvPenalty;
   let bonusSan = 0;
-  let bonusPe = 0;
+  let bonusPe = -halfPePenalty;
   let bonusPeLimit = eff?.limitePeBonus ?? 0;
 
   if (agent.classId !== "sobrevivente") {
+    const isHellHuntersOrigin =
+      originIdNorm === "treinado_hell_hunters" ||
+      originIdNorm === "as9_treinado_hell_hunters";
+
+    if (isHellHuntersOrigin) {
+      // Undo generic pvFixo/pvPor10Nex from eff so we can apply the exact branch
+      bonusPv -= eff?.pvFixo ?? 0;
+      const pontariaTr = agent.skills?.pontaria?.training ?? 0;
+      const reflexosTr = agent.skills?.reflexos?.training ?? 0;
+      const lutaTr = agent.skills?.luta?.training ?? 0;
+      const fortitudeTr = agent.skills?.fortitude?.training ?? 0;
+      const choseRangedBranch =
+        pontariaTr > 0 &&
+        reflexosTr > 0 &&
+        !(lutaTr > 0 && fortitudeTr > 0 && pontariaTr === 0);
+
+      // Milestones at 5% (+2 PV or +1 PE) and every +10% NEX from 5% (15%, 25%, ..., 95%)
+      // Also support standard floor(nex / 10) when NEX is an even multiple of 10 (10%, 20%...)
+      const stepsEvery10 =
+        agent.nex % 10 === 5
+          ? Math.floor(Math.max(0, agent.nex - 5) / 10)
+          : Math.floor(agent.nex / 10);
+
+      if (choseRangedBranch) {
+        bonusPe += 1 + stepsEvery10;
+      } else {
+        bonusPv += 2 + stepsEvery10;
+      }
+    } else {
+      if (eff?.pvPor10Nex) {
+        bonusPv += eff.pvPor10Nex * Math.floor(agent.nex / 10);
+      }
+    }
+
     if (eff?.pvPor5Nex) {
       bonusPv += eff.pvPor5Nex * auto.level;
-    }
-    if (eff?.pvPor10Nex) {
-      bonusPv += eff.pvPor10Nex * Math.floor(agent.nex / 10);
     }
     if (eff?.sanPor5Nex) {
       bonusSan += eff.sanPor5Nex * auto.level;
@@ -634,8 +690,18 @@ export function getAgentEffectiveVitals(agent: Agent) {
   const autoMaxPv = auto.maxPv + bonusPv;
   const autoMaxSan = auto.maxSan + bonusSan;
   const missionPePenalty = Math.max(0, agent.missionPeMaxPenalty ?? 0);
-  const autoMaxPe = Math.max(1, auto.maxPe + bonusPe - missionPePenalty);
-  const autoMaxPd = Math.max(1, auto.maxPd + bonusPe - missionPePenalty);
+  const retainedPeTotal = (agent.retainedRituals ?? []).reduce(
+    (sum, r) => sum + Math.max(0, r.peCost),
+    0
+  );
+  const autoMaxPe = Math.max(
+    1,
+    auto.maxPe + bonusPe - missionPePenalty - retainedPeTotal
+  );
+  const autoMaxPd = Math.max(
+    1,
+    auto.maxPd + bonusPe - missionPePenalty - retainedPeTotal
+  );
   const effectivePeLimit = auto.peLimit + bonusPeLimit;
 
   const maxPv =
@@ -725,6 +791,7 @@ export function calculateLoadAndCategories(params: {
   inventory: InventoryItem[];
   extraCapacityBonus?: number;
   organization?: OrganizationId;
+  classId?: AgentClassId;
 }) {
   const {
     forAttr,
@@ -732,6 +799,7 @@ export function calculateLoadAndCategories(params: {
     inventory,
     extraCapacityBonus = 0,
     organization,
+    classId,
   } = params;
 
   const extraCarryFromItems = inventory
@@ -769,7 +837,15 @@ export function calculateLoadAndCategories(params: {
     categoryCounts[finalCat] = (categoryCounts[finalCat] ?? 0) + qty;
   }
 
-  const categoryLimits = PATENTE_CATEGORY_LIMITS[patente];
+  const baseCategoryLimits = PATENTE_CATEGORY_LIMITS[patente];
+  const categoryLimits: Record<1 | 2 | 3 | 4, number> = {
+    ...baseCategoryLimits,
+    // Predador — Marca da Maldição: reduz em 1 o limite de itens de Categoria I
+    1:
+      classId === "predador"
+        ? Math.max(0, baseCategoryLimits[1] - 1)
+        : baseCategoryLimits[1],
+  };
   const categoryExceeded: Record<1 | 2 | 3 | 4, boolean> = {
     1: categoryCounts[1] > categoryLimits[1],
     2: categoryCounts[2] > categoryLimits[2],

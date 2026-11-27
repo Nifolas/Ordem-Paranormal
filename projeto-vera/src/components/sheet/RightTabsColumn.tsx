@@ -594,6 +594,49 @@ export function RightTabsColumn({
   };
 
   // --- RITUAL ACTIONS ---
+  const reterRitualEnabled = (agent.optionalRules ?? []).includes(
+    "reter_ritual"
+  );
+  const retainedRituals = agent.retainedRituals ?? [];
+  const retainedPeTotal = retainedRituals.reduce((s, r) => s + r.peCost, 0);
+
+  const handleRetainRitual = (ritual: AgentRitual, cost: number) => {
+    if (retainedRituals.some((r) => r.ritualId === ritual.id)) return;
+    const newMax = Math.max(1, vitals.maxPe - cost);
+    onUpdate((prev) => ({
+      ...prev,
+      retainedRituals: [
+        ...(prev.retainedRituals ?? []),
+        {
+          id: generateId("ret"),
+          ritualId: ritual.id,
+          name: ritual.name,
+          peCost: cost,
+        },
+      ],
+      status: {
+        ...prev.status,
+        pe: {
+          ...prev.status.pe,
+          current: Math.min(prev.status.pe.current, newMax),
+        },
+        san: {
+          ...prev.status.san,
+          current: Math.max(0, prev.status.san.current - 1),
+        },
+      },
+    }));
+  };
+
+  const handleReleaseRitual = (retainedId: string) => {
+    onUpdate((prev) => ({
+      ...prev,
+      retainedRituals: (prev.retainedRituals ?? []).filter(
+        (r) => r.id !== retainedId
+      ),
+    }));
+  };
+
   const handleCastRitual = (ritual: AgentRitual, version: RitualVersion) => {
     const resolvedSuperior = resolveSuperiorInfo(ritual);
     const cost = calculateRitualPeCost({
@@ -1312,6 +1355,47 @@ export function RightTabsColumn({
             </div>
 
             {/* Circle & Element Filters */}
+            {reterRitualEnabled && (
+              <div className="rounded-md border border-[#22222A] bg-[#0D0D11] p-3.5 space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-[#D4D4D8]">
+                    Rituais Retidos · Reter Ritual
+                  </span>
+                  <span className="font-mono text-[10px] text-[#8E8E9E] tabular-nums">
+                    {retainedRituals.length} retido(s) · −{retainedPeTotal}{" "}
+                    {resUnit} máx. · {vitals.maxPe} {resUnit} máx. efetivo
+                  </span>
+                </div>
+                {retainedRituals.length === 0 ? (
+                  <p className="font-mono text-[10px] text-[#6E6E7E]">
+                    Use &ldquo;Reter&rdquo; em um ritual de duração cena (após
+                    conjurar): custa 1 SAN e desconta o custo em PE do máximo e
+                    do atual até liberar.
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {retainedRituals.map((r) => (
+                      <span
+                        key={r.id}
+                        className="inline-flex items-center gap-2 rounded-sm border border-amber-500/40 bg-amber-500/10 px-2 py-1 font-mono text-[10px] text-amber-200"
+                      >
+                        {r.name} · −{r.peCost} {resUnit}
+                        <button
+                          type="button"
+                          onClick={() => handleReleaseRitual(r.id)}
+                          className="rounded-sm border border-amber-500/40 px-1 hover:bg-amber-500/20"
+                          title="Liberar ritual e restaurar o PE máximo"
+                        >
+                          Liberar
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Circle & Element Filters */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-1">
               <div className="flex flex-wrap items-center gap-1">
                 {[0, 1, 2, 3, 4].map((c) => {
@@ -1642,16 +1726,51 @@ export function RightTabsColumn({
                                   ? "MEDO · ISENTO DE CUSTO DO PARANORMAL"
                                   : `CUSTO DO PARANORMAL · OCULTISMO DT ${20 + versionCost}`}
                               </span>
-                              <Button
-                                size="sm"
-                                variant="primary"
-                                onClick={() =>
-                                  handleCastRitual(ritual, version)
-                                }
-                              >
-                                <Flame className="h-3.5 w-3.5" /> Conjurar (-
-                                {versionCost} {resUnit})
-                              </Button>
+                              <div className="flex flex-wrap items-center gap-2">
+                                {reterRitualEnabled &&
+                                  (() => {
+                                    const retained = retainedRituals.find(
+                                      (r) => r.ritualId === ritual.id
+                                    );
+                                    return retained ? (
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() =>
+                                          handleReleaseRitual(retained.id)
+                                        }
+                                        title="Liberar ritual retido e restaurar PE máximo"
+                                      >
+                                        Liberar (+{retained.peCost} {resUnit}{" "}
+                                        máx.)
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() =>
+                                          handleRetainRitual(
+                                            ritual,
+                                            versionCost
+                                          )
+                                        }
+                                        title="Reter: −1 SAN e −custo de PE do máximo e atual enquanto retido"
+                                      >
+                                        Reter (−{versionCost} {resUnit} máx.)
+                                      </Button>
+                                    );
+                                  })()}
+                                <Button
+                                  size="sm"
+                                  variant="primary"
+                                  onClick={() =>
+                                    handleCastRitual(ritual, version)
+                                  }
+                                >
+                                  <Flame className="h-3.5 w-3.5" /> Conjurar (-
+                                  {versionCost} {resUnit})
+                                </Button>
+                              </div>
                             </div>
                           </div>
                         );

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useAppStore } from "@/store/useAppStore";
 import { rollOrdemTest } from "@/lib/ordem-rules";
+import { drawBaralhoInfinitoCard } from "@/data/supplements";
 import { cn, ELEMENT_STYLES, formatSigned } from "@/lib/utils";
 import { FreeDiceRoller } from "@/components/FreeDiceRoller";
 import { Button, Input } from "@/components/ui/primitives";
@@ -169,6 +170,34 @@ export function RollOverlay() {
 
   const [attrPool, setAttrPool] = useState(2);
   const [attrBonus, setAttrBonus] = useState(5);
+  const [lastDrawnCard, setLastDrawnCard] = useState<{
+    total: number;
+    dice: [number, number];
+    carta: string;
+    efeito: string;
+  } | null>(null);
+
+  const handleDrawBaralhoInfinito = () => {
+    const drawn = drawBaralhoInfinitoCard();
+    setLastDrawnCard({
+      total: drawn.total,
+      dice: drawn.dice,
+      carta: drawn.card.carta,
+      efeito: drawn.card.efeito,
+    });
+    pushRoll({
+      actorName: "Rolador Rápido",
+      label: `Baralho Infinito (2d12): ${drawn.card.carta}`,
+      kind: "free",
+      element: "Energia",
+      formula: "2d12",
+      diceRolled: drawn.dice,
+      mode: "sum",
+      bonus: 0,
+      total: drawn.total,
+      details: `[${drawn.card.valor}] ${drawn.card.carta} — ${drawn.card.efeito}`,
+    });
+  };
 
   const handleOrdemQuickTest = () => {
     const res = rollOrdemTest({
@@ -326,6 +355,41 @@ export function RollOverlay() {
 
               {/* Free Dice Roller (d4, d6, d8, d10, d12, d20 + formula) */}
               <FreeDiceRoller actorName="Rolador Rápido" />
+
+              {/* Baralho Infinito (2d12 — Grimório do Cataclisma) */}
+              <div className="rounded-md border border-[#22222A] bg-[#101014] p-4 space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8E8E9E]">
+                    Baralho Infinito · Grimório do Cataclisma
+                  </span>
+                  <Button
+                    size="xs"
+                    variant="primary"
+                    onClick={handleDrawBaralhoInfinito}
+                    className="font-mono"
+                  >
+                    <Sparkles className="h-3 w-3" /> Baralho Infinito (2d12)
+                  </Button>
+                </div>
+                {lastDrawnCard && (
+                  <div className="rounded-sm border border-[#2C2C38] bg-[#0B0B0F] p-2.5 text-xs space-y-1">
+                    <div className="flex items-center justify-between font-mono">
+                      <span className="font-bold text-purple-300">
+                        {lastDrawnCard.carta}
+                      </span>
+                      <span className="text-[#8E8E9E]">
+                        2d12 [{lastDrawnCard.dice.join("+")}] ={" "}
+                        <strong className="text-[#F4F4F5]">
+                          {lastDrawnCard.total}
+                        </strong>
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-[#D4D4D8]">
+                      {lastDrawnCard.efeito}
+                    </p>
+                  </div>
+                )}
+              </div>
 
               {/* History */}
               <div className="space-y-2.5">

@@ -33,7 +33,12 @@ import {
   rollOrdemTest,
 } from "@/lib/ordem-rules";
 import { OPTIONAL_RULES_LIST } from "@/data/optionalRules";
-import { COMMUNITY_OPTIONAL_RULES } from "@/data/supplements";
+import {
+  COMMUNITY_CONDITIONS,
+  COMMUNITY_DISEASES_AND_POISONS,
+  COMMUNITY_OPTIONAL_RULES,
+  drawBaralhoInfinitoCard,
+} from "@/data/supplements";
 import { filterByEnabledSources } from "@/lib/sources";
 import { SourceBadge } from "@/components/SourceToggles";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
@@ -96,6 +101,35 @@ export default function EscudoDoMestrePage({
   const [customPv, setCustomPv] = useState(30);
   const [newClueTitle, setNewClueTitle] = useState("");
   const [newClueContent, setNewClueContent] = useState("");
+  const [lastInfiniteCard, setLastInfiniteCard] = useState<{
+    total: number;
+    dice: [number, number];
+    carta: string;
+    efeito: string;
+  } | null>(null);
+
+  const handleRollBaralhoInfinito = () => {
+    const drawn = drawBaralhoInfinitoCard();
+    setLastInfiniteCard({
+      total: drawn.total,
+      dice: drawn.dice,
+      carta: drawn.card.carta,
+      efeito: drawn.card.efeito,
+    });
+    pushRoll({
+      actorName: "Escudo do Mestre",
+      campaignId: campaign?.id,
+      label: `Baralho Infinito (2d12): ${drawn.card.carta}`,
+      kind: "free",
+      element: "Energia",
+      formula: "2d12",
+      diceRolled: drawn.dice,
+      mode: "sum",
+      bonus: 0,
+      total: drawn.total,
+      details: `[${drawn.card.valor}] ${drawn.card.carta} — ${drawn.card.efeito}`,
+    });
+  };
 
   const campaign = campaigns.find((c) => c.id === id);
 
@@ -318,6 +352,14 @@ export default function EscudoDoMestrePage({
           <Button
             variant="outline"
             size="sm"
+            onClick={handleRollBaralhoInfinito}
+            title="Sacar carta aleatória do Baralho Infinito (2d12 — Grimório do Cataclisma)"
+          >
+            <Sparkles className="h-3.5 w-3.5 text-purple-400" /> Baralho Infinito (2d12)
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setManageAgentsOpen(true)}
           >
             <Users className="h-3.5 w-3.5" /> Gerenciar Agentes ({partyAgents.length})
@@ -535,6 +577,49 @@ export default function EscudoDoMestrePage({
               );
             })}
           </div>
+
+          {lastInfiniteCard && (
+            <div className="rounded-sm border border-purple-500/40 bg-purple-950/20 px-3 py-2 text-xs space-y-0.5">
+              <div className="flex items-center justify-between font-mono">
+                <span className="font-bold text-purple-300">
+                  Baralho Infinito (2d12): {lastInfiniteCard.carta}
+                </span>
+                <span className="text-zinc-400">
+                  [{lastInfiniteCard.dice.join("+")}] ={" "}
+                  <strong className="text-zinc-100">
+                    {lastInfiniteCard.total}
+                  </strong>
+                </span>
+              </div>
+              <p className="text-[11px] text-zinc-200">
+                {lastInfiniteCard.efeito}
+              </p>
+            </div>
+          )}
+
+          {(campaign.optionalRules ?? []).length > 0 && (
+            <div className="space-y-1 border-t border-[#20202C] pt-2 max-h-28 overflow-y-auto">
+              <span className="font-mono text-[9px] uppercase tracking-wider text-[#8E8E9E] block">
+                Referência Rápida das Regras Ativas ({(campaign.optionalRules ?? []).length})
+              </span>
+              {[
+                ...OPTIONAL_RULES_LIST,
+                ...COMMUNITY_OPTIONAL_RULES,
+              ]
+                .filter((r) => (campaign.optionalRules ?? []).includes(r.id))
+                .map((r) => (
+                  <p
+                    key={r.id}
+                    className="text-[11px] text-zinc-300 leading-snug"
+                  >
+                    <strong className="text-amber-300 font-mono text-[10px]">
+                      {r.name}:
+                    </strong>{" "}
+                    {r.summary}
+                  </p>
+                ))}
+            </div>
+          )}
         </Card>
       </div>
 
@@ -1108,6 +1193,60 @@ export default function EscudoDoMestrePage({
                       </button>
                     </div>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Reference: Doenças, Venenos & Condições (Arquivos Secretos #3 e #6) */}
+          <div className="space-y-2 border-t border-[#20202C] pt-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+                Consulta Rápida — Doenças, Venenos & Condições (
+                {COMMUNITY_DISEASES_AND_POISONS.length})
+              </span>
+              <SourceBadge source="arquivos_secretos" />
+            </div>
+
+            <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+              {COMMUNITY_DISEASES_AND_POISONS.map((entry) => (
+                <div
+                  key={entry.id}
+                  className="rounded-sm border border-[#22222A] bg-[#0D0D14] p-2 text-xs space-y-0.5"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-semibold text-zinc-100">
+                      {entry.name}
+                    </span>
+                    <span className="font-mono text-[10px] text-amber-300">
+                      {entry.kind} · {entry.resistance}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-zinc-300 leading-snug">
+                    {entry.stagesOrEffect}
+                  </p>
+                </div>
+              ))}
+
+              {filterByEnabledSources(
+                COMMUNITY_CONDITIONS,
+                campaign.enabledSources
+              ).map((cond) => (
+                <div
+                  key={cond.id}
+                  className="rounded-sm border border-[#22222A] bg-[#0B0B10] p-2 text-xs space-y-0.5"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-semibold text-zinc-100">
+                      Condição: {cond.name}
+                    </span>
+                    <span className="font-mono text-[10px] text-zinc-400">
+                      {cond.kind}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-zinc-400 leading-snug">
+                    {cond.description}
+                  </p>
                 </div>
               ))}
             </div>

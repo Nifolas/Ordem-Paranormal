@@ -47,6 +47,8 @@ export type AgentClassId =
   | "devoto"
   | "predador";
 
+export type AgentClass = AgentClassId;
+
 export type TrainingDegree = 0 | 5 | 10 | 15;
 
 export type Patente =
@@ -100,7 +102,35 @@ export type OptionalRuleId =
   | "transcender_itens"
   | "evolucao_modular"
   // Suplementos da Comunidade
-  | "rs_regra_rituais_superiores";
+  | "rs_regra_rituais_superiores"
+  | "gdc_reg_espolios"
+  | "gdc_reg_invocar_criatura"
+  | "gdc_reg_transcender_amenizado"
+  | "gdc_reg_arremessar_granadas"
+  | "gdc_reg_curativos_rapidos"
+  | "gdc_reg_ala_medica"
+  | "gdc_reg_desastres"
+  | "gdc_reg_hordas"
+  | "gdc_reg_condecoracoes"
+  // Arquivos Secretos #1 e #2 (Entrega 6)
+  | "as1_uso_ocultismo_blindar_mente"
+  | "as1_reg_transcender_itens"
+  | "as1_reg_reter_ritual"
+  | "as2_reg_mascaras_forma_suprema"
+  | "as2_reg_base_hexatombe"
+  // Arquivos Secretos #3 e #4 (Entrega 7)
+  | "as3_batalhas_intencoes"
+  | "as3_veiculos_operacionais"
+  | "as4_uso_tecnologia_obter_info"
+  | "as4_reg_hacking"
+  // Arquivos Secretos #5 e #6 (Entrega 8)
+  | "as5_uso_tecnologia_trilha_digital"
+  | "as5_regalias_veiculos_extras"
+  | "as5_perigos_complexos"
+  | "as6_evolucao_modular"
+  // Arquivos Secretos #7 e #9 (Entrega 9)
+  | "as7_uso_religiao_resguardar_espirito"
+  | "as9_regalias_veiculos_assalto";
 
 export interface OptionalRuleDefinition {
   id: OptionalRuleId;
@@ -199,6 +229,9 @@ export interface PatentDefinition {
 
 export interface OriginPassiveEffects {
   metadeSanInicial?: boolean;
+  metadePvInicial?: boolean;
+  metadePeInicial?: boolean;
+  nexBonus?: number;
   poderParanormalExtra?: number;
   pvPor5Nex?: number;
   pvPor10Nex?: number;
@@ -212,6 +245,7 @@ export interface OriginPassiveEffects {
   limiteCreditoBonus?: number;
   defesa?: number;
   rdMentalPorInt?: number;
+  rdMentalPorPre?: number;
   rdGeral?: number;
   rodadasMorrendoExtra?: number;
   rdSangueEscalonavel?: {
@@ -446,6 +480,12 @@ export interface InventoryItem {
   ammoShotsRemaining?: number;
   /** Optional broken flag for Interlude Manutenção */
   broken?: boolean;
+  /** Max doses/uses for medicines or consumables (e.g. 2 usos) */
+  maxUses?: number;
+  /** Remaining doses/uses for medicines or consumables */
+  currentUses?: number;
+  /** Grau de Risco (G.R. 0–3) for Grimório do Cataclisma medicines */
+  riskGrade?: number;
 }
 
 export interface AgentAttack {
@@ -505,6 +545,58 @@ export type AllyTemplateId =
   | "socorrista"
   | "cao_adestrado"
   | "companheiro_animal"
+  | "gdc_pet_cao_guarda"
+  | "gdc_pet_gato_rua"
+  | "gdc_pet_pequeno_roedor"
+  | "gdc_pet_ave_rapina"
+  | "gdc_pet_guaxinim"
+  | "gdc_pet_macaco"
+  | "gdc_pet_jiboia"
+  | "gdc_pet_lagarto"
+  | "gdc_pet_marsupial"
+  | "as1_aliado_agatha"
+  | "as2_aliado_aguiar"
+  | "as2_aliado_dalmo"
+  | "as2_aliado_kemi"
+  | "as2_aliado_labirinto"
+  | "as2_aliado_jasper"
+  | "as2_aliado_lena"
+  | "as2_aliado_maria"
+  | "as2_aliado_remi"
+  | "as2_aliado_tuco"
+  | "as2_aliado_juan"
+  | "as3_aliado_ana"
+  | "as3_aliado_argano"
+  | "as3_aliado_chispa"
+  | "as3_aliado_escarlata"
+  | "as3_aliado_torvo"
+  | "as3_aliado_coruja"
+  | "as3_aliado_harpia"
+  | "as3_aliado_corvo"
+  | "as3_aliado_papagaio"
+  | "as3_aliado_pomba"
+  | "as3_aliado_caio"
+  | "as3_aliado_cindy"
+  | "as3_aliado_eloy"
+  | "as3_aliado_franco"
+  | "as3_pet_corvo"
+  | "as6_aliado_ketan"
+  | "as6_aliado_laila"
+  | "as6_aliado_neruda"
+  | "as9_aliado_ryder"
+  | "as9_aliado_jason"
+  | "as9_aliado_karen"
+  | "as9_aliado_troy"
+  | "as9_aliado_roy"
+  | "as9_aliado_stella"
+  | "as9_aliado_arnold"
+  | "as9_aliado_chloe"
+  | "as9_drone_atirador"
+  | "as9_drone_espiao"
+  | "as9_drone_inteligente"
+  | "as9_drone_medico"
+  | "as9_drone_protetor"
+  | "as9_drone_utilitario"
   | "custom";
 
 export interface AgentAlly {
@@ -532,6 +624,14 @@ export interface AgentAlly {
   petDefense?: number;
   petAttack?: string;
   notes?: string;
+}
+
+export interface RetainedRitual {
+  id: string;
+  ritualId: string;
+  name: string;
+  /** PE retidos (descontados do máximo enquanto retido) */
+  peCost: number;
 }
 
 export interface AgentDescription {
@@ -598,6 +698,12 @@ export interface Agent {
   interludeBonusDice?: InterludeBonusDie[];
   /** Temporary PE max penalty from Sucesso a Qualquer Custo (restored at mission end) */
   missionPeMaxPenalty?: number;
+  /** Rituais retidos (regra opcional Reter Ritual — Arquivos Secretos) */
+  retainedRituals?: RetainedRitual[];
+  /** Daily count of medicine uses with Grau de Risco (G.R.) */
+  dailyMedicineUses?: number;
+  /** Daily accumulated sum of Grau de Risco (G.R.) consumed */
+  dailyRiskGradeSum?: number;
   description: AgentDescription;
   createdAt: string;
   updatedAt: string;

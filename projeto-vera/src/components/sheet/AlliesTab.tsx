@@ -637,9 +637,20 @@ export function AlliesTab({
                   <p className="text-[11px] text-[#A1A1AA] mt-1 leading-snug">
                     {tpl.bonusSummary}
                   </p>
-                  <p className="font-mono text-[10px] text-amber-300/90 mt-1">
-                    {tpl.abilityName} ({tpl.abilityPeCost} PE)
-                  </p>
+                  <div className="mt-1 flex items-center justify-between gap-2 font-mono text-[10px]">
+                    <span className="text-amber-300/90">
+                      {tpl.abilityName}{" "}
+                      {tpl.abilityPeCost > 0
+                        ? `(${tpl.abilityPeCost} PE)`
+                        : "(Livre)"}
+                    </span>
+                    {tpl.defaultCombatStats && (
+                      <span className="text-[#8E8E9E]">
+                        PV {tpl.defaultCombatStats.petPv} · DEF{" "}
+                        {tpl.defaultCombatStats.petDefense}
+                      </span>
+                    )}
+                  </div>
                 </button>
               );
             })}

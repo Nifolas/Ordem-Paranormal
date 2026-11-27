@@ -1,10 +1,29 @@
-import type { AgentAlly, AllyTemplateId, AllyType, SkillKey } from "@/types/ordem";
+import type {
+  AgentAlly,
+  AllyTemplateId,
+  AllyType,
+  AttributeKey,
+  ContentSource,
+  SkillKey,
+} from "@/types/ordem";
+import {
+  ENTREGA5_PETS,
+  ENTREGA6_ALLY_TEMPLATES,
+  ENTREGA7_ALLY_TEMPLATES,
+  ENTREGA8_ALLY_TEMPLATES,
+  ENTREGA9_ALLY_TEMPLATES,
+} from "@/data/supplements";
 
 export interface AllyTemplateDefinition {
   id: AllyTemplateId;
   name: string;
   kind: AllyType;
   sourceLabel: string;
+  source?: ContentSource;
+  petCategory?: "Domesticado" | "Domado" | "Exótico";
+  petSize?: string;
+  petDisplacement?: string;
+  petAttributes?: Record<AttributeKey, number>;
   bonusSummary: string;
   skillFlatBonuses?: Partial<Record<SkillKey, number>>;
   skillDiceBonuses?: Partial<Record<SkillKey, number>>;
@@ -29,12 +48,13 @@ export interface AllyTemplateDefinition {
   };
 }
 
-export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
+export const OFFICIAL_ALLY_TEMPLATES: AllyTemplateDefinition[] = [
   {
     id: "acolito",
     name: "Acólito",
     kind: "aliado",
     sourceLabel: "Livro Básico",
+    source: "livro_basico",
     bonusSummary: "+1d20 em Ocultismo e dispensa componentes ritualísticos.",
     skillDiceBonuses: { ocultismo: 1 },
     dispensesRitualComponents: true,
@@ -48,6 +68,7 @@ export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
     name: "Faz-Tudo",
     kind: "aliado",
     sourceLabel: "Livro Básico",
+    source: "livro_basico",
     bonusSummary:
       "Você conta como treinado em 2 perícias à escolha (exceto Luta e Pontaria).",
     requiresSkillChoice: {
@@ -68,6 +89,7 @@ export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
     name: "Guerrilheiro",
     kind: "aliado",
     sourceLabel: "Livro Básico",
+    source: "livro_basico",
     bonusSummary: "+1d20 em testes de ataque.",
     attackDiceBonus: 1,
     abilityName: "Ataque Conjunto",
@@ -81,6 +103,7 @@ export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
     name: "Socorrista",
     kind: "aliado",
     sourceLabel: "Livro Básico",
+    source: "livro_basico",
     bonusSummary: "Você conta como treinado em Medicina.",
     trainedSkills: ["medicina"],
     abilityName: "Bolsa de Remédios",
@@ -94,6 +117,7 @@ export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
     name: "Cão Adestrado",
     kind: "pet",
     sourceLabel: "Sobrevivendo ao Horror",
+    source: "sobrevivendo_ao_horror",
     bonusSummary: "+2 em Investigação e Percepção.",
     skillFlatBonuses: { investigacao: 2, percepcao: 2 },
     abilityName: "Ladrar e Morder",
@@ -111,6 +135,7 @@ export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
     name: "Companheiro Animal / Pai de Pet",
     kind: "pet",
     sourceLabel: "Sobrevivendo ao Horror",
+    source: "sobrevivendo_ao_horror",
     bonusSummary: "+2 em 1 ou 2 perícias escolhidas vinculadas ao pet.",
     requiresSkillChoice: {
       count: 1,
@@ -130,6 +155,44 @@ export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
   },
 ];
 
+export const COMMUNITY_PET_TEMPLATES: AllyTemplateDefinition[] =
+  ENTREGA5_PETS.map((pet) => {
+    const attrsText = `AGI ${pet.attributes.AGI} · FOR ${pet.attributes.FOR} · INT ${pet.attributes.INT} · PRE ${pet.attributes.PRE} · VIG ${pet.attributes.VIG}`;
+    return {
+      id: pet.id,
+      name: `${pet.name} (${pet.petCategory})`,
+      kind: "pet",
+      sourceLabel: "Grimório do Cataclisma",
+      source: pet.source,
+      petCategory: pet.petCategory,
+      petSize: pet.size,
+      petDisplacement: pet.displacement,
+      petAttributes: pet.attributes,
+      bonusSummary: `Pet ${pet.petCategory} (${pet.size} · Desl. ${pet.displacement} · ${attrsText}). Ataque: ${pet.attack}.`,
+      abilityName: pet.abilityName,
+      abilityPeCost: 0,
+      abilityDescription: pet.abilityDescription,
+      defaultCombatStats: {
+        petPv: pet.pv,
+        petDefense: pet.defense,
+        petAttack: pet.attack,
+      },
+    };
+  });
+
+export const ARQUIVOS_SECRETOS_ALLY_TEMPLATES: AllyTemplateDefinition[] = [
+  ...ENTREGA6_ALLY_TEMPLATES,
+  ...ENTREGA7_ALLY_TEMPLATES,
+  ...ENTREGA8_ALLY_TEMPLATES,
+  ...ENTREGA9_ALLY_TEMPLATES,
+];
+
+export const ALLY_TEMPLATES: AllyTemplateDefinition[] = [
+  ...OFFICIAL_ALLY_TEMPLATES,
+  ...ARQUIVOS_SECRETOS_ALLY_TEMPLATES,
+  ...COMMUNITY_PET_TEMPLATES,
+];
+
 export function buildAllyFromTemplate(params: {
   id: string;
   template: AllyTemplateDefinition;
@@ -142,7 +205,9 @@ export function buildAllyFromTemplate(params: {
   const skillFlatBonuses: Partial<Record<SkillKey, number>> = {
     ...(template.skillFlatBonuses ?? {}),
   };
-  let trainedSkills = template.trainedSkills ? [...template.trainedSkills] : undefined;
+  let trainedSkills = template.trainedSkills
+    ? [...template.trainedSkills]
+    : undefined;
   let bonusSummary = template.bonusSummary;
 
   if (template.requiresSkillChoice && chosenSkills.length > 0) {
@@ -179,7 +244,7 @@ export function buildAllyFromTemplate(params: {
     abilityRollFormula: template.abilityRollFormula,
     dangerRuleEnabled: false,
     wounds: 0,
-    combatStatsEnabled: false,
+    combatStatsEnabled: template.kind === "pet",
     petPv: template.defaultCombatStats?.petPv ?? 12,
     petMaxPv: template.defaultCombatStats?.petPv ?? 12,
     petDefense: template.defaultCombatStats?.petDefense ?? 12,
