@@ -18,6 +18,7 @@ import { useAppStore } from "@/store/useAppStore";
 import { BASE_ORIGINS, getOriginById } from "@/data/origins";
 import { getClassById } from "@/data/classes";
 import { BASE_TRAILS } from "@/data/trails";
+import { COMMUNITY_TRAILS } from "@/data/supplements";
 import { getAgentEffectiveVitals, normalizeCatalogId } from "@/lib/ordem-rules";
 import {
   exportAgentToJson,
@@ -50,7 +51,7 @@ export default function AgentesPage() {
   const importBackupInputRef = useRef<HTMLInputElement>(null);
 
   const allTrails = useMemo(
-    () => [...BASE_TRAILS, ...(homebrew.trails ?? [])],
+    () => [...BASE_TRAILS, ...COMMUNITY_TRAILS, ...(homebrew.trails ?? [])],
     [homebrew.trails]
   );
 

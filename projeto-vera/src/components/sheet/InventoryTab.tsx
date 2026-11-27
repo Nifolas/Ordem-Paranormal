@@ -26,6 +26,12 @@ import {
   ITEM_CATEGORY_META,
 } from "@/data/equipment";
 import {
+  COMMUNITY_CURSES,
+  COMMUNITY_MODIFICATIONS,
+} from "@/data/supplements";
+import { filterByEnabledSources } from "@/lib/sources";
+import { SourceBadge } from "@/components/SourceToggles";
+import {
   calculateItemFinalCategory,
   calculateLoadAndCategories,
   canAddCurseToItem,
@@ -76,13 +82,21 @@ export function InventoryTab({
   });
 
   const allModifications = useMemo(
-    () => [...(homebrew.modifications ?? []), ...BASE_MODIFICATIONS],
-    [homebrew.modifications]
+    () => [
+      ...(homebrew.modifications ?? []),
+      ...filterByEnabledSources(COMMUNITY_MODIFICATIONS, agent.enabledSources),
+      ...BASE_MODIFICATIONS,
+    ],
+    [homebrew.modifications, agent.enabledSources]
   );
 
   const allCurses = useMemo(
-    () => [...(homebrew.curses ?? []), ...BASE_CURSES],
-    [homebrew.curses]
+    () => [
+      ...(homebrew.curses ?? []),
+      ...filterByEnabledSources(COMMUNITY_CURSES, agent.enabledSources),
+      ...BASE_CURSES,
+    ],
+    [homebrew.curses, agent.enabledSources]
   );
 
   const editingItem = useMemo(
@@ -689,7 +703,9 @@ export function InventoryTab({
               </span>
               <Badge variant="warning">
                 CATEGORIA FINAL:{" "}
-                {ROMAN_CAT[calculateItemFinalCategory(editingItem)]}
+                {ROMAN_CAT[
+                  calculateItemFinalCategory(editingItem, agent.organization)
+                ]}
               </Badge>
             </div>
 
@@ -728,8 +744,13 @@ export function InventoryTab({
                       )}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-semibold">{mod.name}</span>
-                        <span className="font-mono text-[9px] uppercase text-[#6E6E7E]">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="text-xs font-semibold truncate">
+                            {mod.name}
+                          </span>
+                          <SourceBadge source={mod.source} />
+                        </div>
+                        <span className="font-mono text-[9px] uppercase text-[#6E6E7E] shrink-0">
                           {mod.appliesTo}
                         </span>
                       </div>
@@ -774,10 +795,13 @@ export function InventoryTab({
                       )}
                     >
                       <div className="flex items-center justify-between gap-1">
-                        <span className="text-xs font-semibold">
-                          {curse.name}
-                        </span>
-                        <span className="font-mono text-[9px] uppercase">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          <span className="text-xs font-semibold truncate">
+                            {curse.name}
+                          </span>
+                          <SourceBadge source={curse.source} />
+                        </div>
+                        <span className="font-mono text-[9px] uppercase shrink-0">
                           {curse.element}
                         </span>
                       </div>

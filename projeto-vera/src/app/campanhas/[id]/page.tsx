@@ -33,6 +33,9 @@ import {
   rollOrdemTest,
 } from "@/lib/ordem-rules";
 import { OPTIONAL_RULES_LIST } from "@/data/optionalRules";
+import { COMMUNITY_OPTIONAL_RULES } from "@/data/supplements";
+import { filterByEnabledSources } from "@/lib/sources";
+import { SourceBadge } from "@/components/SourceToggles";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
 import type {
   Agent,
@@ -445,33 +448,60 @@ export default function EscudoDoMestrePage({
             }
           />
 
-          <div className="flex items-center gap-2 border-t border-[#20202C] pt-2">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-[#8E8E9E]">
-              Organização
-            </span>
-            <select
-              value={campaign.organization ?? "ordo_realitas"}
-              onChange={(e) =>
-                updateCampaign(campaign.id, (prev) => ({
-                  ...prev,
-                  organization: e.target.value as OrganizationId,
-                }))
-              }
-              className="h-7 rounded-sm border border-[#22222A] bg-[#09090B] px-2 text-xs text-[#F4F4F5] focus:outline-none"
-            >
-              {ORGANIZATIONS.map((o) => (
-                <option key={o.id} value={o.id}>
-                  {o.name}
-                </option>
-              ))}
-            </select>
-            <span className="text-[10px] text-[#6E6E7E] truncate">
-              {getOrganization(campaign.organization).summary}
-            </span>
+          <div className="space-y-1.5 border-t border-[#20202C] pt-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-mono text-[10px] uppercase tracking-wider text-[#8E8E9E]">
+                Organização da Realidade
+              </span>
+              <select
+                value={getOrganization(campaign.organization).id}
+                onChange={(e) =>
+                  updateCampaign(campaign.id, (prev) => ({
+                    ...prev,
+                    organization: e.target.value as OrganizationId,
+                  }))
+                }
+                className="h-7 rounded-sm border border-[#22222A] bg-[#09090B] px-2 text-xs text-[#F4F4F5] focus:outline-none"
+              >
+                {ORGANIZATIONS.map((o) => (
+                  <option key={o.id} value={o.id}>
+                    {o.name}
+                  </option>
+                ))}
+              </select>
+              {getOrganization(campaign.organization).id !== "ordo_realitas" && (
+                <SourceBadge source="misterios_do_outro_lado" />
+              )}
+            </div>
+            {(() => {
+              const org = getOrganization(campaign.organization);
+              return (
+                <div className="rounded-sm border border-[#22222A] bg-[#0D0D14] px-2.5 py-2 text-[11px] space-y-1">
+                  <p className="text-zinc-200">
+                    <strong className="font-mono text-[10px] uppercase tracking-wider text-purple-300">
+                      {org.abilityName}:
+                    </strong>{" "}
+                    <span className="text-zinc-300">{org.abilityDescription}</span>
+                  </p>
+                  <p className="text-[10px] text-zinc-400">
+                    <strong className="text-zinc-300">Equipamentos:</strong>{" "}
+                    {org.equipmentRules} ·{" "}
+                    <strong className="text-zinc-300">Crédito:</strong>{" "}
+                    {org.creditRules}
+                  </p>
+                </div>
+              );
+            })()}
           </div>
 
           <div className="flex flex-wrap gap-1.5 pt-1 border-t border-[#20202C] max-h-24 overflow-y-auto">
-            {OPTIONAL_RULES_LIST.map((rule) => {
+            {[
+              ...OPTIONAL_RULES_LIST,
+              ...filterByEnabledSources(
+                COMMUNITY_OPTIONAL_RULES,
+                campaign.enabledSources
+              ),
+            ].map((rule) => {
               const active = (campaign.optionalRules ?? []).includes(rule.id);
               return (
                 <button
@@ -490,14 +520,17 @@ export default function EscudoDoMestrePage({
                     })
                   }
                   className={cn(
-                    "rounded-md border px-2 py-0.5 text-[10px] font-medium transition-colors",
+                    "inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-medium transition-colors",
                     active
                       ? "border-amber-500/60 bg-amber-500/15 text-amber-200"
                       : "border-[#242432] bg-[#0D0D14] text-zinc-400 hover:text-zinc-200"
                   )}
                 >
-                  {active ? "● " : "○ "}
-                  {rule.name}
+                  <span>
+                    {active ? "● " : "○ "}
+                    {rule.name}
+                  </span>
+                  <SourceBadge source={rule.source} />
                 </button>
               );
             })}

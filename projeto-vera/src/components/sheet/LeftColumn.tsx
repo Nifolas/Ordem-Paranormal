@@ -10,6 +10,8 @@ import {
   Trash2,
 } from "lucide-react";
 import type { Agent, AttributeKey } from "@/types/ordem";
+import { getOriginById } from "@/data/origins";
+import { COMMUNITY_CONDITIONS } from "@/data/supplements";
 import {
   calculateCombatStats,
   calculateLoadAndCategories,
@@ -52,11 +54,30 @@ export function LeftColumn({
 
   const vitals = getAgentEffectiveVitals(agent);
   const combat = calculateCombatStats(agent);
+  const originDef = getOriginById(agent.originId);
+  const morrendoMaxTurns =
+    3 + (originDef?.efeitosPassivos?.rodadasMorrendoExtra ?? 0);
+  const enlouquecendoMaxTurns =
+    originDef?.efeitosPassivos?.rodadasMorrendoExtra &&
+    agent.affinityElement === "Morte"
+      ? 3 + originDef.efeitosPassivos.rodadasMorrendoExtra
+      : 3;
+  const originBloodRd = (() => {
+    const rd = originDef?.efeitosPassivos?.rdSangueEscalonavel;
+    if (!rd) return 0;
+    if (agent.affinityElement === "Sangue") return rd.afinidade;
+    if (rd.nex25 !== undefined && agent.nex >= 25) return rd.nex25;
+    return rd.base;
+  })();
+  const desorientadoDef = COMMUNITY_CONDITIONS.find(
+    (c) => c.id === "gc1_desorientado"
+  );
   const load = calculateLoadAndCategories({
     forAttr: agent.attributes.FOR,
     patente: agent.patente,
     inventory: agent.inventory,
     extraCapacityBonus: getTrailCarryBonus(agent),
+    organization: agent.organization,
   });
 
   const autoConds = evaluateVitalConditions({
@@ -159,10 +180,14 @@ export function LeftColumn({
                 label: "Desorientado (-3 Def)",
                 active: Boolean(agent.status.desorientado),
                 cls: "border-yellow-500/40 bg-yellow-500/10 text-yellow-300",
+                title: desorientadoDef
+                  ? `${desorientadoDef.name} (${desorientadoDef.kind}): ${desorientadoDef.description}`
+                  : undefined,
               },
             ].map((cond) => (
               <label
                 key={cond.key}
+                title={"title" in cond ? cond.title : undefined}
                 className={cn(
                   "flex cursor-pointer items-center justify-center gap-1 rounded-sm border px-2 py-1.5 font-mono text-[10px] transition-colors select-none",
                   cond.active
@@ -216,40 +241,49 @@ export function LeftColumn({
             <div className="rounded-sm border border-red-600/30 bg-red-600/5 p-2 space-y-1.5 font-mono text-[10px]">
               {agent.status.morrendo && (
                 <div className="flex items-center justify-between">
-                  <span className="text-red-300">MORRENDO (3T)</span>
+                  <span className="text-red-300">
+                    MORRENDO ({morrendoMaxTurns}T)
+                  </span>
                   <div className="flex gap-1">
-                    {[1, 2, 3].map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() =>
-                          onUpdate((prev) => ({
-                            ...prev,
-                            status: {
-                              ...prev.status,
-                              morrendoTurns:
-                                prev.status.morrendoTurns === t ? t - 1 : t,
-                            },
-                          }))
-                        }
-                        className={cn(
-                          "h-5 w-5 rounded-sm border font-bold",
-                          (agent.status.morrendoTurns ?? 0) >= t
-                            ? "border-red-500 bg-red-600 text-white"
-                            : "border-[#22222A] bg-[#09090B] text-[#6E6E7E]"
-                        )}
-                      >
-                        {t}
-                      </button>
-                    ))}
+                    {Array.from({ length: morrendoMaxTurns }, (_, i) => i + 1).map(
+                      (t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() =>
+                            onUpdate((prev) => ({
+                              ...prev,
+                              status: {
+                                ...prev.status,
+                                morrendoTurns:
+                                  prev.status.morrendoTurns === t ? t - 1 : t,
+                              },
+                            }))
+                          }
+                          className={cn(
+                            "h-5 w-5 rounded-sm border font-bold",
+                            (agent.status.morrendoTurns ?? 0) >= t
+                              ? "border-red-500 bg-red-600 text-white"
+                              : "border-[#22222A] bg-[#09090B] text-[#6E6E7E]"
+                          )}
+                        >
+                          {t}
+                        </button>
+                      )
+                    )}
                   </div>
                 </div>
               )}
               {agent.status.enlouquecendo && (
                 <div className="flex items-center justify-between">
-                  <span className="text-purple-300">ENLOUQ. (3T)</span>
+                  <span className="text-purple-300">
+                    ENLOUQ. ({enlouquecendoMaxTurns}T)
+                  </span>
                   <div className="flex gap-1">
-                    {[1, 2, 3].map((t) => (
+                    {Array.from(
+                      { length: enlouquecendoMaxTurns },
+                      (_, i) => i + 1
+                    ).map((t) => (
                       <button
                         key={t}
                         type="button"
@@ -288,7 +322,17 @@ export function LeftColumn({
             Resistências a Dano (RD)
           </span>
           <div className="flex flex-wrap gap-1">
-            {Object.entries(agent.defense.resistances).length === 0 ? (
+            {originBloodRd > 0 && (
+              <Badge
+                variant="danger"
+                className="font-mono text-[10px]"
+                title={`RD a Sangue automática da origem ${originDef?.name ?? ""}`}
+              >
+                Sangue {originBloodRd} (Origem)
+              </Badge>
+            )}
+            {Object.entries(agent.defense.resistances).length === 0 &&
+            originBloodRd === 0 ? (
               <span className="text-[11px] text-[#6E6E7E]">
                 Nenhuma RD registrada.
               </span>

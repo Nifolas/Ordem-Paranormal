@@ -20,8 +20,18 @@ import { BASE_CLASS_POWERS } from "@/data/classPowers";
 import { BASE_GENERAL_POWERS } from "@/data/generalPowers";
 import { BASE_PARANORMAL_POWERS } from "@/data/paranormalPowers";
 import { COMMUNITY_POWERS } from "@/data/supplements";
-import { SOURCE_LABELS, filterByEnabledSources } from "@/lib/sources";
-import { SourceBadge } from "@/components/SourceToggles";
+import {
+  COMMUNITY_SOURCES,
+  OFFICIAL_SOURCES,
+  SOURCE_LABELS,
+  filterByEnabledSources,
+} from "@/lib/sources";
+import {
+  SourceBadge,
+  SourceToggleGroup,
+  setCommunityList,
+  toggleSourceList,
+} from "@/components/SourceToggles";
 import { checkPowerPrerequisites } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
@@ -55,17 +65,22 @@ export function AbilitiesCatalogModal({
   onClose,
   agent,
   onAddAbility,
+  onUpdateSources,
 }: {
   open: boolean;
   onClose: () => void;
   agent: Agent;
   onAddAbility: (ability: AgentAbility, isTranscender: boolean) => void;
+  onUpdateSources?: (
+    updater: (prev: ContentSource[] | undefined) => ContentSource[]
+  ) => void;
 }) {
   const { homebrew } = useAppStore();
 
   const [tab, setTab] = useState<CatalogTab>("classe");
   const [search, setSearch] = useState("");
   const [sourceFilter, setSourceFilter] = useState<"todos" | ContentSource>("todos");
+  const [showSourcesPanel, setShowSourcesPanel] = useState(false);
   const [elementFilter, setElementFilter] = useState<"todos" | ParanormalElement>("todos");
   const [selectedPowerId, setSelectedPowerId] = useState<string | null>(null);
 
@@ -396,13 +411,14 @@ export function AbilitiesCatalogModal({
                 </div>
 
                 {/* Source Filter Pills */}
-                <div className="flex flex-wrap gap-1">
+                <div className="flex flex-wrap items-center gap-1">
                   {(
                     [
                       "todos",
-                      "livro_basico",
-                      "sobrevivendo_ao_horror",
-                      "arquivos_secretos",
+                      ...OFFICIAL_SOURCES.map((s) => s.id),
+                      ...COMMUNITY_SOURCES.filter((s) =>
+                        (agent.enabledSources ?? []).includes(s.id)
+                      ).map((s) => s.id),
                       "homebrew",
                     ] as const
                   ).map((src) => (
@@ -420,7 +436,36 @@ export function AbilitiesCatalogModal({
                       {src === "todos" ? "Todos Livros" : SOURCE_LABELS[src]}
                     </button>
                   ))}
+                  {onUpdateSources && (
+                    <button
+                      type="button"
+                      onClick={() => setShowSourcesPanel((v) => !v)}
+                      className={cn(
+                        "ml-auto rounded-sm border px-2 py-0.5 font-mono text-[10px] transition-colors",
+                        showSourcesPanel
+                          ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                          : "border-[#32323E] bg-[#141419] text-[#A1A1AA] hover:text-[#F4F4F5]"
+                      )}
+                    >
+                      {showSourcesPanel ? "Ocultar Fontes" : "Fontes & Suplementos"}
+                    </button>
+                  )}
                 </div>
+
+                {onUpdateSources && showSourcesPanel && (
+                  <div className="rounded-sm border border-[#22222A] bg-[#0C0C10] p-2.5">
+                    <SourceToggleGroup
+                      compact
+                      enabled={agent.enabledSources}
+                      onToggle={(src) =>
+                        onUpdateSources((prev) => toggleSourceList(prev, src))
+                      }
+                      onSetCommunity={(on) =>
+                        onUpdateSources((prev) => setCommunityList(prev, on))
+                      }
+                    />
+                  </div>
+                )}
 
                 {/* Element Filter Pills (when on Paranormais) */}
                 {tab === "paranormais" && (

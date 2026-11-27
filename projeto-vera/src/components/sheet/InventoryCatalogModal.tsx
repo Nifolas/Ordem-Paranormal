@@ -21,8 +21,20 @@ import {
   ITEM_CATEGORY_BY_KEY,
   ITEM_CATEGORY_META,
 } from "@/data/equipment";
+import { COMMUNITY_ITEMS } from "@/data/supplements";
 import { normalizeItemCategoryType } from "@/lib/ordem-rules";
-import { SOURCE_LABELS } from "@/lib/sources";
+import {
+  COMMUNITY_SOURCES,
+  OFFICIAL_SOURCES,
+  SOURCE_LABELS,
+  filterByEnabledSources,
+} from "@/lib/sources";
+import {
+  SourceBadge,
+  SourceToggleGroup,
+  setCommunityList,
+  toggleSourceList,
+} from "@/components/SourceToggles";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
 import {
@@ -56,6 +68,7 @@ const ELEMENTS: ParanormalElement[] = [
 export function InventoryCatalogModal({
   open,
   onClose,
+  agent,
   onUpdate,
   initialTab = "todos",
 }: {
@@ -72,6 +85,7 @@ export function InventoryCatalogModal({
   const [sourceFilter, setSourceFilter] = useState<"todos" | ContentSource>(
     "todos"
   );
+  const [showSourcesPanel, setShowSourcesPanel] = useState(false);
   const [weaponProfFilter, setWeaponProfFilter] = useState<
     "Todas" | "Simples" | "Tática" | "Pesada"
   >("Todas");
@@ -103,8 +117,13 @@ export function InventoryCatalogModal({
   });
 
   const allLibraryItems = useMemo(
-    () => [...homebrew.weapons, ...homebrew.items, ...BASE_ITEMS],
-    [homebrew.weapons, homebrew.items]
+    () => [
+      ...homebrew.weapons,
+      ...homebrew.items,
+      ...filterByEnabledSources(COMMUNITY_ITEMS, agent.enabledSources),
+      ...BASE_ITEMS,
+    ],
+    [homebrew.weapons, homebrew.items, agent.enabledSources]
   );
 
   // Counts per standardized category
@@ -350,13 +369,33 @@ export function InventoryCatalogModal({
                 className="h-8 w-auto text-xs"
               >
                 <option value="todos">Todos os Livros</option>
-                <option value="livro_basico">Livro Básico</option>
-                <option value="sobrevivendo_ao_horror">
-                  Sobrevivendo ao Horror
-                </option>
-                <option value="arquivos_secretos">Arquivos Secretos</option>
-                <option value="homebrew">Homebrew</option>
+                {OFFICIAL_SOURCES.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {SOURCE_LABELS[s.id]}
+                  </option>
+                ))}
+                {COMMUNITY_SOURCES.filter((s) =>
+                  (agent.enabledSources ?? []).includes(s.id)
+                ).map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {SOURCE_LABELS[s.id]}
+                  </option>
+                ))}
+                <option value="homebrew">{SOURCE_LABELS.homebrew}</option>
               </Select>
+
+              <button
+                type="button"
+                onClick={() => setShowSourcesPanel((v) => !v)}
+                className={cn(
+                  "h-8 rounded-sm border px-2.5 font-mono text-[10px] transition-colors",
+                  showSourcesPanel
+                    ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                    : "border-[#32323E] bg-[#141419] text-[#A1A1AA] hover:text-[#F4F4F5]"
+                )}
+              >
+                {showSourcesPanel ? "Ocultar Fontes" : "Fontes & Suplementos"}
+              </button>
 
               {activeTab === "arma" && (
                 <Select
@@ -393,6 +432,26 @@ export function InventoryCatalogModal({
                   ))}
                 </Select>
               )}
+            </div>
+          )}
+          {activeTab !== "custom" && showSourcesPanel && (
+            <div className="rounded-sm border border-[#22222A] bg-[#101014] p-2.5">
+              <SourceToggleGroup
+                compact
+                enabled={agent.enabledSources}
+                onToggle={(src) =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    enabledSources: toggleSourceList(prev.enabledSources, src),
+                  }))
+                }
+                onSetCommunity={(on) =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    enabledSources: setCommunityList(prev.enabledSources, on),
+                  }))
+                }
+              />
             </div>
           )}
         </div>
@@ -635,9 +694,12 @@ export function InventoryCatalogModal({
                       )}
                     >
                       <div className="flex items-start justify-between gap-2">
-                        <span className="text-xs font-semibold text-[#F4F4F5] leading-snug">
-                          {item.name}
-                        </span>
+                        <div className="flex items-center gap-1.5 flex-wrap min-w-0">
+                          <span className="text-xs font-semibold text-[#F4F4F5] leading-snug">
+                            {item.name}
+                          </span>
+                          <SourceBadge source={item.source} />
+                        </div>
                         <span className="shrink-0 font-mono text-[10px] text-[#8E8E9E] tabular-nums">
                           CAT {ROMAN_CAT[item.category]}
                         </span>

@@ -1028,6 +1028,12 @@ export function AbilitiesTab({
         open={catalogOpen}
         onClose={() => setCatalogOpen(false)}
         agent={agent}
+        onUpdateSources={(updater) =>
+          onUpdate((prev) => ({
+            ...prev,
+            enabledSources: updater(prev.enabledSources),
+          }))
+        }
         onAddAbility={(ability, isTranscender) => {
           onUpdate((prev) => ({
             ...prev,

@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import {
+  Crown,
   Dices,
   Edit3,
   Heart,
@@ -13,11 +14,30 @@ import {
   Sparkles,
   Swords,
   Trash2,
+  Users,
 } from "lucide-react";
 import { useAppStore } from "@/store/useAppStore";
+import { COMMUNITY_RELICS, COMMUNITY_THREATS } from "@/data/supplements";
+import {
+  DEFAULT_ENABLED_SOURCES,
+  filterByEnabledSources,
+} from "@/lib/sources";
+import {
+  SourceBadge,
+  SourceToggleGroup,
+  setCommunityList,
+  toggleSourceList,
+} from "@/components/SourceToggles";
 import { rollDiceFormula, rollOrdemTest } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, generateId } from "@/lib/utils";
-import type { ParanormalElement, Threat, ThreatAttack } from "@/types/ordem";
+import type {
+  AgentAlly,
+  ContentSource,
+  ParanormalElement,
+  RelicDefinition,
+  Threat,
+  ThreatAttack,
+} from "@/types/ordem";
 import {
   Badge,
   Button,
@@ -80,20 +100,34 @@ function createEmptyThreat(): Threat {
 
 export default function AmeacasPage() {
   const {
+    agents,
     threats,
     campaigns,
     addThreat,
     updateThreat,
     deleteThreat,
+    updateAgent,
     toggleThreatEnigmaResolved,
     sendThreatToCampaignInitiative,
     pushRoll,
   } = useAppStore();
 
+  const [activeSection, setActiveSection] = useState<"bestiario" | "reliquias">(
+    "bestiario"
+  );
   const [search, setSearch] = useState("");
   const [elementFilter, setElementFilter] = useState<"Todos" | ParanormalElement>(
     "Todos"
   );
+  const [variantFilter, setVariantFilter] = useState<
+    "todos" | "base" | "variantes"
+  >("todos");
+  const [enabledSources, setEnabledSources] = useState<ContentSource[]>([
+    ...DEFAULT_ENABLED_SOURCES,
+    "guia_confidencial_vol1",
+    "misterios_do_outro_lado",
+  ]);
+  const [showSourcesPanel, setShowSourcesPanel] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<Threat>(createEmptyThreat());
@@ -102,20 +136,44 @@ export default function AmeacasPage() {
   const [targetCampaignId, setTargetCampaignId] = useState(
     campaigns[0]?.id ?? ""
   );
+  const [relicModal, setRelicModal] = useState<RelicDefinition | null>(null);
+  const [targetAgentId, setTargetAgentId] = useState(agents[0]?.id ?? "");
   const [sentNotice, setSentNotice] = useState<string | null>(null);
+
+  const combinedThreats = useMemo(() => {
+    const storeIds = new Set(threats.map((t) => t.id));
+    const communityExtra = COMMUNITY_THREATS.filter((ct) => !storeIds.has(ct.id));
+    return filterByEnabledSources(
+      [...threats, ...communityExtra],
+      enabledSources
+    );
+  }, [threats, enabledSources]);
+
+  const variantCount = useMemo(
+    () => combinedThreats.filter((t) => Boolean(t.isVariant)).length,
+    [combinedThreats]
+  );
+
+  const visibleRelics = useMemo(
+    () => filterByEnabledSources(COMMUNITY_RELICS, enabledSources),
+    [enabledSources]
+  );
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return threats.filter((t) => {
+    return combinedThreats.filter((t) => {
       if (elementFilter !== "Todos" && t.element !== elementFilter) return false;
+      if (variantFilter === "variantes" && !t.isVariant) return false;
+      if (variantFilter === "base" && t.isVariant) return false;
       if (!q) return true;
       return (
         t.name.toLowerCase().includes(q) ||
         t.description.toLowerCase().includes(q) ||
+        (t.baseCreatureName?.toLowerCase().includes(q) ?? false) ||
         String(t.vd).includes(q)
       );
     });
-  }, [threats, search, elementFilter]);
+  }, [combinedThreats, search, elementFilter, variantFilter]);
 
   const handleRollThreatAttack = (threat: Threat, atk: ThreatAttack) => {
     const res = rollOrdemTest({
@@ -185,12 +243,22 @@ export default function AmeacasPage() {
   const handleSaveThreat = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name.trim()) return;
-    if (editingId) {
+    if (editingId && threats.some((t) => t.id === editingId)) {
       updateThreat(editingId, () => form);
+    } else if (editingId) {
+      addThreat({ ...form, id: editingId });
     } else {
       addThreat({ ...form, id: generateId("threat") });
     }
     setEditorOpen(false);
+  };
+
+  const handleToggleEnigma = (threat: Threat) => {
+    if (threats.some((t) => t.id === threat.id)) {
+      toggleThreatEnigmaResolved(threat.id);
+    } else {
+      addThreat({ ...threat, enigmaResolved: !threat.enigmaResolved });
+    }
   };
 
   const handleSendToInitiative = () => {
@@ -225,6 +293,37 @@ export default function AmeacasPage() {
     setSendModalThreat(null);
   };
 
+  const handleAddRelicAsAlly = () => {
+    if (!relicModal || !targetAgentId) return;
+    const abilityTitle =
+      relicModal.ally.ability.split("(")[0]?.trim() || "Habilidade de Relíquia";
+    const ally: AgentAlly = {
+      id: generateId("ally"),
+      templateId: "custom",
+      name: `Relíquia Aliada — ${relicModal.name}`,
+      kind: "aliado",
+      helping: true,
+      bonusSummary: `${relicModal.ally.general} • ${relicModal.ally.bonus}`,
+      attackDiceBonus:
+        relicModal.id === "mol_rel_trono_de_sangue" ? 1 : undefined,
+      abilityName: abilityTitle,
+      abilityPeCost: 7,
+      abilityDescription: relicModal.ally.ability,
+      notes: `Relíquia como Aliada (${relicModal.element} · Mistérios do Outro Lado). ${relicModal.bearerRelation}`,
+    };
+    updateAgent(targetAgentId, (prev) => ({
+      ...prev,
+      allies: [ally, ...(prev.allies ?? [])],
+    }));
+    const agentName =
+      agents.find((a) => a.id === targetAgentId)?.name ?? "Agente";
+    setSentNotice(
+      `Bônus de "${relicModal.name}" adicionados como Aliada na ficha de "${agentName}"!`
+    );
+    window.setTimeout(() => setSentNotice(null), 4500);
+    setRelicModal(null);
+  };
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between border-b border-[#22222A] pb-5">
@@ -236,9 +335,38 @@ export default function AmeacasPage() {
             Ameaças
           </h1>
         </div>
-        <Button variant="primary" size="sm" onClick={openCreate}>
-          <Plus className="h-4 w-4" /> Nova Ameaça
-        </Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="inline-flex rounded-sm border border-[#22222A] bg-[#0D0D11] p-0.5">
+            <button
+              type="button"
+              onClick={() => setActiveSection("bestiario")}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors",
+                activeSection === "bestiario"
+                  ? "bg-[#16161C] text-[#F4F4F5]"
+                  : "text-[#8E8E9E] hover:text-[#D4D4D8]"
+              )}
+            >
+              <Skull className="h-3.5 w-3.5" /> Bestiário ({combinedThreats.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSection("reliquias")}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-sm px-3 py-1.5 text-xs font-medium transition-colors",
+                activeSection === "reliquias"
+                  ? "bg-[#16161C] text-[#F4F4F5]"
+                  : "text-[#8E8E9E] hover:text-[#D4D4D8]"
+              )}
+            >
+              <Crown className="h-3.5 w-3.5 text-amber-400" /> Relíquias (
+              {visibleRelics.length})
+            </button>
+          </div>
+          <Button variant="primary" size="sm" onClick={openCreate}>
+            <Plus className="h-4 w-4" /> Nova Ameaça
+          </Button>
+        </div>
       </div>
 
       {sentNotice && (
@@ -247,18 +375,200 @@ export default function AmeacasPage() {
         </div>
       )}
 
-      {/* Search & Element Filter */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="relative max-w-sm w-full">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar ameaça por nome ou VD..."
-            className="pl-9"
-          />
+      {activeSection === "reliquias" ? (
+        <div className="space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 className="font-display text-lg font-bold text-[#F4F4F5]">
+                Relíquias da Calamidade
+              </h2>
+              <p className="text-xs text-[#8E8E9E]">
+                Efeitos de objeto, relação com o portador, habilidades opcionais
+                e bônus de Relíquia como Aliada (Mistérios do Outro Lado).
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowSourcesPanel((v) => !v)}
+              className={cn(
+                "rounded-sm border px-2.5 py-1 font-mono text-[10px] transition-colors",
+                showSourcesPanel
+                  ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                  : "border-[#32323E] bg-[#141419] text-[#A1A1AA] hover:text-[#F4F4F5]"
+              )}
+            >
+              {showSourcesPanel ? "Ocultar Fontes" : "Fontes & Suplementos"}
+            </button>
+          </div>
+
+          {showSourcesPanel && (
+            <Card className="p-3.5">
+              <SourceToggleGroup
+                compact
+                enabled={enabledSources}
+                onToggle={(src) =>
+                  setEnabledSources((prev) => toggleSourceList(prev, src))
+                }
+                onSetCommunity={(on) =>
+                  setEnabledSources((prev) => setCommunityList(prev, on))
+                }
+              />
+            </Card>
+          )}
+
+          {visibleRelics.length === 0 ? (
+            <Card className="p-8 text-center space-y-3 border-dashed">
+              <p className="text-sm text-[#A1A1AA]">
+                A fonte <strong>Mistérios do Outro Lado</strong> está desativada
+                nos filtros atuais.
+              </p>
+              <Button
+                size="sm"
+                variant="primary"
+                onClick={() =>
+                  setEnabledSources((prev) =>
+                    prev.includes("misterios_do_outro_lado")
+                      ? prev
+                      : [...prev, "misterios_do_outro_lado"]
+                  )
+                }
+              >
+                Ativar Mistérios do Outro Lado
+              </Button>
+            </Card>
+          ) : (
+            <div className="grid gap-5 lg:grid-cols-2">
+              {visibleRelics.map((relic) => {
+                const st = ELEMENT_STYLES[relic.element];
+                return (
+                  <Card
+                    key={relic.id}
+                    className={cn(
+                      "p-5 space-y-4 border-l-[3px] hover:border-[#32323E] transition-colors",
+                      st.borderLeft
+                    )}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Crown className={cn("h-4 w-4", st.text)} />
+                          <h3 className="text-lg font-bold text-zinc-50">
+                            {relic.name}
+                          </h3>
+                          <SourceBadge source={relic.source} />
+                          <span
+                            className={cn(
+                              "rounded border px-2 py-0.5 text-[11px] font-semibold uppercase",
+                              st.badge
+                            )}
+                          >
+                            {relic.element}
+                          </span>
+                        </div>
+                      </div>
+                      <Button
+                        size="xs"
+                        variant="primary"
+                        className="shrink-0"
+                        onClick={() => {
+                          setTargetAgentId(agents[0]?.id ?? "");
+                          setRelicModal(relic);
+                        }}
+                      >
+                        <Users className="h-3 w-3" /> Adicionar como Aliada
+                      </Button>
+                    </div>
+
+                    <div className="space-y-2.5 text-xs text-zinc-300 leading-relaxed">
+                      <div className="rounded-sm border border-[#22222A] bg-[#0D0D11] p-3 space-y-1">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#8E8E9E] block">
+                          Efeito do Objeto
+                        </span>
+                        <p>{relic.objectEffect}</p>
+                      </div>
+
+                      <div className="rounded-sm border border-[#22222A] bg-[#0D0D11] p-3 space-y-1">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300 block">
+                          Relação com o Portador
+                        </span>
+                        <p>{relic.bearerRelation}</p>
+                      </div>
+
+                      <div className="rounded-sm border border-purple-500/30 bg-purple-500/5 p-3 space-y-1.5">
+                        <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-purple-300 block">
+                          Relíquia como Aliada
+                        </span>
+                        <p>
+                          <strong className="text-zinc-100">Geral:</strong>{" "}
+                          {relic.ally.general}
+                        </p>
+                        <p>
+                          <strong className="text-zinc-100">Bônus:</strong>{" "}
+                          {relic.ally.bonus}
+                        </p>
+                        <p>
+                          <strong className="text-zinc-100">Habilidade:</strong>{" "}
+                          {relic.ally.ability}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 border-t border-[#20202C] pt-3">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
+                        Habilidades Opcionais ({relic.optionalAbilities.length})
+                      </span>
+                      {relic.optionalAbilities.map((ab) => (
+                        <div key={ab.name} className="text-xs text-zinc-400">
+                          <strong className="text-zinc-200">{ab.name}:</strong>{" "}
+                          {ab.description}
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
-        <div className="flex flex-wrap gap-1.5">
+      ) : (
+        <>
+          {/* Search & Element Filter */}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-wrap items-center gap-2 flex-1">
+              <div className="relative max-w-sm w-full">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+                <Input
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Buscar ameaça, base ou VD..."
+                  className="pl-9"
+                />
+              </div>
+              <div className="inline-flex rounded-sm border border-[#22222A] bg-[#0D0D11] p-0.5 text-[11px]">
+                {(
+                  [
+                    { id: "todos", label: "Todas" },
+                    { id: "base", label: "Criaturas" },
+                    { id: "variantes", label: `Variantes (${variantCount})` },
+                  ] as const
+                ).map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setVariantFilter(opt.id)}
+                    className={cn(
+                      "rounded-sm px-2.5 py-1 font-mono transition-colors",
+                      variantFilter === opt.id
+                        ? "bg-[#16161C] text-[#F4F4F5]"
+                        : "text-[#8E8E9E] hover:text-[#D4D4D8]"
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+        <div className="flex flex-wrap gap-1.5 items-center">
           <button
             type="button"
             onClick={() => setElementFilter("Todos")}
@@ -269,7 +579,7 @@ export default function AmeacasPage() {
                 : "border-[#22222A] bg-[#101014] text-[#8E8E9E] hover:text-[#D4D4D8]"
             )}
           >
-            Todos ({threats.length})
+            Todos ({combinedThreats.length})
           </button>
           {ELEMENTS.map((el) => {
             const st = ELEMENT_STYLES[el];
@@ -289,8 +599,35 @@ export default function AmeacasPage() {
               </button>
             );
           })}
+          <button
+            type="button"
+            onClick={() => setShowSourcesPanel((v) => !v)}
+            className={cn(
+              "rounded-sm border px-2.5 py-1 font-mono text-[10px] transition-colors",
+              showSourcesPanel
+                ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                : "border-[#32323E] bg-[#141419] text-[#A1A1AA] hover:text-[#F4F4F5]"
+            )}
+          >
+            {showSourcesPanel ? "Ocultar Fontes" : "Fontes & Suplementos"}
+          </button>
         </div>
       </div>
+
+      {showSourcesPanel && (
+        <Card className="p-3.5">
+          <SourceToggleGroup
+            compact
+            enabled={enabledSources}
+            onToggle={(src) =>
+              setEnabledSources((prev) => toggleSourceList(prev, src))
+            }
+            onSetCommunity={(on) =>
+              setEnabledSources((prev) => setCommunityList(prev, on))
+            }
+          />
+        </Card>
+      )}
 
       {/* Threat Cards */}
       <div className="grid gap-5 lg:grid-cols-2">
@@ -312,6 +649,12 @@ export default function AmeacasPage() {
                     <h2 className="text-lg font-bold text-zinc-50">
                       {threat.name}
                     </h2>
+                    <SourceBadge source={threat.source} />
+                    {threat.isVariant && (
+                      <Badge variant="warning" className="font-mono text-[10px]">
+                        VARIANTE
+                      </Badge>
+                    )}
                     <span
                       className={cn(
                         "rounded border px-2 py-0.5 text-[11px] font-semibold uppercase",
@@ -320,6 +663,17 @@ export default function AmeacasPage() {
                     >
                       {threat.element}
                     </span>
+                    {threat.secondaryElements?.map((sec) => (
+                      <span
+                        key={sec}
+                        className={cn(
+                          "rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase",
+                          ELEMENT_STYLES[sec].badge
+                        )}
+                      >
+                        + {sec}
+                      </span>
+                    ))}
                     <Badge variant="default" className="font-mono">
                       VD {threat.vd}
                     </Badge>
@@ -366,7 +720,16 @@ export default function AmeacasPage() {
                 </div>
               </div>
 
-              {threat.description && (
+              {threat.isVariant && threat.variantAlterations && (
+                <div className="rounded-sm border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px] text-amber-100 space-y-0.5">
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300 block">
+                    Variante de {threat.baseCreatureName} · Alterações
+                  </span>
+                  <p>{threat.variantAlterations}</p>
+                </div>
+              )}
+
+              {threat.description && !threat.isVariant && (
                 <p className="text-xs text-zinc-400 leading-relaxed">
                   {threat.description}
                 </p>
@@ -447,7 +810,7 @@ export default function AmeacasPage() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => toggleThreatEnigmaResolved(threat.id)}
+                      onClick={() => handleToggleEnigma(threat)}
                       className={cn(
                         "rounded-md border px-2 py-0.5 font-mono text-[10px] font-semibold transition-colors",
                         threat.enigmaResolved
@@ -465,51 +828,57 @@ export default function AmeacasPage() {
               )}
 
               {/* Clickable Attacks */}
-              <div className="space-y-2 border-t border-[#20202C] pt-3">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
-                  Ataques (clique para rolar)
-                </span>
-                {threat.attacks.map((atk) => (
-                  <div
-                    key={atk.id}
-                    className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#242432] bg-[#0D0D14] p-2.5"
-                  >
-                    <div>
-                      <p className="text-xs font-semibold text-zinc-100">
-                        {atk.name}
-                      </p>
-                      <p className="font-mono text-[11px] text-zinc-400">
-                        {atk.diceCount}d20+{atk.testBonus} • {atk.damageFormula}{" "}
-                        ({atk.damageType}) • Crít {atk.threatRange}/x
-                        {atk.critMultiplier}
-                      </p>
+              {threat.attacks.length > 0 && (
+                <div className="space-y-2 border-t border-[#20202C] pt-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
+                    Ataques (clique para rolar)
+                  </span>
+                  {threat.attacks.map((atk) => (
+                    <div
+                      key={atk.id}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#242432] bg-[#0D0D14] p-2.5"
+                    >
+                      <div>
+                        <p className="text-xs font-semibold text-zinc-100">
+                          {atk.name}
+                        </p>
+                        <p className="font-mono text-[11px] text-zinc-400">
+                          {atk.diceCount}d20+{atk.testBonus} • {atk.damageFormula}{" "}
+                          ({atk.damageType}) • Crít {atk.threatRange}/x
+                          {atk.critMultiplier}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Button
+                          size="xs"
+                          variant="primary"
+                          onClick={() => handleRollThreatAttack(threat, atk)}
+                        >
+                          <Dices className="h-3 w-3" /> Teste
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="default"
+                          onClick={() =>
+                            handleRollThreatDamage(threat, atk, false)
+                          }
+                        >
+                          <Swords className="h-3 w-3 text-red-400" /> Dano
+                        </Button>
+                        <Button
+                          size="xs"
+                          variant="danger"
+                          onClick={() =>
+                            handleRollThreatDamage(threat, atk, true)
+                          }
+                        >
+                          <Sparkles className="h-3 w-3" /> x{atk.critMultiplier}
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <Button
-                        size="xs"
-                        variant="primary"
-                        onClick={() => handleRollThreatAttack(threat, atk)}
-                      >
-                        <Dices className="h-3 w-3" /> Teste
-                      </Button>
-                      <Button
-                        size="xs"
-                        variant="default"
-                        onClick={() => handleRollThreatDamage(threat, atk, false)}
-                      >
-                        <Swords className="h-3 w-3 text-red-400" /> Dano
-                      </Button>
-                      <Button
-                        size="xs"
-                        variant="danger"
-                        onClick={() => handleRollThreatDamage(threat, atk, true)}
-                      >
-                        <Sparkles className="h-3 w-3" /> x{atk.critMultiplier}
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
 
               {/* Abilities */}
               {threat.abilities.length > 0 && (
@@ -529,6 +898,61 @@ export default function AmeacasPage() {
           );
         })}
       </div>
+        </>
+      )}
+
+      {/* Add Relic as Ally Modal */}
+      <Modal
+        open={Boolean(relicModal)}
+        onClose={() => setRelicModal(null)}
+        title={`Relíquia como Aliada — ${relicModal?.name ?? ""}`}
+        description="Selecione a ficha do agente que receberá os bônus e a habilidade desta Relíquia na aba Aliados & Pets."
+        maxWidth="max-w-md"
+      >
+        {agents.length === 0 ? (
+          <p className="text-xs text-zinc-400">
+            Você ainda não possui nenhum agente cadastrado. Crie um agente na
+            aba <strong className="text-zinc-200">Agentes</strong> primeiro.
+          </p>
+        ) : (
+          <div className="space-y-4">
+            {relicModal && (
+              <div className="rounded-sm border border-[#22222A] bg-[#0D0D11] p-3 text-xs text-zinc-300 space-y-1">
+                <p>
+                  <strong className="text-zinc-100">Geral:</strong>{" "}
+                  {relicModal.ally.general}
+                </p>
+                <p>
+                  <strong className="text-zinc-100">Bônus:</strong>{" "}
+                  {relicModal.ally.bonus}
+                </p>
+                <p>
+                  <strong className="text-zinc-100">Habilidade:</strong>{" "}
+                  {relicModal.ally.ability}
+                </p>
+              </div>
+            )}
+            <Select
+              value={targetAgentId}
+              onChange={(e) => setTargetAgentId(e.target.value)}
+            >
+              {agents.map((a) => (
+                <option key={a.id} value={a.id}>
+                  {a.name} ({a.patente})
+                </option>
+              ))}
+            </Select>
+            <div className="flex justify-end gap-2">
+              <Button variant="ghost" onClick={() => setRelicModal(null)}>
+                Cancelar
+              </Button>
+              <Button variant="primary" onClick={handleAddRelicAsAlly}>
+                <Users className="h-3.5 w-3.5" /> Adicionar à Ficha
+              </Button>
+            </div>
+          </div>
+        )}
+      </Modal>
 
       {/* Send to Initiative Modal */}
       <Modal

@@ -30,8 +30,8 @@ import type {
 import { BASE_ORIGINS, getOriginById } from "@/data/origins";
 import { ALL_CLASSES, getClassById } from "@/data/classes";
 import { BASE_TRAILS } from "@/data/trails";
-import { COMMUNITY_TRAILS } from "@/data/supplements";
-import { isCommunitySource } from "@/data/sources";
+import { COMMUNITY_ORIGINS, COMMUNITY_TRAILS } from "@/data/supplements";
+import { filterByEnabledSources, isCommunitySource } from "@/data/sources";
 import { ORGANIZATIONS, getOrganization } from "@/data/organizations";
 import {
   SourceToggleGroup,
@@ -249,20 +249,43 @@ export function SheetTacticalHeader({
     }));
   };
 
-  const allOrigins = useMemo(
-    () => [...BASE_ORIGINS, ...homebrew.origins],
-    [homebrew.origins]
-  );
+  const allOrigins = useMemo(() => {
+    const enabledCommunity = filterByEnabledSources(
+      COMMUNITY_ORIGINS,
+      agent.enabledSources
+    );
+    const currentCommunity = COMMUNITY_ORIGINS.find(
+      (o) =>
+        o.id === agent.originId || o.id === normalizeCatalogId(agent.originId)
+    );
+    const community =
+      currentCommunity &&
+      !enabledCommunity.some((o) => o.id === currentCommunity.id)
+        ? [...enabledCommunity, currentCommunity]
+        : enabledCommunity;
+    return [...BASE_ORIGINS, ...community, ...homebrew.origins];
+  }, [homebrew.origins, agent.enabledSources, agent.originId]);
 
   const classTrails = useMemo(() => {
+    const enabledCommunity = filterByEnabledSources(
+      COMMUNITY_TRAILS,
+      agent.enabledSources
+    );
+    const currentCommunity = COMMUNITY_TRAILS.find(
+      (t) =>
+        t.id === agent.trilhaId || t.id === normalizeCatalogId(agent.trilhaId)
+    );
+    const community =
+      currentCommunity &&
+      !enabledCommunity.some((t) => t.id === currentCommunity.id)
+        ? [...enabledCommunity, currentCommunity]
+        : enabledCommunity;
     return [
       ...BASE_TRAILS,
-      ...COMMUNITY_TRAILS,
+      ...community,
       ...(homebrew.trails ?? []),
-    ].filter(
-      (t) => t.classId === agent.classId
-    );
-  }, [agent.classId, homebrew.trails]);
+    ].filter((t) => t.classId === agent.classId);
+  }, [agent.classId, agent.enabledSources, agent.trilhaId, homebrew.trails]);
 
   const origin = getOriginById(agent.originId, homebrew.origins);
   const cls = getClassById(agent.classId);
@@ -280,6 +303,7 @@ export function SheetTacticalHeader({
     patente: agent.patente,
     inventory: agent.inventory,
     extraCapacityBonus: getTrailCarryBonus(agent),
+    organization: agent.organization,
   });
   const autoConds = evaluateVitalConditions({
     currentPv: agent.status.pv.current,
@@ -343,8 +367,12 @@ export function SheetTacticalHeader({
         patente: prev.patente,
         optionalRules: prev.optionalRules,
         transcenderCount: oldVitals.transcenderCount,
-        halfInitialSan:
-          normalizeCatalogId(prev.originId) === "cultista_arrependido",
+        halfInitialSan: Boolean(
+          getOriginById(prev.originId, homebrew.origins)?.efeitosPassivos
+            ?.metadeSanInicial ||
+            getOriginById(prev.originId, homebrew.origins)?.halfInitialSan ||
+            normalizeCatalogId(prev.originId) === "cultista_arrependido"
+        ),
         permanentSanLoss: prev.permanentSanLoss ?? 0,
       });
       return {
@@ -1283,7 +1311,7 @@ export function SheetTacticalHeader({
               Organização da Realidade
             </label>
             <Select
-              value={agent.organization ?? "ordo_realitas"}
+              value={getOrganization(agent.organization).id}
               onChange={(e) =>
                 onUpdate((prev) => ({
                   ...prev,

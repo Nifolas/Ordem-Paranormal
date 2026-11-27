@@ -1,4 +1,5 @@
 import type { OriginDefinition, OriginPassiveEffects, SkillKey } from "@/types/ordem";
+import { COMMUNITY_ORIGINS } from "@/data/supplements";
 
 /**
  * LOTE 1 — Todas as 49 Origens oficiais:
@@ -638,7 +639,7 @@ export function getOriginById(
 ): OriginDefinition | undefined {
   if (!originId) return undefined;
   const normalized = originId.replace(/-/g, "_");
-  return [...BASE_ORIGINS, ...extraOrigins].find(
+  return [...BASE_ORIGINS, ...COMMUNITY_ORIGINS, ...extraOrigins].find(
     (o) => o.id === originId || o.id === normalized
   );
 }

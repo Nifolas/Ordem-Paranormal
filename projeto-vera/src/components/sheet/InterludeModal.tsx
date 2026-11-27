@@ -39,7 +39,9 @@ import {
   getAgentSkillList,
   STANDARD_SKILL_KEYS,
 } from "@/data/skills";
-import { cn, formatSigned, generateId } from "@/lib/utils";
+import { COMMUNITY_PARANORMAL_FOODS } from "@/data/supplements";
+import { SourceBadge } from "@/components/SourceToggles";
+import { cn, ELEMENT_STYLES, formatSigned, generateId } from "@/lib/utils";
 import { useAppStore } from "@/store/useAppStore";
 import {
   Badge,
@@ -143,7 +145,7 @@ export function InterludeModal({
   const [readCount, setReadCount] = useState(0);
 
   const [maintenanceCount, setMaintenanceCount] = useState(0);
-  const [maintenanceItemId, setMaintenanceItemId] = useState<string>("");
+  const [maintenanceItemIds, setMaintenanceItemIds] = useState<string[]>([]);
   const [maintenanceNote, setMaintenanceNote] = useState<string>("");
 
   const [reviewCount, setReviewCount] = useState(0);
@@ -182,6 +184,8 @@ export function InterludeModal({
         dishes: didEat ? dishes : [],
         exerciseCount,
         readCount,
+        maintenanceCount,
+        vig: effAttrs.VIG,
         originId: agent.originId,
         trilhaId: agent.trilhaId,
         nex: agent.nex,
@@ -197,6 +201,8 @@ export function InterludeModal({
       dishes,
       exerciseCount,
       readCount,
+      maintenanceCount,
+      effAttrs.VIG,
       agent.originId,
       agent.trilhaId,
       agent.nex,
@@ -224,7 +230,7 @@ export function InterludeModal({
     setExerciseCount(0);
     setReadCount(0);
     setMaintenanceCount(0);
-    setMaintenanceItemId("");
+    setMaintenanceItemIds([]);
     setMaintenanceNote("");
     setReviewCount(0);
     setLastReviewLog(null);
@@ -240,6 +246,7 @@ export function InterludeModal({
       patente: agent.patente,
       inventory: agent.inventory,
       extraCapacityBonus: getTrailCarryBonus(agent),
+      organization: agent.organization,
     });
     const loadPen = sk.penalidadeCarga && load.isOverloaded ? -5 : 0;
     const kitPen = sk.requerKit && sk.hasKit === false ? -5 : 0;
@@ -311,7 +318,9 @@ export function InterludeModal({
         source: "exercitar",
         dieFormula: "1d6",
         appliesTo: ["AGI", "FOR", "VIG"],
-        label: "Exercitar-se (+1d6 AGI/FOR/VIG)",
+        label: preview.exerciseWholeScene
+          ? "Exercitar-se + Alimento de Sangue (+1d6 AGI/FOR/VIG pela cena inteira)"
+          : "Exercitar-se (+1d6 AGI/FOR/VIG)",
         createdAt: now,
       });
     }
@@ -324,10 +333,17 @@ export function InterludeModal({
         source: "ler",
         dieFormula: preview.readDieFormula,
         appliesTo: ["INT", "PRE"],
-        label: `Leitura (+${preview.readDieFormula} INT/PRE)`,
+        label: preview.readWholeScene
+          ? `Leitura + Alimento de Conhecimento (+${preview.readDieFormula} INT/PRE pela cena inteira)`
+          : `Leitura (+${preview.readDieFormula} INT/PRE)`,
         createdAt: now,
       });
     }
+
+    const activeMaintenanceIds = maintenanceItemIds.slice(
+      0,
+      preview.maxMaintenanceItems
+    );
 
     onUpdate((prev) => {
       const effVitals = getAgentEffectiveVitals(prev);
@@ -339,9 +355,12 @@ export function InterludeModal({
         effVitals.maxPe,
         prev.status.pe.current + preview.peRecovered
       );
-      const nextSan = Math.min(
-        effVitals.maxSan,
-        prev.status.san.current + preview.sanRecovered
+      const nextSan = Math.max(
+        0,
+        Math.min(
+          effVitals.maxSan,
+          prev.status.san.current + preview.sanRecovered
+        ) - preview.sanLostFromParanormalFood
       );
 
       const curPd = prev.status.pd ?? {
@@ -350,9 +369,10 @@ export function InterludeModal({
         maxOverride: null,
         autoCalc: true,
       };
-      const nextPd = Math.min(
-        effVitals.maxPd,
-        curPd.current + preview.pdRecovered
+      const nextPd = Math.max(
+        0,
+        Math.min(effVitals.maxPd, curPd.current + preview.pdRecovered) -
+          (effVitals.usingPd ? preview.sanLostFromParanormalFood : 0)
       );
 
       const conds = evaluateVitalConditions({
@@ -363,17 +383,23 @@ export function InterludeModal({
         usingPd: effVitals.usingPd,
       });
 
+      const repairedSet = new Set(activeMaintenanceIds);
       const nextInventory =
-        maintenanceCount > 0 && maintenanceItemId
+        maintenanceCount > 0 && repairedSet.size > 0
           ? prev.inventory.map((it) =>
-              it.id === maintenanceItemId ? { ...it, broken: false } : it
+              repairedSet.has(it.id) ? { ...it, broken: false } : it
             )
           : prev.inventory;
 
-      const maintenanceAppend =
-        maintenanceCount > 0 && maintenanceNote.trim()
-          ? `\n[Interlúdio · Manutenção] ${maintenanceNote.trim()}`
-          : "";
+      const noteLines: string[] = [];
+      if (maintenanceCount > 0 && maintenanceNote.trim()) {
+        noteLines.push(`[Interlúdio · Manutenção] ${maintenanceNote.trim()}`);
+      }
+      for (const foodNote of preview.paranormalFoodNotes) {
+        noteLines.push(`[Interlúdio · Alimentar-se] ${foodNote}`);
+      }
+      const notesAppend =
+        noteLines.length > 0 ? `\n${noteLines.join("\n")}` : "";
 
       return {
         ...prev,
@@ -392,17 +418,22 @@ export function InterludeModal({
           machucado: conds.machucado,
           morrendo: nextPv > 0 ? false : prev.status.morrendo,
           perturbado: conds.perturbado,
-          enlouquecendo: nextSan > 0 ? false : prev.status.enlouquecendo,
+          enlouquecendo:
+            !effVitals.usingPd && nextSan === 0
+              ? true
+              : nextSan > 0
+              ? false
+              : prev.status.enlouquecendo,
         },
         inventory: nextInventory,
         interludeBonusDice: [
           ...(prev.interludeBonusDice ?? []),
           ...newBonusDice,
         ],
-        description: maintenanceAppend
+        description: notesAppend
           ? {
               ...prev.description,
-              notes: `${prev.description.notes}${maintenanceAppend}`.trim(),
+              notes: `${prev.description.notes}${notesAppend}`.trim(),
             }
           : prev.description,
       };
@@ -416,16 +447,31 @@ export function InterludeModal({
     if (preview.pdRecovered > 0) summaryParts.push(`+${preview.pdRecovered} PD`);
     if (preview.pdTempBonus > 0)
       summaryParts.push(`+${preview.pdTempBonus} PD temp.`);
+    if (preview.sanLostFromParanormalFood > 0) {
+      summaryParts.push(
+        `-${preview.sanLostFromParanormalFood} ${
+          vitals.usingPd ? "PD" : "SAN"
+        } (Alimento Paranormal)`
+      );
+    }
     if (addExercise > 0) summaryParts.push(`+${addExercise}× 1d6 Exercitar`);
     if (addRead > 0)
       summaryParts.push(`+${addRead}× ${preview.readDieFormula} Leitura`);
+    if (preview.nextScenePeDiscount > 0) {
+      summaryParts.push("-1 PE em habilidades/rituais na próxima cena");
+    }
     if (maintenanceCount > 0) {
-      const itemName = agent.inventory.find(
-        (i) => i.id === maintenanceItemId
-      )?.name;
+      const itemNames = activeMaintenanceIds
+        .map((id) => agent.inventory.find((i) => i.id === id)?.name)
+        .filter((n): n is string => Boolean(n));
       summaryParts.push(
-        itemName ? `Manutenção (${itemName})` : "Manutenção realizada"
+        itemNames.length > 0
+          ? `Manutenção (${itemNames.join(", ")})`
+          : "Manutenção realizada"
       );
+    }
+    for (const foodNote of preview.paranormalFoodNotes) {
+      summaryParts.push(foodNote);
     }
 
     pushRoll({
@@ -687,28 +733,81 @@ export function InterludeModal({
             </div>
 
             {didEat && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                {DISH_OPTIONS.map((d) => {
-                  const selected = dishes.includes(d.id);
-                  return (
-                    <button
-                      key={d.id}
-                      type="button"
-                      onClick={() => toggleDish(d.id)}
-                      className={cn(
-                        "rounded-sm border px-2.5 py-2 text-left transition-colors",
-                        selected
-                          ? "border-amber-400/70 bg-amber-500/10 text-[#F4F4F5]"
-                          : "border-[#22222A] bg-[#09090B] text-[#A1A1AA] hover:border-[#32323E]"
-                      )}
-                    >
-                      <div className="font-mono text-xs font-bold">{d.label}</div>
-                      <p className="text-[11px] text-[#8E8E9E] mt-0.5">
-                        {d.effect}
-                      </p>
-                    </button>
-                  );
-                })}
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {DISH_OPTIONS.map((d) => {
+                    const selected = dishes.includes(d.id);
+                    return (
+                      <button
+                        key={d.id}
+                        type="button"
+                        onClick={() => toggleDish(d.id)}
+                        className={cn(
+                          "rounded-sm border px-2.5 py-2 text-left transition-colors",
+                          selected
+                            ? "border-amber-400/70 bg-amber-500/10 text-[#F4F4F5]"
+                            : "border-[#22222A] bg-[#09090B] text-[#A1A1AA] hover:border-[#32323E]"
+                        )}
+                      >
+                        <div className="font-mono text-xs font-bold">
+                          {d.label}
+                        </div>
+                        <p className="text-[11px] text-[#8E8E9E] mt-0.5">
+                          {d.effect}
+                        </p>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Alimentos Paranormais (Mistérios do Outro Lado) */}
+                <div className="space-y-1.5 border-t border-[#22222A] pt-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-purple-300">
+                        Alimentos Paranormais
+                      </span>
+                      <SourceBadge source="misterios_do_outro_lado" />
+                    </div>
+                    <span className="font-mono text-[10px] text-red-300">
+                      Custo por alimento: -{Math.max(0, effAttrs.VIG)}{" "}
+                      {vitals.usingPd ? "PD" : "SAN"} (VIG {effAttrs.VIG})
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                    {COMMUNITY_PARANORMAL_FOODS.map((food) => {
+                      const selected = dishes.includes(food.id);
+                      const elemSt = ELEMENT_STYLES[food.element];
+                      return (
+                        <button
+                          key={food.id}
+                          type="button"
+                          onClick={() => toggleDish(food.id)}
+                          className={cn(
+                            "rounded-sm border border-l-[3px] px-2.5 py-2 text-left transition-colors",
+                            elemSt.borderLeft,
+                            selected
+                              ? elemSt.badge
+                              : "border-[#22222A] bg-[#09090B] text-[#A1A1AA] hover:border-[#32323E]"
+                          )}
+                        >
+                          <div className="flex items-center justify-between gap-1.5">
+                            <span className="font-mono text-xs font-bold">
+                              {food.name}
+                            </span>
+                            <span className="font-mono text-[9px] uppercase opacity-80">
+                              -{Math.max(0, effAttrs.VIG)}{" "}
+                              {vitals.usingPd ? "PD" : "SAN"}
+                            </span>
+                          </div>
+                          <p className="text-[11px] opacity-85 mt-0.5 leading-snug">
+                            <strong>Interlúdio:</strong> {food.interludeEffect}
+                          </p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -842,18 +941,62 @@ export function InterludeModal({
 
             {maintenanceCount > 0 && (
               <div className="space-y-2">
-                <Select
-                  value={maintenanceItemId}
-                  onChange={(e) => setMaintenanceItemId(e.target.value)}
-                  className="h-8 text-xs"
-                >
-                  <option value="">Selecionar item do inventário (opcional)...</option>
-                  {agent.inventory.map((it) => (
-                    <option key={it.id} value={it.id}>
-                      {it.name} {it.broken ? "(Quebrado)" : ""}
+                {preview.maxMaintenanceItems > 1 ? (
+                  <div className="space-y-1.5">
+                    <span className="font-mono text-[10px] text-amber-300 block">
+                      Alimento de Energia: selecione até{" "}
+                      {preview.maxMaintenanceItems} itens ({maintenanceItemIds.length}/
+                      {preview.maxMaintenanceItems})
+                    </span>
+                    <div className="max-h-28 overflow-y-auto space-y-1 rounded-sm border border-[#22222A] bg-[#09090B] p-1.5">
+                      {agent.inventory.map((it) => {
+                        const checked = maintenanceItemIds.includes(it.id);
+                        return (
+                          <label
+                            key={it.id}
+                            className="flex items-center gap-2 text-xs text-[#D4D4D8] cursor-pointer px-1 py-0.5 hover:bg-[#141419] rounded-sm"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() =>
+                                setMaintenanceItemIds((prev) =>
+                                  prev.includes(it.id)
+                                    ? prev.filter((x) => x !== it.id)
+                                    : prev.length >= preview.maxMaintenanceItems
+                                    ? [...prev.slice(1), it.id]
+                                    : [...prev, it.id]
+                                )
+                              }
+                            />
+                            <span className="truncate">
+                              {it.name} {it.broken ? "(Quebrado)" : ""}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : (
+                  <Select
+                    value={maintenanceItemIds[0] ?? ""}
+                    onChange={(e) =>
+                      setMaintenanceItemIds(
+                        e.target.value ? [e.target.value] : []
+                      )
+                    }
+                    className="h-8 text-xs"
+                  >
+                    <option value="">
+                      Selecionar item do inventário (opcional)...
                     </option>
-                  ))}
-                </Select>
+                    {agent.inventory.map((it) => (
+                      <option key={it.id} value={it.id}>
+                        {it.name} {it.broken ? "(Quebrado)" : ""}
+                      </option>
+                    ))}
+                  </Select>
+                )}
                 <Input
                   value={maintenanceNote}
                   onChange={(e) => setMaintenanceNote(e.target.value)}
@@ -984,7 +1127,26 @@ export function InterludeModal({
             {preview.reviewCaseBonus > 0 && (
               <Badge variant="warning">+5 Revisar Caso</Badge>
             )}
+            {preview.sanLostFromParanormalFood > 0 && (
+              <Badge variant="danger">
+                -{preview.sanLostFromParanormalFood}{" "}
+                {vitals.usingPd ? "PD" : "SAN"} (Alimento Paranormal)
+              </Badge>
+            )}
+            {preview.nextScenePeDiscount > 0 && (
+              <Badge variant="purple">-1 PE na próxima cena</Badge>
+            )}
+            {preview.maxMaintenanceItems > 1 && (
+              <Badge variant="warning">Manutenção até 3 itens</Badge>
+            )}
           </div>
+          {preview.paranormalFoodNotes.length > 0 && (
+            <div className="space-y-1 pt-1 border-t border-[#1E1E26] text-[11px] text-[#D4D4D8]">
+              {preview.paranormalFoodNotes.map((note) => (
+                <p key={note}>• {note}</p>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Footer Actions */}

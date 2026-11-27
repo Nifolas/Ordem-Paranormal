@@ -214,17 +214,34 @@ export function calculateRitualPeCost(params: {
  * ORGANIZAÇÕES DA REALIDADE (Mistérios do Outro Lado)
  * ============================================================================ */
 
+function normalizeOrgKey(
+  organization?: OrganizationId
+): "ordo_realitas" | "hell_hunters" | "famiglia_leone" | "obscurite" | "ordo_calamitas" {
+  if (!organization) return "ordo_realitas";
+  const stripped = organization.replace(/^mol_org_/, "");
+  if (
+    stripped === "hell_hunters" ||
+    stripped === "famiglia_leone" ||
+    stripped === "obscurite" ||
+    stripped === "ordo_calamitas"
+  ) {
+    return stripped;
+  }
+  return "ordo_realitas";
+}
+
 /** Ajuste de categoria de item imposto pela organização do agente. */
 export function getOrganizationCategoryDelta(
   item: Pick<InventoryItem, "type" | "name" | "element">,
   organization?: OrganizationId
 ): number {
-  if (!organization || organization === "ordo_realitas") return 0;
+  const org = normalizeOrgKey(organization);
+  if (org === "ordo_realitas") return 0;
   const cat = normalizeItemCategoryType(item);
   const isParanormal = cat === "paranormal" || cat === "amaldicoado";
-  if (organization === "hell_hunters" && cat === "arma") return -1;
-  if (organization === "famiglia_leone" && isParanormal) return 1;
-  if (organization === "obscurite" && isParanormal) return -1;
+  if (org === "hell_hunters" && cat === "arma") return -1;
+  if (org === "famiglia_leone" && isParanormal) return 1;
+  if (org === "obscurite" && isParanormal) return -1;
   return 0;
 }
 
@@ -233,7 +250,7 @@ export function getOrganizationWeaponDamageBonus(
   organization: OrganizationId | undefined,
   patente: Patente
 ): number {
-  if (organization !== "hell_hunters") return 0;
+  if (normalizeOrgKey(organization) !== "hell_hunters") return 0;
   const high = patente === "Oficial de Operações" || patente === "Agente de Elite";
   return high ? 5 : 3;
 }
@@ -242,7 +259,7 @@ export function getOrganizationWeaponDamageBonus(
 export function getTranscenderSanPenaltyPerCount(
   organization: OrganizationId | undefined
 ): number | undefined {
-  return organization === "ordo_calamitas" ? 2 : undefined;
+  return normalizeOrgKey(organization) === "ordo_calamitas" ? 2 : undefined;
 }
 
 /**
@@ -495,6 +512,10 @@ export function getTrailCarryBonus(agent: Agent): number {
   const effAttrs = getAgentEffectiveAttributes(agent);
   if (trail === "tecnico") return effAttrs.INT;
   if (trail === "muambeiro") return 5;
+  if (trail === "mol_armeiro") {
+    const tatica = agent.skills?.tatica;
+    return (tatica?.training ?? 0) + (tatica?.bonus ?? 0);
+  }
   return 0;
 }
 
@@ -1604,6 +1625,8 @@ export interface InterludeCalculationInput {
   dishes: InterludeDish[];
   exerciseCount?: number;
   readCount?: number;
+  maintenanceCount?: number;
+  vig?: number;
   originId?: string;
   trilhaId?: string | null;
   nex?: number;
@@ -1618,8 +1641,21 @@ export interface InterludeCalculationResult {
   reviewCaseBonus: number;
   exerciseDiceCount: number;
   readDiceCount: number;
-  readDieFormula: "1d6" | "2d6" | "1d8";
+  readDieFormula: "1d6" | "2d6" | "1d8" | "1d10" | "1d12";
+  sanLostFromParanormalFood: number;
+  paranormalFoodNotes: string[];
+  maxMaintenanceItems: number;
+  exerciseWholeScene: boolean;
+  readWholeScene: boolean;
+  nextScenePeDiscount: number;
 }
+
+const PARANORMAL_FOOD_IDS = new Set<InterludeDish>([
+  "mol_alimento_sangue",
+  "mol_alimento_morte",
+  "mol_alimento_conhecimento",
+  "mol_alimento_energia",
+]);
 
 export function calculateInterludeRecovery(
   input: InterludeCalculationInput
@@ -1632,6 +1668,10 @@ export function calculateInterludeRecovery(
   const hasEnergetico = dishes.includes("energetico");
   const hasFavorito = dishes.includes("favorito");
   const hasRapido = dishes.includes("rapido");
+  const hasAlimentoSangue = dishes.includes("mol_alimento_sangue");
+  const hasAlimentoMorte = dishes.includes("mol_alimento_morte");
+  const hasAlimentoConhecimento = dishes.includes("mol_alimento_conhecimento");
+  const hasAlimentoEnergia = dishes.includes("mol_alimento_energia");
 
   let pvRecovered = 0;
   let peRecovered = 0;
@@ -1664,12 +1704,63 @@ export function calculateInterludeRecovery(
 
   const originNorm = normalizeCatalogId(input.originId);
   const trailNorm = normalizeCatalogId(input.trilhaId);
+  const nex = input.nex ?? 0;
 
-  let readDieFormula: "1d6" | "2d6" | "1d8" = "1d6";
+  let readDieFormula: "1d6" | "2d6" | "1d8" | "1d10" | "1d12" = "1d6";
   if (originNorm === "nerd_entusiasta") {
     readDieFormula = "2d6";
-  } else if (trailNorm === "bibliotecario" && (input.nex ?? 0) >= 40) {
+  } else if (trailNorm === "mol_detetive") {
+    if (nex >= 65) readDieFormula = "1d12";
+    else if (nex >= 40) readDieFormula = "1d10";
+    else if (nex >= 10) readDieFormula = "1d8";
+  } else if (trailNorm === "bibliotecario" && nex >= 40) {
     readDieFormula = "1d8";
+  }
+
+  const exerciseDiceCount = Math.max(0, Math.floor(input.exerciseCount ?? 0));
+  const readDiceCount = Math.max(0, Math.floor(input.readCount ?? 0));
+  const maintenanceCount = Math.max(0, Math.floor(input.maintenanceCount ?? 0));
+
+  const paranormalFoodsCount = dishes.filter((d) =>
+    PARANORMAL_FOOD_IDS.has(d)
+  ).length;
+  const sanLostFromParanormalFood =
+    paranormalFoodsCount * Math.max(0, Math.floor(input.vig ?? 0));
+
+  const paranormalFoodNotes: string[] = [];
+  const exerciseWholeScene = hasAlimentoSangue && exerciseDiceCount > 0;
+  const readWholeScene = hasAlimentoConhecimento && readDiceCount > 0;
+  const nextScenePeDiscount = hasAlimentoMorte && input.didSleep ? 1 : 0;
+  const maxMaintenanceItems =
+    hasAlimentoEnergia && maintenanceCount > 0 ? 3 : 1;
+
+  if (hasAlimentoSangue) {
+    paranormalFoodNotes.push(
+      exerciseWholeScene
+        ? "Alimento de Sangue: bônus de Exercitar-se vale para todos os testes de AGI, FOR ou VIG (escolha um) durante toda a cena."
+        : "Alimento de Sangue (cena): +5 resistência contra fadiga, fraqueza, venenos e doenças e RD 5 até o fim da cena."
+    );
+  }
+  if (hasAlimentoMorte) {
+    paranormalFoodNotes.push(
+      nextScenePeDiscount > 0
+        ? "Alimento de Morte + Dormir: todas as habilidades e rituais custam -1 PE até o fim da próxima cena."
+        : "Alimento de Morte (cena): ações completas (exceto rituais) têm execução reduzida para padrão até o fim da cena."
+    );
+  }
+  if (hasAlimentoConhecimento) {
+    paranormalFoodNotes.push(
+      readWholeScene
+        ? "Alimento de Conhecimento: bônus de Ler vale para todos os testes de INT ou PRE (escolha um) durante toda a cena."
+        : "Alimento de Conhecimento (cena): +5 Vontade e pode usar perícias sem kits ou sem treinamento até o fim da cena."
+    );
+  }
+  if (hasAlimentoEnergia) {
+    paranormalFoodNotes.push(
+      maxMaintenanceItems > 1
+        ? "Alimento de Energia + Manutenção: conserta até 3 itens em uma única ação."
+        : "Alimento de Energia (cena): +5 Reflexos e +6m de deslocamento até o fim da cena."
+    );
   }
 
   return {
@@ -1679,9 +1770,15 @@ export function calculateInterludeRecovery(
     pdRecovered,
     pdTempBonus,
     reviewCaseBonus: hasRapido ? 5 : 0,
-    exerciseDiceCount: Math.max(0, Math.floor(input.exerciseCount ?? 0)),
-    readDiceCount: Math.max(0, Math.floor(input.readCount ?? 0)),
+    exerciseDiceCount,
+    readDiceCount,
     readDieFormula,
+    sanLostFromParanormalFood,
+    paranormalFoodNotes,
+    maxMaintenanceItems,
+    exerciseWholeScene,
+    readWholeScene,
+    nextScenePeDiscount,
   };
 }
 

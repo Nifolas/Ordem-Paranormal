@@ -1,0 +1,612 @@
+{
+  "meta": {
+    "entrega": 1,
+    "titulo": "Extras da Comunidade, Máscaras Teatrais, Rituais Superiores e Guia Confidencial Vol. I",
+    "fontes_incluidas": [
+      {
+        "id": "comunidade_avulsos",
+        "nome": "Extras da Comunidade",
+        "tipo": "comunidade"
+      },
+      {
+        "id": "mascaras_teatrais",
+        "nome": "Máscaras Teatrais (Arquivos Confidenciais)",
+        "tipo": "comunidade"
+      },
+      {
+        "id": "rituais_superiores",
+        "nome": "Rituais Superiores (Arquivos Confidenciais)",
+        "tipo": "comunidade"
+      },
+      {
+        "id": "guia_confidencial_vol1",
+        "nome": "Guia Confidencial Vol. I (Arquivos Confidenciais)",
+        "tipo": "comunidade"
+      }
+    ]
+  },
+  "origens": [
+    {
+      "id": "gc1_mensageiro_do_estige",
+      "nome": "Cultista Arrependido (Mensageiro do Estige)",
+      "source": "guia_confidencial_vol1",
+      "pericias": [
+        "Ocultismo",
+        "Religião"
+      ],
+      "poder": {
+        "nome": "Chamado da Morte",
+        "descricao": "Você pode passar 4 turnos na condição Morrendo, em vez de 3, antes de morrer. No entanto, sempre que fizer um teste que possa colocá-lo em Morrendo (como Fortitude ou Reflexos), sofre -1d20 no teste. Com Afinidade em Morte, as mesmas regras se aplicam à condição Enlouquecendo. (Mantém a regra de Cultista Arrependido: inicia com metade da Sanidade inicial.)"
+      },
+      "efeitosPassivos": {
+        "metadeSanInicial": true,
+        "rodadasMorrendoExtra": 1
+      }
+    },
+    {
+      "id": "gc1_almeida_pais_protetores",
+      "nome": "Cultista Arrependido (Família Almeida - Pais Protetores)",
+      "source": "guia_confidencial_vol1",
+      "pericias": [
+        "Ocultismo",
+        "Religião"
+      ],
+      "poder": {
+        "nome": "Pais Protetores",
+        "descricao": "Você sabe do histórico da Família Almeida, mas nunca teve contato direto. Recebe o poder paranormal Sangue de Ferro e RD 2 a dano de Sangue (aumenta para RD 5 em NEX 25% e para RD 10 se adquirir Afinidade com Sangue). (Mantém metade da Sanidade inicial de Cultista Arrependido.)"
+      },
+      "efeitosPassivos": {
+        "metadeSanInicial": true,
+        "rdSangueEscalonavel": {
+          "base": 2,
+          "nex25": 5,
+          "afinidade": 10
+        }
+      }
+    },
+    {
+      "id": "gc1_almeida_crianca_traumatizada",
+      "nome": "Cultista Arrependido (Família Almeida - Criança Traumatizada)",
+      "source": "guia_confidencial_vol1",
+      "preRequisito": "NEX 15%",
+      "pericias": [
+        "Ocultismo",
+        "Religião"
+      ],
+      "poder": {
+        "nome": "Criança Traumatizada",
+        "descricao": "Você cresceu entre os Almeida e fugiu após testemunhar seus horrores. Possui permanentemente os efeitos do ritual Corpo Adaptado e RD 2 a dano de Sangue (aumenta para RD 5 em NEX 25% e para RD 10 se adquirir Afinidade com Sangue). (Mantém metade da Sanidade inicial de Cultista Arrependido.)"
+      },
+      "efeitosPassivos": {
+        "metadeSanInicial": true,
+        "rdSangueEscalonavel": {
+          "base": 2,
+          "nex25": 5,
+          "afinidade": 10
+        }
+      }
+    },
+    {
+      "id": "gc1_almeida_filho_perdido",
+      "nome": "Cultista Arrependido (Família Almeida - Filho Perdido)",
+      "source": "guia_confidencial_vol1",
+      "pericias": [
+        "Ocultismo",
+        "Religião"
+      ],
+      "poder": {
+        "nome": "Filho Perdido",
+        "descricao": "Você não sabe de onde veio nem conhece a Família Almeida. Recebe RD 5 a dano de Sangue (aumenta para RD 10 se adquirir Afinidade com Sangue). (Mantém metade da Sanidade inicial de Cultista Arrependido.)"
+      },
+      "efeitosPassivos": {
+        "metadeSanInicial": true,
+        "rdSangueEscalonavel": {
+          "base": 5,
+          "afinidade": 10
+        }
+      }
+    }
+  ],
+  "trilhas": [
+    {
+      "id": "ext_dr_frankenstein",
+      "nome": "Dr. Frankenstein",
+      "classe": "ocultista",
+      "source": "comunidade_avulsos",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Análise Monstruosa",
+          "descricao": "Quanto mais tempo permanecer em combate com uma criatura, mais efetivas serão suas habilidades contra ela (efeitos não cumulativos, aplicados no início da rodada indicada): 2ª rodada: +1 em testes de Resistência; 3ª rodada: +1 em DT de Rituais; 4ª rodada: +2 em testes de Resistência; 5ª rodada: +2 na DT de Rituais; 6ª rodada: +1 de dano por dado em seus rituais (ex.: 6d6 torna-se 6d6+6). Se não for a primeira vez enfrentando uma criatura desse tipo, o bônus conta como se estivesse uma rodada à frente. Além disso, o item Leitor Neural de Criaturas Paranormais tem sua categoria diminuída em I."
+        },
+        {
+          "marco": "40%",
+          "nome": "Preservação Assombrosa",
+          "descricao": "Ao entrar em contato com o cadáver de uma criatura, pode preservá-lo para que leve o dobro do tempo para se decompor. Com um teste de Ciências ou Ocultismo (DT 25), extrai uma Essência de Criatura (líquido, 1 espaço, dura até 1 semana refrigerada). Beber a essência (Ação de Movimento) reduz a Sanidade atual pela metade, mas concede +5 em testes contra aquele tipo de criatura até o fim da cena."
+        },
+        {
+          "marco": "65%",
+          "nome": "Réplica Aberrante",
+          "descricao": "Ao gastar uma Ação de Interlúdio, transforma até cinco essências em partes de criaturas. Cada parte pode ser usada para replicar uma habilidade ativa (que possua custo de ação) daquela criatura uma única vez, usando as estatísticas e ações da original. Ao usar o Leitor Neural de Criaturas Paranormais, passa a ver períodos de 10 minutos em vez de 5."
+        },
+        {
+          "marco": "99%",
+          "nome": "Recriando o Terror",
+          "descricao": "Você aprende o ritual Recriando o Terror."
+        }
+      ]
+    }
+  ],
+  "poderesClasse": [
+    {
+      "id": "ext_aspecto_imperceptivel",
+      "nome": "Aspecto Imperceptível",
+      "classe": "ocultista",
+      "source": "comunidade_avulsos",
+      "preRequisito": "Veterano em Furtividade",
+      "descricao": "Sua presença é completamente imperceptível para criaturas, como se não notassem sua existência. No início de uma cena, criaturas não te veem nem sentem sua presença até que realize uma ação chamativa. Se não fizer nenhuma ação chamativa antes de atacá-las, o alvo escolhido estará Desprevenido contra o seu ataque."
+    }
+  ],
+  "poderesGerais": [
+    {
+      "id": "ext_desacreditado",
+      "nome": "Desacreditado",
+      "source": "comunidade_avulsos",
+      "preRequisito": "NEX 30% (incompatível com Afinidade)",
+      "descricao": "Seu ceticismo o torna resistente ao Outro Lado. A cada NEX recebe um benefício (retroativo se adquirido depois; não cumulativos): 30%: +2 Vontade vs paranormal; 35%: +2 Defesa vs criaturas; 40%: +2 dano vs criaturas; 45%: +1 PV por NEX; 50%: +1 atributo; 55%: +2 Fortitude vs paranormal; 60%: +5 Defesa vs criaturas; 65%: +2 ataque vs criaturas; 70%: +1 SAN por NEX; 75%: +1 atributo (diferente); 80%: +2 Reflexos vs paranormal; 85%: +5 ataque vs criaturas; 90%: +5 dano; 95%: +1 PE por NEX; 99%: +1 atributo (diferente). Usar voluntariamente item amaldiçoado, poder paranormal ou ritual desativa este poder até o fim da missão; receber efeitos de aliados vindos dessas fontes deixa você Alquebrado. Não adquire novas alterações por NEX e não pode ser pego por quem tem afinidade."
+    }
+  ],
+  "poderesParanormais": [
+    {
+      "id": "ext_imbuir_sistema",
+      "nome": "Imbuir Sistema",
+      "elemento": "Sangue",
+      "source": "comunidade_avulsos",
+      "preRequisito": "Sangue 2",
+      "efeito": "Você concentra o Paranormal em uma parte do corpo. Uma vez por rodada, pode usar uma Ação Livre para mudar o local concentrado: Cabeça (Faro, Visão na Penumbra e +2 em testes para Observar e Ouvir); Articulações (+2 em Atletismo, Acrobacia e Reflexos); Pernas (+3m de deslocamento e ignora terreno difícil); Braços (+2 em ataques corpo a corpo e +2 espaços de carga); Coração (+1d20 em Fortitude e RD 2 a dano físico).",
+      "afinidade": "Você pode imbuir duas partes do corpo ao mesmo tempo."
+    }
+  ],
+  "rituais": [
+    {
+      "id": "ext_recriando_o_terror",
+      "nome": "Recriando o Terror",
+      "elemento": "Medo",
+      "circulo": 4,
+      "source": "comunidade_avulsos",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "4 partes de criaturas criadas pela habilidade Réplica Aberrante",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "exclusivoTrilha": "Dr. Frankenstein",
+      "efeitoPadrao": "Combina 4 partes de criaturas para formar uma aberração paranormal sob seu controle. Para que obedeça na próxima rodada, gaste Ação Padrão e vença teste de Vontade oposto contra a dela. Se todas as 4 partes forem da mesma criatura, cria uma cópia perfeita com metade dos PV e sem RD (não obedece completamente, mas não te ataca). Se forem partes diferentes, cria um ser de Medo com 1 habilidade ativa de cada criatura e divide 4 grupos de estatísticas entre as partes: Atributos e Testes (age na rodada seguinte), Defesa e Resistências, Imunidades e PV (metade dos PV da maior; replica Enigma de Medo se ligado à imunidade) e Demais Estatísticas (Presença Perturbadora, deslocamentos, tamanho e sentidos). Desfaz-se em 0 PV ou no fim da cena; as partes não são recuperáveis."
+    },
+    {
+      "id": "rs_fluxo_elemento",
+      "nome": "Fluxo de (Elemento)",
+      "elemento": "Variável (Sangue, Morte, Energia ou Conhecimento)",
+      "circulo": 2,
+      "isSuperior": true,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "alcance": "Toque",
+      "alvo": "Pessoas voluntárias",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Requer Conjuração Complexa. Escolha um elemento ao aprender. Pessoas que tocarem você durante o ritual recebem RD 10 e -1 PE no custo de poderes e rituais desse elemento. Se entregarem um componente do elemento como oferenda, recebem RD 15, -2 PE no custo e +5 na DT de rituais. A cada rodada sustentando, faça Vontade (DT 15 + 1 por teste anterior): falha reduz a RD em 5 e o desconto de PE em 1 por 1 rodada; 3 falhas seguidas encerram o ritual.",
+      "superiorInfo": {
+        "conjuracao": "Durante a 3ª etapa, deve permanecer sobre o símbolo desenhado meditando de olhos fechados (fica Desprevenido; abrir os olhos ou levantar-se encerra o ritual).",
+        "consequencias": "Um resquício do fluxo permanece em você: criaturas do mesmo elemento em alcance curto recebem +1d20 em ataques e +2 na DT de suas habilidades até o fim da próxima cena."
+      }
+    },
+    {
+      "id": "rs_retornar_do_inferno",
+      "nome": "Retornar do Inferno",
+      "elemento": "Sangue",
+      "circulo": 4,
+      "isSuperior": true,
+      "source": "rituais_superiores",
+      "execucao": "4 rodadas consecutivas",
+      "alcance": "Curto",
+      "alvo": "1 ser",
+      "duracao": "Veja texto",
+      "resistencia": "Vontade (para escapar)",
+      "efeitoPadrao": "Requer Conjuração Complexa. Abre um buraco para um limbo de Sangue: quando um ser cair dentro, a fenda fecha e ele fica acorrentado sofrendo 1d10 dano de Sangue e curando 1d8 PV por rodada. Quem presenciar torna-se testemunha: sempre que sofrer dano cura 1d6 PV e ganha +5 em Fortitude contra doenças e venenos (o prisioneiro sofre por eles). No início de cada cena, o prisioneiro testa Vontade (DT 100 - 2 por teste anterior, -5 por testemunha morta) para escapar.",
+      "superiorInfo": {
+        "conjuracao": "Gasta 1 rodada extra concentrando-se enquanto o símbolo se abre em uma fenda de 6m x 6m que dura até o fim da cena.",
+        "consequencias": "Quando o prisioneiro consegue se libertar, retorna à Realidade com RD 5 permanente contra todos os tipos de dano que as testemunhas sofreram (+5 a cada 30 pontos de dano totais sofridos por elas), imunidade às doenças/venenos que as afetaram e pressente a localização exata de cada testemunha por 1 mês."
+      }
+    },
+    {
+      "id": "rs_voltar_dos_mortos",
+      "nome": "Voltar dos Mortos",
+      "elemento": "Morte",
+      "circulo": 4,
+      "isSuperior": true,
+      "source": "rituais_superiores",
+      "execucao": "Veja texto",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Veja texto",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Requer Conjuração Complexa. Ao morrer dentro do símbolo, sua alma é levada ao mundo dos mortos, onde pode conversar com qualquer pessoa conhecida já falecida (a cada rodada conversando, Vontade DT 20 + 1d12; falha faz ouvir apenas vozes abafadas soltas).",
+      "superiorInfo": {
+        "conjuracao": "Ao final da 3ª etapa, gasta as rodadas seguintes causando dano a si mesmo ou realizando um golpe de misericórdia até morrer dentro do símbolo.",
+        "consequencias": "Após 3 dias, o Lodo da Morte reconstrói seu corpo e o traz de volta à vida. Você adquire (ou substitui sua atual por) Afinidade com Morte e regenera 2 PV por rodada após 3 rodadas sem sofrer dano. Contudo, adquire vulnerabilidade tripla (3x dano) contra Fogo, Eletricidade e Energia."
+      }
+    },
+    {
+      "id": "rs_santificar",
+      "nome": "Santificar",
+      "elemento": "Conhecimento",
+      "circulo": 3,
+      "isSuperior": true,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "alcance": "Pessoal",
+      "alvo": "Pessoas em círculo de 36m de raio",
+      "duracao": "Cena",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "Requer Conjuração Complexa. Projeta uma luz divina fazendo todos na área considerarem você virtuoso e ficarem no mínimo amistosos (ou prestativos se já eram), esquecendo qualquer ação condenável sua. Quem passa no teste ainda esquece suas ações, mas fica apenas indiferente. Qualquer ataque contra você deixa seus admiradores hostis contra o agressor.",
+      "superiorInfo": {
+        "conjuracao": "Você deve estar em um local aberto com visão do céu durante todas as etapas da conjuração.",
+        "consequencias": "Ao fim do ritual, as memórias retornam distorcidas pelo Outro Lado: a atitude de todos os NPCs afetados diminui em 2 passos (não podendo ser melhorada por 1 dia), e quem se tornar hostil atacará você sem hesitar."
+      }
+    },
+    {
+      "id": "rs_apocaliptica_instabilidade",
+      "nome": "Apocalíptica Instabilidade",
+      "elemento": "Energia",
+      "circulo": 4,
+      "isSuperior": true,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "alcance": "Longo",
+      "alvo": "Seres e objetos em nuvem de 36m de raio",
+      "duracao": "Cena",
+      "resistencia": "Veja texto",
+      "efeitoPadrao": "Requer Conjuração Complexa. Todos na área (exceto você) sofrem -2d20 em testes de perícias (Vontade reduz para -1d20). Sempre que um ser afetado falha em qualquer teste, um relâmpago o atinge causando 3d10+10 dano de Energia (Fortitude reduz à metade) e deixando-o Em Chamas; seres em alcance curto dele sofrem -1d20 cumulativo em perícias por 2 rodadas. Objetos eletrônicos têm 20% de chance de falhar (+10% por rodada até 80%) e disparam um raio no usuário ou ser mais próximo.",
+      "superiorInfo": {
+        "conjuracao": "Os componentes ritualísticos utilizados na preparação devem ser dados numéricos.",
+        "consequencias": "Ao fim do ritual, role 1d20: resultado par causa 5d10 pontos de dano de Energia em você; resultado ímpar deixa você Confuso por 1d12+4 rodadas."
+      }
+    },
+    {
+      "id": "gc1_encontro_anacronico",
+      "nome": "Encontro Anacrônico",
+      "elemento": "Morte",
+      "circulo": 1,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "Um cadáver e uma pessoa",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Mantendo contato físico com o cadáver enquanto volta os ponteiros de um relógio analógico e um aliado despeja cinzas humanas sobre o corpo, o cadáver retorna à vida na próxima rodada podendo responder perguntas que sabia (inclusive como morreu). A cada 2 turnos sustentando em ação (ou a cada 10 segundos fora de combate), ambos perdem 1d10 PV.",
+      "discente": "(+2 PE): Pode conjurar o ritual sozinho, mas a perda de PV muda para 2d8. Requer 2º círculo."
+    },
+    {
+      "id": "gc1_continuidade_retroativa",
+      "nome": "Continuidade Retroativa",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Movimento",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Instantânea",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Quebra um osso humano e despeja cinzas em um relógio de pulso quebrado para voltar ao momento exato da sua última ação neste turno e refazê-la. Recebe +1d20 se envolver teste seu, ou impõe -1d20 se envolver testes de alvos (a ação de movimento do ritual continua gasta).",
+      "discente": "(+3 PE): Bônus muda para +2d20 e penalidade de alvos muda para -2d20. Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): Bônus +2d20 / penalidade -2d20; além disso, a DT do seu teste diminui em 2 e a dos alvos aumenta em 2. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gc1_memento_mori",
+      "nome": "Memento Mori",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 objeto",
+      "duracao": "Instantânea",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Afundando um objeto importante do falecido em cinzas e girando um pião, você revive os últimos momentos da pessoa morta (fica Indefeso durante o processo). Ao terminar, perde PV igual à metade do dano que causou a morte da pessoa (se morte natural, sofre 2d12 dano de Morte e envelhece 1 ano). Só pode ser usado 1 vez por objeto.",
+      "verdadeiro": "(+3 PE): Vê também as duas últimas pessoas a tocarem no objeto antes de você; dano reduzido para 1d6 (ou 1d8 em morte natural). Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gc1_tormenta_cinerea",
+      "nome": "Tormenta Cinérea",
+      "elemento": "Morte",
+      "circulo": 3,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 ser",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Assopra cinzas humanas no rosto do alvo; se falhar em Vontade, vê o mundo como um labirinto e fica Confuso até o início do próximo turno. Enquanto sustentado, o alvo repete Vontade no início de cada rodada (2 sucessos dissipam). Exige testes de Concentração para sustentar.",
+      "discente": "(+4 PE): Não exige teste de Concentração para sustentar e a rolagem de Confuso muda para 1d6-1 (resultado 0 conta como 1).",
+      "verdadeiro": "(+9 PE): Alcance muda para curto, alvo para seres escolhidos e custo para sustentar passa para 3 PE por turno. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gc1_visita_ao_estige",
+      "nome": "Visita ao Estige",
+      "elemento": "Morte",
+      "circulo": 3,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Padrão",
+      "alcance": "Curto",
+      "alvo": "1 pessoa",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Prende o alvo em um domo espaço-temporal de cinzas (intangível por fora; só efeitos paranormais o atingem; exige Concentração). Ao fim do ritual, o alvo testa Vontade: se falhar, fica Confuso até o fim da cena e perde 1d12 SAN por rodada passada no domo; se passar, sofre 1d6 dano mental por rodada.",
+      "verdadeiro": "(+4 PE): Dano mental por rodada muda para 2d8 se falhar e 1d8 se passar, e não exige Concentração para sustentar. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gc1_devorar_sentimento",
+      "nome": "Devorar Sentimento",
+      "elemento": "Sangue",
+      "circulo": 1,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Movimento",
+      "alcance": "Toque",
+      "alvo": "Uma Adaga ou um Punhal",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude anula",
+      "efeitoPadrao": "Envolve a lâmina da adaga ou punhal em sangue. No próximo ataque acertado com ela, o alvo fica Desorientado por 1 rodada; se for acerto crítico, você rouba 1d4 PE dele.",
+      "discente": "(+2 PE): Duração da condição e PE roubados aumentam para 1d6. Requer 3º círculo.",
+      "verdadeiro": "(+5 PE): Execução muda para padrão, alvo para 1 criatura e duração para cena. Sempre que acertar um ataque nesse alvo, ele fica Desorientado por 1 rodada; em crítico, você recupera 1 PE. Requer 3º círculo e afinidade."
+    },
+    {
+      "id": "gc1_agonia_controlada",
+      "nome": "Agonia Controlada",
+      "elemento": "Sangue",
+      "circulo": 2,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "1 ser",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude reduz à metade",
+      "efeitoPadrao": "Abre uma ferida no próprio corpo perdendo 1d10 PV para lançar seu sangue no alvo, causando 5d10 de dano (metade Sangue, metade Mental). Qualquer ser que tocar o sangue sofre os efeitos do ritual até o líquido se desfazer no fim da cena.",
+      "discente": "(+3 PE): Perde 2d6 PV e o dano no alvo aumenta para 6d12. Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): O alvo também sofre os efeitos do ritual sempre que algum outro ser tocar o sangue. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gc1_amaldicoar_ventre",
+      "nome": "Amaldiçoar Ventre",
+      "elemento": "Sangue",
+      "circulo": 2,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "Instantânea",
+      "resistencia": "Vontade",
+      "efeitoPadrao": "Ritual narrativo de corrupção paranormal de uma gestação (DT sobe conforme o tempo de preparação, até +15). Se passar, o paranormal adormece na criança (pode despertar ao atingir NEX 5%). Se falhar, o bebê nasce como um Raquítico e a gestante rola 1d10 na tabela de destino (1: sobrevive; 2: Sangrando; 3: Sangrando 2d6; 4-5: Morrendo; 6-7: Morrendo faltando 1 rodada; 8-9: morre e vira Zumbi de Sangue; 10: morre e vira Zumbi de Sangue Bestial).",
+      "discente": "(+3 PE): Nasce como Carnífice; rolagem da gestante muda para 1d6+2. Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): Nasce como Bicéfalo; rolagem da gestante muda para 1d6+4. Requer 4º círculo."
+    },
+    {
+      "id": "gc1_empatia_sanguinea",
+      "nome": "Empatia Sanguínea",
+      "elemento": "Sangue",
+      "circulo": 3,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 aliado",
+      "duracao": "1d3+3 rodadas",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Você e o aliado cortam as mãos (ambos perdem 1d4 PV) e criam um elo de sangue. Todo bônus e penalidade sofrido por um afeta o outro durante a duração do ritual, e qualquer dano Mental é dividido igualmente entre ambos.",
+      "verdadeiro": "(+4 PE): A duração muda para sustentada. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "gc1_sangue_latejante",
+      "nome": "Sangue Latejante",
+      "elemento": "Sangue",
+      "circulo": 3,
+      "source": "guia_confidencial_vol1",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Emanação de 3m de raio",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude reduz à metade",
+      "efeitoPadrao": "Despeja sangue fervido sobre si enquanto foca nas criaturas em 3m. Cada criatura focada sofre 1d12 de dano Químico para cada instância de dano que já sofreu desde o início do seu turno na rodada passada.",
+      "verdadeiro": "(+4 PE): Aliados não são afetados e o dano por instância muda de 1d12 para 2d6. Requer afinidade."
+    }
+  ],
+  "formasSuperioresRituaisOficiais": [
+    {
+      "id": "rs_sup_involucro_de_carne",
+      "ritualAlvoNome": "Invólucro de Carne",
+      "elemento": "Sangue",
+      "circulo": 4,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "efeitoSuperior": "Invoca uma versão 'perfeita' de si com o dobro de suas RD e +5 em todas as perícias treinadas. Pode respirar embaixo d'água, não sente dor, não arrisca a própria vida e é imune a venenos e doenças. A cada rodada role 1d20: em resultado par, a cópia decide a próxima ação por conta própria. A cada 2 rodadas de existência, faça Vontade (DT 20 + 2 por teste anterior) ou fica Fraco."
+    },
+    {
+      "id": "rs_sup_desacelerar_impacto",
+      "ritualAlvoNome": "Desacelerar Impacto",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "efeitoSuperior": "Muda alvos para seres na área (raio de 18m) e duração para cena. Anula a gravidade ao redor: todos flutuam com deslocamento pela metade em qualquer direção, sem peso e sem dano por queda; projéteis causam o dobro de dano dentro da área. Ao fim do ritual, tudo cai normalmente sofrendo dano por queda."
+    },
+    {
+      "id": "rs_sup_videncia",
+      "ritualAlvoNome": "Vidência",
+      "elemento": "Conhecimento",
+      "circulo": 3,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "efeitoSuperior": "Alcance longo, área raio de 36m, sustentada, Vontade parcial. Medita de olhos fechados (Desprevenido), percebendo todos na área e podendo escolher um alvo para ver e ouvir (trocar = ação de movimento). Pode gastar ação completa para invocar 1d3 Vultos adjacentes ao alvo escolhido (em até 3 alvos). Ao encerrar, 50% de chance (ímpar em 1d20) de 1d4+1 Vultos surgirem ao seu redor."
+    },
+    {
+      "id": "rs_sup_transfigurar_terra",
+      "ritualAlvoNome": "Transfigurar Terra",
+      "elemento": "Energia",
+      "circulo": 3,
+      "source": "rituais_superiores",
+      "execucao": "3 rodadas consecutivas",
+      "efeitoSuperior": "Área círculo de 90m de raio, duração cena. Cria terremoto devastador: todos na área sofrem -1d20 em ataques, ficam Lentos, não conseguem manter ações de concentração e testam Reflexos no início do turno (DT For + 2/teste anterior) ou ficam Caídos. A cada rodada abre uma rachadura perto de um ser aleatório (Reflexos DT Agi ou cai preso e Vulnerável; Atletismo DT Agi+5 para sair). Construções sofrem 15 dano/rodada ignorando RD."
+    }
+  ],
+  "itensAmaldicoados": [
+    {
+      "id": "mt_maniaco_covarde",
+      "nome": "O Maníaco Covarde",
+      "tipo": "amaldicoado",
+      "subtipo": "Vestimenta (Máscara)",
+      "elemento": "Sangue",
+      "categoria": 3,
+      "espacos": 1,
+      "vestivel": true,
+      "source": "mascaras_teatrais",
+      "descricao": "Na primeira vez que vestir e a cada 3 rodadas, role 1d20. Par (Vibrante): +1d20 em ataques, +1 dado de dano corpo a corpo em investidas, usa Força em vez de Presença em Intimidação e, ao acertar ataque em investida, pode agarrar o alvo recebendo +2 cumulativo em ataques por rodada enquanto o mantiver Agarrado. Ímpar (Amedrontado): fica Apavorado do ser mais próximo, -5 em ataques e RD Mental pela metade, mas ganha +6m de deslocamento. Só pode ser retirada enquanto estiver amedrontada."
+    },
+    {
+      "id": "mt_cantor_melancolico",
+      "nome": "O Cantor Melancólico",
+      "tipo": "amaldicoado",
+      "subtipo": "Vestimenta (Máscara)",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 1,
+      "vestivel": true,
+      "source": "mascaras_teatrais",
+      "descricao": "Gasta 4 PE para cantar uma ópera que afeta todos os seres em alcance médio. Ação de movimento por rodada para teste estendido de Artes (DT 18 + 2 por teste na cena; 4 sucessos antes de 2 fracassos): 1º sucesso: Abalados; 2º: Fascinados e -2 Defesa; 3º: Fascinados e -5 Defesa; 4º: Apavorados de você por 3 rodadas e 3d8 dano de Morte. Após o fim, inutilizável na cena. Se interrompida ou 2 fracassos, fica Frustrado por 1d4+2 rodadas e a máscara fica inutilizável por 1d3 cenas."
+    },
+    {
+      "id": "mt_dancarino_sorrateiro",
+      "nome": "O Dançarino Sorrateiro",
+      "tipo": "amaldicoado",
+      "subtipo": "Vestimenta (Máscara)",
+      "elemento": "Conhecimento",
+      "categoria": 3,
+      "espacos": 1,
+      "vestivel": true,
+      "source": "mascaras_teatrais",
+      "descricao": "Ao vestir, cria 4 cópias ilusórias dançando em raio de 12m de um alvo escolhido. Deve mover-se ao menos 1x por turno. Cópias atacadas explodem causando 3d10 dano de Conhecimento em 3m (Vontade DT Pre+5 reduz à metade), reduzindo o raio em 3m e acumulando +1 na margem de ameaça e +1 dado de dano de Conhecimento em ataques corpo a corpo contra o alvo. Quando todas acabam ou você é acertado, recebe os bônus acumulados por 3 rodadas. Enquanto dança sofre -1d20 em testes; se não se mover, dissipa e fica inutilizável por 1 cena."
+    },
+    {
+      "id": "mt_bastiao_celeste",
+      "nome": "O Bastião Celeste",
+      "tipo": "amaldicoado",
+      "subtipo": "Vestimenta (Máscara)",
+      "elemento": "Energia",
+      "categoria": 3,
+      "espacos": 1,
+      "vestivel": true,
+      "source": "mascaras_teatrais",
+      "descricao": "Ativa com ação completa e sustenta com 2 PE/rodada (ao encerrar, inutilizável por 1d3 cenas). Você flutua 3m para cima, fica Imóvel e afeta raio de 12m. Dia: ilumina a área, remove camuflagem/invisibilidade e deixa Ofuscado; +1 PE/rodada cria campo de força que causa 1d6 x Pre dano de Energia a quem entra ou sai (Vontade DT Pre+5 metade). Noite: escuridão total (camuflagem total); +1 PE/rodada cria até 3 esferas que explodem quando alguém fica adjacente causando 2d6 x Pre dano de Energia (Fortitude DT Pre metade; Percepção DT Pre+10 percebe)."
+    },
+    {
+      "id": "mt_mediador_cerimonia",
+      "nome": "O Mediador da Cerimônia",
+      "tipo": "amaldicoado",
+      "subtipo": "Vestimenta (Máscara)",
+      "elemento": "Medo",
+      "categoria": 4,
+      "espacos": 1,
+      "vestivel": true,
+      "source": "mascaras_teatrais",
+      "descricao": "Ação completa e 5 PE para vestir: torna-se intangível e desaparece até o fim da cena, agindo dos bastidores apenas com 4 ações (custam SAN): Remanejamento (Completa, 3d8 SAN: move até 2 seres até 12m; 3 rodadas de recarga nos mesmos alvos); Siga o Roteiro (Completa, 3d10 SAN: 1 aliado e 1 inimigo fazem a mesma ação não suicida com +10); Reviravolta (Completa, 2d10 SAN: cura 1 condição de 1 aliado e 1 inimigo, exceto Morrendo/Enlouquecendo); O Show Deve Continuar (Completa, 5d8 SAN, 1x/alvo: tira 1 personagem de Morrendo/Enlouquecendo dando RD 10 e +5 em testes por 2 rodadas, mas 1 inimigo ganha 1 ação padrão extra pelo mesmo tempo). Ao fim, inutilizável por 1 dia; zerar SAN retorna em Enlouquecendo (DT +5) e quebra a máscara."
+    }
+  ],
+  "condicoes": [
+    {
+      "id": "gc1_desorientado",
+      "nome": "Desorientado",
+      "tipo": "Sentidos",
+      "source": "guia_confidencial_vol1",
+      "descricao": "O personagem sofre -1d20 em testes de perícia que envolvam se localizar por ambientes, lembrar trajetos e memorizar rotas, e sofre -3 na Defesa."
+    }
+  ],
+  "regrasExtras": [
+    {
+      "id": "rs_regra_rituais_superiores",
+      "nome": "Rituais Superiores (Conjuração Complexa)",
+      "source": "rituais_superiores",
+      "descricao": "Só podem ser invocados usando a regra opcional Conjuração Complexa (SaH p. 114). Se falhar no teste final de invocação, possui rodadas extras de tentativa conforme o grau em Ocultismo: Treinado (+1 rodada), Veterano (+2 rodadas), Expert (+3 rodadas)."
+    }
+  ],
+  "ameacas": [
+    {
+      "id": "gc1_prematuro",
+      "nome": "Prematuro",
+      "vd": 100,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Morte"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Pequeno",
+      "source": "guia_confidencial_vol1",
+      "presencaPerturbadora": {
+        "dt": 20,
+        "dano": "3d4 mental",
+        "imuneNex": 45
+      },
+      "sentidos": {
+        "percepcao": "3d20+8",
+        "iniciativa": "3d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 26,
+      "resistenciasTestes": {
+        "fortitude": "2d20+8",
+        "reflexos": "3d20+8",
+        "vontade": "3d20+12"
+      },
+      "pv": 130,
+      "resistenciasDano": "Balístico, Corte e Perfuração 5; Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 1,
+        "INT": 0,
+        "PRE": 3,
+        "VIG": 2
+      },
+      "deslocamento": "15m",
+      "ataques": [
+        {
+          "nome": "Mordida",
+          "alcance": "Corpo a corpo",
+          "teste": "2d20+15",
+          "dano": "2d6+6 perfuração"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Drenar a Vida (Passiva)",
+          "descricao": "Cada PE gasto por qualquer ser na cena é convertido em PV temporários para o Prematuro."
+        },
+        {
+          "nome": "Sangue do Meu Sangue (Passiva)",
+          "descricao": "Se algum membro da Família Almeida estiver em alcance curto, prioriza ataques contra ele e recebe +3 na rolagem."
+        },
+        {
+          "nome": "Abraço de Filho (Livre)",
+          "descricao": "Ao acertar mordida em ser Médio ou menor, pode agarrá-lo (2d20+13), subir em suas costas e no início do turno forçar Vontade (DT 25) para o alvo realizar uma ação a seu mando (exceto suicida)."
+        },
+        {
+          "nome": "Lágrimas de Lodo (Movimento)",
+          "descricao": "Todos em alcance médio testam Vontade (DT 23): falha deixa Enjoado por 1 rodada; falha por 10+ deixa Abalado por 1 rodada."
+        },
+        {
+          "nome": "Peculiaridades Corporais (Escolha 2)",
+          "descricao": "Mãos Pequenas (cada 6 no dano causa 1d6 em alvo a até 6m; Reflexos DT 21 evita); Placenta (RD física sobe para 10 e 1x/rodada reduz dano de corte/balístico à metade antes de RD); Corpo Mole (usa AGI em ataques/manobras); Dentes de Leite (mordida causa Sangrando progressivo +2/rodada até ação padrão para retirar); Parrudo (+50 PV e escalada 6m); Ligeiro (+1 ação de movimento exclusiva para se mover)."
+        }
+      ],
+      "enigmaDeMedo": "Vínculo de Sangue com quem o gerou: se essa pessoa estiver viva e presente na cena, ganha 1 ação padrão adicional; se ela for morta, o Prematuro sofre -5 na Defesa e perde Drenar a Vida e Lágrimas de Lodo."
+    }
+  ]
+}

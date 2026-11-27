@@ -1,4 +1,5 @@
 import type { AgentRitual, ContentSource, ParanormalElement } from "@/types/ordem";
+import { getOfficialSuperiorForm } from "@/data/supplements/rituaisSuperiores";
 
 /**
  * LOTE 5 — Todos os 79 Rituais (1º ao 4º Círculo — Livro Básico v1.2 + Arquivos Secretos).
@@ -155,6 +156,7 @@ const RAW_RITUALS: RawRitual[] = [
 
 export const BASE_RITUALS: AgentRitual[] = RAW_RITUALS.map((r) => {
   const basePe = CIRCLE_BASE_PE[r.circulo];
+  const superiorInfo = getOfficialSuperiorForm(r.nome);
   return {
     id: r.id,
     name: r.nome,
@@ -171,6 +173,7 @@ export const BASE_RITUALS: AgentRitual[] = RAW_RITUALS.map((r) => {
     discenteCost: parseAddonPe(r.discente, basePe),
     verdadeira: r.verdadeiro,
     verdadeiraCost: parseAddonPe(r.verdadeiro, basePe),
+    ...(superiorInfo ? { superiorInfo } : {}),
     source: r.source,
   };
 });

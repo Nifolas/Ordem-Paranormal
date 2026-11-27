@@ -25,6 +25,7 @@ import type {
   AgentAbility,
   AgentAttack,
   AgentRitual,
+  ContentSource,
   InventoryItem,
   ParanormalElement,
   RitualVersion,
@@ -50,14 +51,25 @@ import {
   rollWeaponDamage,
 } from "@/lib/ordem-rules";
 import { cn, ELEMENT_STYLES, formatSigned, generateId } from "@/lib/utils";
-import { COMMUNITY_RITUALS } from "@/data/supplements";
-import { filterByEnabledSources } from "@/data/sources";
+import { COMMUNITY_ITEMS, COMMUNITY_RITUALS } from "@/data/supplements";
+import {
+  COMMUNITY_SOURCES,
+  OFFICIAL_SOURCES,
+  SOURCE_LABELS,
+  filterByEnabledSources,
+} from "@/lib/sources";
 import {
   getSuperiorExtraRounds,
   hasSuperiorForm,
+  resolveSuperiorInfo,
   SUPERIOR_REQUIREMENT_TEXT,
 } from "@/data/supplements/rituaisSuperiores";
-import { SourceBadge } from "@/components/SourceToggles";
+import {
+  SourceBadge,
+  SourceToggleGroup,
+  setCommunityList,
+  toggleSourceList,
+} from "@/components/SourceToggles";
 import { useAppStore } from "@/store/useAppStore";
 import { AbilitiesTab } from "./AbilitiesTab";
 import { AlliesTab } from "./AlliesTab";
@@ -194,6 +206,10 @@ export function RightTabsColumn({
   );
   const [ritModalOpen, setRitModalOpen] = useState(false);
   const [ritSearch, setRitSearch] = useState("");
+  const [ritSourceFilter, setRitSourceFilter] = useState<
+    "todos" | ContentSource
+  >("todos");
+  const [showRitSourcesPanel, setShowRitSourcesPanel] = useState(false);
   const [costPrompt, setCostPrompt] = useState<ParanormalCostPrompt | null>(
     null
   );
@@ -214,10 +230,13 @@ export function RightTabsColumn({
 
   const allLibraryWeapons = useMemo(
     () =>
-      [...homebrew.weapons, ...homebrew.items, ...BASE_ITEMS].filter(
-        (i) => normalizeItemCategoryType(i) === "arma"
-      ),
-    [homebrew.weapons, homebrew.items]
+      [
+        ...homebrew.weapons,
+        ...homebrew.items,
+        ...filterByEnabledSources(COMMUNITY_ITEMS, agent.enabledSources),
+        ...BASE_ITEMS,
+      ].filter((i) => normalizeItemCategoryType(i) === "arma"),
+    [homebrew.weapons, homebrew.items, agent.enabledSources]
   );
 
   const showPeAlert = (msg: string) => {
@@ -576,13 +595,14 @@ export function RightTabsColumn({
 
   // --- RITUAL ACTIONS ---
   const handleCastRitual = (ritual: AgentRitual, version: RitualVersion) => {
+    const resolvedSuperior = resolveSuperiorInfo(ritual);
     const cost = calculateRitualPeCost({
       circle: ritual.circle,
       version,
       basePeOverride: ritual.peCost,
       discenteCost: ritual.discenteCost,
       verdadeiraCost: ritual.verdadeiraCost,
-      superiorCost: ritual.superiorInfo?.peCost,
+      superiorCost: resolvedSuperior?.peCost,
     });
 
     if (!spendResource(cost)) return;
@@ -1377,13 +1397,14 @@ export function RightTabsColumn({
                         const st = ELEMENT_STYLES[ritual.element];
                         const version: RitualVersion =
                           ritVersions[ritual.id] ?? "Normal";
+                        const superiorInfo = resolveSuperiorInfo(ritual);
                         const versionCost = calculateRitualPeCost({
                           circle: ritual.circle,
                           version,
                           basePeOverride: ritual.peCost,
                           discenteCost: ritual.discenteCost,
                           verdadeiraCost: ritual.verdadeiraCost,
-                          superiorCost: ritual.superiorInfo?.peCost,
+                          superiorCost: superiorInfo?.peCost,
                         });
                         const showSuperior = hasSuperiorForm(ritual);
                         const ocultismoTraining =
@@ -1398,7 +1419,7 @@ export function RightTabsColumn({
                             ? ritual.verdadeira ||
                               "Sem versão Verdadeira cadastrada."
                             : version === "Superior"
-                            ? ritual.superiorInfo?.efeitoSuperior ||
+                            ? superiorInfo?.efeitoSuperior ||
                               ritual.description
                             : ritual.description;
 
@@ -1417,6 +1438,14 @@ export function RightTabsColumn({
                                     {ritual.name}
                                   </h4>
                                   <SourceBadge source={ritual.source} />
+                                  {ritual.isCorrentesDaRealidade && (
+                                    <Badge
+                                      variant="purple"
+                                      className="font-mono text-[9px]"
+                                    >
+                                      CORRENTES DA REALIDADE
+                                    </Badge>
+                                  )}
                                   <span
                                     className={cn(
                                       "inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider",
@@ -1521,7 +1550,7 @@ export function RightTabsColumn({
                                   basePeOverride: ritual.peCost,
                                   discenteCost: ritual.discenteCost,
                                   verdadeiraCost: ritual.verdadeiraCost,
-                                  superiorCost: ritual.superiorInfo?.peCost,
+                                  superiorCost: superiorInfo?.peCost,
                                 });
                                 const active = version === ver;
                                 return (
@@ -1551,14 +1580,29 @@ export function RightTabsColumn({
                               {versionText}
                             </p>
 
-                            {version === "Superior" && (
+                            {(version === "Superior" || ritual.isSuperior) && (
                               <div className="rounded-sm border border-amber-500/30 bg-amber-500/5 p-3 space-y-1.5 text-xs">
-                                <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300">
-                                  Forma Superior · Conjuração Complexa
-                                </p>
+                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                  <p className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-300">
+                                    Forma Superior · Conjuração Complexa
+                                  </p>
+                                  <SourceBadge
+                                    source={
+                                      superiorInfo?.source ?? "rituais_superiores"
+                                    }
+                                  />
+                                </div>
                                 <p className="text-[#D4D4D8]">
                                   {SUPERIOR_REQUIREMENT_TEXT}
                                 </p>
+                                {superiorInfo?.execution && (
+                                  <p className="font-mono text-[11px] text-[#D4D4D8]">
+                                    Execução Superior:{" "}
+                                    <strong className="text-amber-200">
+                                      {superiorInfo.execution}
+                                    </strong>
+                                  </p>
+                                )}
                                 <p className="font-mono text-[11px] text-[#A1A1AA]">
                                   Rodadas extras de tentativa (Ocultismo{" "}
                                   {ocultismoTraining >= 15
@@ -1573,24 +1617,21 @@ export function RightTabsColumn({
                                     +{superiorRounds}
                                   </strong>
                                 </p>
-                                {ritual.superiorInfo ? (
+                                {superiorInfo && (
                                   <div className="space-y-1 text-[#D4D4D8]">
-                                    <p>
-                                      <strong>Conjuração:</strong>{" "}
-                                      {ritual.superiorInfo.conjuracao}
-                                    </p>
-                                    <p>
-                                      <strong>Consequências:</strong>{" "}
-                                      {ritual.superiorInfo.consequencias}
-                                    </p>
+                                    {superiorInfo.conjuracao && (
+                                      <p>
+                                        <strong>Conjuração:</strong>{" "}
+                                        {superiorInfo.conjuracao}
+                                      </p>
+                                    )}
+                                    {superiorInfo.consequencias && (
+                                      <p>
+                                        <strong>Consequências:</strong>{" "}
+                                        {superiorInfo.consequencias}
+                                      </p>
+                                    )}
                                   </div>
-                                ) : (
-                                  <p className="text-[#8E8E9E]">
-                                    O texto completo desta forma Superior (Conjuração,
-                                    Consequências e Efeito) será exibido assim que o
-                                    suplemento <em>Rituais Superiores</em> for
-                                    importado.
-                                  </p>
                                 )}
                               </div>
                             )}
@@ -1946,18 +1987,80 @@ export function RightTabsColumn({
         maxWidth="max-w-3xl"
       >
         <div className="space-y-3.5">
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
-            <Input
-              value={ritSearch}
-              onChange={(e) => setRitSearch(e.target.value)}
-              placeholder="Buscar ritual por nome, elemento ou círculo..."
-              className="pl-9"
-            />
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#6E6E7E]" />
+              <Input
+                value={ritSearch}
+                onChange={(e) => setRitSearch(e.target.value)}
+                placeholder="Buscar ritual por nome, elemento ou círculo..."
+                className="pl-9"
+              />
+            </div>
+            <Select
+              value={ritSourceFilter}
+              onChange={(e) =>
+                setRitSourceFilter(e.target.value as "todos" | ContentSource)
+              }
+              className="h-9 w-auto text-xs"
+            >
+              <option value="todos">Todas as Fontes</option>
+              {OFFICIAL_SOURCES.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {SOURCE_LABELS[s.id]}
+                </option>
+              ))}
+              {COMMUNITY_SOURCES.filter((s) =>
+                (agent.enabledSources ?? []).includes(s.id)
+              ).map((s) => (
+                <option key={s.id} value={s.id}>
+                  {SOURCE_LABELS[s.id]}
+                </option>
+              ))}
+              <option value="homebrew">{SOURCE_LABELS.homebrew}</option>
+            </Select>
+            <button
+              type="button"
+              onClick={() => setShowRitSourcesPanel((v) => !v)}
+              className={cn(
+                "h-9 rounded-sm border px-2.5 font-mono text-[10px] transition-colors",
+                showRitSourcesPanel
+                  ? "border-[#F4F4F5] bg-[#16161C] text-[#F4F4F5]"
+                  : "border-[#32323E] bg-[#141419] text-[#A1A1AA] hover:text-[#F4F4F5]"
+              )}
+            >
+              {showRitSourcesPanel ? "Ocultar Fontes" : "Fontes & Suplementos"}
+            </button>
           </div>
+          {showRitSourcesPanel && (
+            <div className="rounded-sm border border-[#22222A] bg-[#0C0C10] p-2.5">
+              <SourceToggleGroup
+                compact
+                enabled={agent.enabledSources}
+                onToggle={(src) =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    enabledSources: toggleSourceList(prev.enabledSources, src),
+                  }))
+                }
+                onSetCommunity={(on) =>
+                  onUpdate((prev) => ({
+                    ...prev,
+                    enabledSources: setCommunityList(prev.enabledSources, on),
+                  }))
+                }
+              />
+            </div>
+          )}
           <div className="max-h-[60vh] overflow-y-auto space-y-2 pr-1">
             {allLibraryRituals
               .filter((r) => {
+                if (
+                  ritSourceFilter !== "todos" &&
+                  (r.source ?? "livro_basico") !== ritSourceFilter
+                ) {
+                  return false;
+                }
                 const q = ritSearch.trim().toLowerCase();
                 if (!q) return true;
                 return (
@@ -1969,6 +2072,7 @@ export function RightTabsColumn({
               .map((rit) => {
                 const alreadyKnown = agent.rituals.some((x) => x.id === rit.id);
                 const st = ELEMENT_STYLES[rit.element];
+                const hasSup = hasSuperiorForm(rit);
                 return (
                   <div
                     key={rit.id}
@@ -1983,6 +2087,22 @@ export function RightTabsColumn({
                           {rit.name}
                         </span>
                         <SourceBadge source={rit.source} />
+                        {rit.isCorrentesDaRealidade && (
+                          <Badge
+                            variant="purple"
+                            className="font-mono text-[9px]"
+                          >
+                            CORRENTES DA REALIDADE
+                          </Badge>
+                        )}
+                        {hasSup && (
+                          <Badge
+                            variant="warning"
+                            className="font-mono text-[9px]"
+                          >
+                            {rit.isSuperior ? "SUPERIOR" : "+ SUPERIOR"}
+                          </Badge>
+                        )}
                         <span
                           className={cn(
                             "rounded-sm border px-1.5 py-0.5 font-mono text-[10px]",

@@ -18,12 +18,13 @@ import { useAppStore } from "@/store/useAppStore";
 import { BASE_ORIGINS } from "@/data/origins";
 import { ALL_CLASSES, getClassById } from "@/data/classes";
 import {
+  COMMUNITY_ORIGINS,
   COMMUNITY_POWERS,
   COMMUNITY_RITUALS,
   COMMUNITY_TRAILS,
 } from "@/data/supplements";
-import { isCommunitySource } from "@/data/sources";
-import { SourceToggleGroup, setCommunityList } from "@/components/SourceToggles";
+import { SOURCE_LABELS, isCommunitySource } from "@/lib/sources";
+import { SourceBadge, SourceToggleGroup, setCommunityList } from "@/components/SourceToggles";
 import { BASE_TRAILS } from "@/data/trails";
 import { BASE_CLASS_POWERS } from "@/data/classPowers";
 import { BASE_GENERAL_POWERS } from "@/data/generalPowers";
@@ -115,7 +116,7 @@ export default function NovoAgenteWizardPage() {
 
   // Step 3: Origin
   const filteredOrigins = useMemo(() => {
-    const all = [...BASE_ORIGINS, ...homebrew.origins];
+    const all = [...BASE_ORIGINS, ...COMMUNITY_ORIGINS, ...homebrew.origins];
     return all.filter((o) => enabledSources.includes(o.source ?? "livro_basico"));
   }, [homebrew.origins, enabledSources]);
 
@@ -937,14 +938,18 @@ export default function NovoAgenteWizardPage() {
                   <div>
                     <div className="flex items-center justify-between gap-2">
                       <h3 className="text-sm font-bold text-zinc-100">{origin.name}</h3>
-                      <Badge variant="outline" className="text-[9px]">
-                        {origin.source === "sobrevivendo_ao_horror"
-                          ? "SaH"
-                          : origin.source === "homebrew"
-                          ? "HB"
-                          : "Básico"}
-                      </Badge>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <SourceBadge source={origin.source} />
+                        <Badge variant="outline" className="text-[9px]">
+                          {SOURCE_LABELS[origin.source ?? "livro_basico"]}
+                        </Badge>
+                      </div>
                     </div>
+                    {origin.prerequisites && (
+                      <p className="mt-1 font-mono text-[10px] text-amber-300">
+                        Pré-requisito: {origin.prerequisites}
+                      </p>
+                    )}
                     <p className="mt-1 text-[11px] text-zinc-400 line-clamp-2">
                       {origin.description}
                     </p>

@@ -36,15 +36,33 @@ import {
 import { BASE_ORIGINS } from "@/data/origins";
 import { ALL_CLASSES, getClassById } from "@/data/classes";
 import {
+  COMMUNITY_CONDITIONS,
+  COMMUNITY_CURSED_ITEMS,
+  COMMUNITY_CURSES,
+  COMMUNITY_ITEMS,
+  COMMUNITY_MODIFICATIONS,
+  COMMUNITY_NEW_THREATS,
+  COMMUNITY_OPTIONAL_RULES,
+  COMMUNITY_ORGANIZATIONS,
+  COMMUNITY_ORIGINS,
+  COMMUNITY_PARANORMAL_FOODS,
   COMMUNITY_POWERS,
+  COMMUNITY_RELICS,
   COMMUNITY_RITUALS,
+  COMMUNITY_THREATS,
   COMMUNITY_TRAILS,
+  COMMUNITY_VARIANT_THREATS,
+  OFFICIAL_SUPERIOR_FORMS,
 } from "@/data/supplements";
+import { ORGANIZATIONS, getOrganization } from "@/data/organizations";
 import {
+  getOfficialSuperiorForm,
   getSuperiorExtraRounds,
   hasSuperiorForm,
+  resolveSuperiorInfo,
 } from "@/data/supplements/rituaisSuperiores";
 import { SOURCE_META, filterByEnabledSources } from "@/data/sources";
+import { getOriginById } from "@/data/origins";
 import { BASE_TRAILS } from "@/data/trails";
 import { BASE_CLASS_POWERS } from "@/data/classPowers";
 import { BASE_GENERAL_POWERS } from "@/data/generalPowers";
@@ -1082,23 +1100,210 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
       ).toBe(9);
     });
 
-    it("importa o Bloco A completo com IDs prefixados, sem colisão com o conteúdo oficial", () => {
-      expect(COMMUNITY_TRAILS).toHaveLength(1);
-      expect(COMMUNITY_TRAILS[0].id).toBe("ext_dr_frankenstein");
-      expect(COMMUNITY_TRAILS[0].abilitiesByNex.map((a) => a.nex)).toEqual([
+    it("importa 100% das Entregas 1 e 2 com IDs prefixados, acopla forma Superior nos 4 rituais oficiais e evita colisões", () => {
+      // Entrega 1
+      expect(COMMUNITY_ORIGINS).toHaveLength(4);
+      const extTrails = COMMUNITY_TRAILS.filter(
+        (t) => t.source === "comunidade_avulsos"
+      );
+      expect(extTrails).toHaveLength(1);
+      expect(extTrails[0].id).toBe("ext_dr_frankenstein");
+      expect(extTrails[0].abilitiesByNex.map((a) => a.nex)).toEqual([
         10, 40, 65, 99,
       ]);
-      expect(COMMUNITY_RITUALS.map((r) => r.id)).toEqual(["ext_recriando_o_terror"]);
-      expect(COMMUNITY_POWERS.map((p) => p.id).sort()).toEqual([
+      expect(
+        COMMUNITY_POWERS.filter((p) => p.source === "comunidade_avulsos")
+          .map((p) => p.id)
+          .sort()
+      ).toEqual([
         "ext_aspecto_imperceptivel",
         "ext_desacreditado",
         "ext_imbuir_sistema",
       ]);
+      expect(
+        COMMUNITY_RITUALS.filter((r) => r.source === "comunidade_avulsos")
+      ).toHaveLength(1);
+      expect(
+        COMMUNITY_RITUALS.filter((r) => r.source === "rituais_superiores")
+      ).toHaveLength(5);
+      expect(
+        COMMUNITY_RITUALS.filter((r) => r.source === "guia_confidencial_vol1")
+      ).toHaveLength(10);
+      expect(
+        COMMUNITY_CURSED_ITEMS.filter((i) => i.source === "mascaras_teatrais")
+      ).toHaveLength(5);
+      expect(COMMUNITY_CONDITIONS.map((c) => c.id)).toEqual(["gc1_desorientado"]);
+      expect(COMMUNITY_OPTIONAL_RULES.map((r) => r.id)).toEqual([
+        "rs_regra_rituais_superiores",
+      ]);
+      expect(COMMUNITY_THREATS.some((t) => t.id === "gc1_prematuro")).toBe(true);
+      expect(OFFICIAL_SUPERIOR_FORMS).toHaveLength(4);
+
+      // Entrega 2 + 3 — Mistérios do Outro Lado (Partes 1 e 2)
+      expect(
+        COMMUNITY_POWERS.filter((p) => p.source === "misterios_do_outro_lado")
+      ).toHaveLength(17);
+      expect(
+        COMMUNITY_TRAILS.filter((t) => t.source === "misterios_do_outro_lado")
+      ).toHaveLength(10);
+      // 12 equipamentos (Entrega 2) + 58 itens/recompensas (Entrega 3) = 70 itens MoL
+      const molItems = COMMUNITY_ITEMS.filter(
+        (i) => i.source === "misterios_do_outro_lado"
+      );
+      expect(molItems).toHaveLength(70);
+      expect(molItems.filter((i) => i.type === "arma")).toHaveLength(6);
+      expect(molItems.filter((i) => i.type === "protecao")).toHaveLength(2);
+      expect(molItems.filter((i) => i.type === "medicamento")).toHaveLength(3);
+      expect(molItems.filter((i) => i.type === "paranormal")).toHaveLength(4);
+      expect(molItems.filter((i) => i.type === "amaldicoado")).toHaveLength(53);
+      expect(COMMUNITY_PARANORMAL_FOODS).toHaveLength(4);
+      expect(COMMUNITY_MODIFICATIONS).toHaveLength(3);
+      expect(COMMUNITY_CURSES).toHaveLength(4);
+      expect(COMMUNITY_CURSES.every((c) => c.element === "Medo")).toBe(true);
+      expect(COMMUNITY_ORGANIZATIONS).toHaveLength(5);
+      expect(ORGANIZATIONS).toHaveLength(5);
+      const molRituals = COMMUNITY_RITUALS.filter(
+        (r) => r.source === "misterios_do_outro_lado"
+      );
+      expect(molRituals).toHaveLength(14);
+      expect(molRituals.filter((r) => r.isCorrentesDaRealidade)).toHaveLength(5);
+
+      // Entrega 3 — Ameaças inéditas (7), Variantes (44) e Relíquias (4)
+      expect(COMMUNITY_NEW_THREATS).toHaveLength(7);
+      expect(COMMUNITY_VARIANT_THREATS).toHaveLength(44);
+      expect(
+        COMMUNITY_VARIANT_THREATS.every(
+          (v) => v.isVariant === true && Boolean(v.baseCreatureName)
+        )
+      ).toBe(true);
+      expect(COMMUNITY_THREATS).toHaveLength(52); // 1 (GC1) + 7 inéditas + 44 variantes
+      expect(COMMUNITY_RELICS).toHaveLength(4);
+      expect(
+        COMMUNITY_RELICS.every(
+          (rel) =>
+            Boolean(rel.objectEffect) &&
+            Boolean(rel.bearerRelation) &&
+            Boolean(rel.ally.ability) &&
+            rel.optionalAbilities.length > 0
+        )
+      ).toBe(true);
+
+      // Acoplamento direto nos 4 rituais oficiais sem sobrescrever campos oficiais
+      for (const officialName of [
+        "Invólucro de Carne",
+        "Desacelerar Impacto",
+        "Vidência",
+        "Transfigurar Terra",
+      ]) {
+        const rit = BASE_RITUALS.find((r) => r.name === officialName);
+        expect(rit).toBeDefined();
+        expect(rit?.source).toBe("livro_basico");
+        expect(rit?.superiorInfo?.efeitoSuperior).toBeTruthy();
+        expect(rit?.superiorInfo?.execution).toBe("3 rodadas consecutivas");
+        expect(getOfficialSuperiorForm(officialName)?.efeitoSuperior).toBe(
+          rit?.superiorInfo?.efeitoSuperior
+        );
+        expect(resolveSuperiorInfo({ name: officialName })?.efeitoSuperior).toBe(
+          rit?.superiorInfo?.efeitoSuperior
+        );
+      }
+
+      // getOriginById resolve origens da comunidade
+      expect(getOriginById("gc1_mensageiro_do_estige")?.efeitosPassivos?.rodadasMorrendoExtra).toBe(1);
+      expect(getOriginById("gc1_almeida_filho_perdido")?.efeitosPassivos?.rdSangueEscalonavel?.base).toBe(5);
+
+      // Organizações da Realidade (IDs canônicos e prefixados mol_org_*)
+      expect(getOrganization("mol_org_hell_hunters").abilityName).toBe(
+        "Arsenal de Qualidade"
+      );
+      expect(
+        calculateItemFinalCategory(
+          {
+            id: "w1",
+            name: "Fuzil",
+            type: "arma",
+            category: 2,
+            spaces: 2,
+            quantity: 1,
+            equipped: false,
+            description: "",
+          },
+          "mol_org_hell_hunters"
+        )
+      ).toBe(1);
+      expect(
+        calculateItemFinalCategory(
+          {
+            id: "p1",
+            name: "Amuleto",
+            type: "amaldicoado",
+            category: 2,
+            spaces: 1,
+            quantity: 1,
+            equipped: false,
+            description: "",
+          },
+          "mol_org_famiglia_leone"
+        )
+      ).toBe(3);
+      expect(
+        calculateItemFinalCategory(
+          {
+            id: "p2",
+            name: "Amuleto",
+            type: "paranormal",
+            category: 2,
+            spaces: 1,
+            quantity: 1,
+            equipped: false,
+            description: "",
+          },
+          "mol_org_obscurite"
+        )
+      ).toBe(1);
+
+      // Alimentos Paranormais no Interlúdio (perda de SAN = Vigor + bônus)
+      const foodInterlude = calculateInterludeRecovery({
+        restCondition: "normal",
+        baseRecovery: 4,
+        didSleep: true,
+        didRelax: false,
+        dishes: ["mol_alimento_morte", "mol_alimento_energia"],
+        maintenanceCount: 1,
+        vig: 3,
+      });
+      expect(foodInterlude.sanLostFromParanormalFood).toBe(6);
+      expect(foodInterlude.nextScenePeDiscount).toBe(1);
+      expect(foodInterlude.maxMaintenanceItems).toBe(3);
+
+      const bloodAndKnowledge = calculateInterludeRecovery({
+        restCondition: "normal",
+        baseRecovery: 3,
+        didSleep: false,
+        didRelax: false,
+        dishes: ["mol_alimento_sangue", "mol_alimento_conhecimento"],
+        exerciseCount: 1,
+        readCount: 1,
+        vig: 2,
+        trilhaId: "mol_detetive",
+        nex: 65,
+      });
+      expect(bloodAndKnowledge.sanLostFromParanormalFood).toBe(4);
+      expect(bloodAndKnowledge.exerciseWholeScene).toBe(true);
+      expect(bloodAndKnowledge.readWholeScene).toBe(true);
+      expect(bloodAndKnowledge.readDieFormula).toBe("1d12");
 
       const community = [
+        ...COMMUNITY_ORIGINS,
         ...COMMUNITY_TRAILS,
         ...COMMUNITY_POWERS,
         ...COMMUNITY_RITUALS,
+        ...COMMUNITY_ITEMS,
+        ...COMMUNITY_MODIFICATIONS,
+        ...COMMUNITY_CURSES,
+        ...COMMUNITY_CONDITIONS,
+        ...COMMUNITY_OPTIONAL_RULES,
+        ...COMMUNITY_THREATS,
       ];
       for (const item of community) {
         const meta = SOURCE_META.find((s) => s.id === item.source);
@@ -1114,6 +1319,10 @@ describe("Motor de Regras Oficiais — Ordem Paranormal RPG v1.2 + SaH", () => {
         ...BASE_PARANORMAL_POWERS.map((p) => p.id),
         ...BASE_RITUALS.map((r) => r.id),
         ...BASE_ITEMS.map((i) => i.id),
+        ...BASE_MODIFICATIONS.map((m) => m.id),
+        ...BASE_CURSES.map((c) => c.id),
+        ...BASE_THREATS.map((t) => t.id),
+        ...OPTIONAL_RULES_LIST.map((r) => r.id),
       ]);
       for (const item of community) {
         expect(officialIdSet.has(item.id)).toBe(false);

@@ -1,0 +1,1917 @@
+{
+  "meta": {
+    "entrega": 3,
+    "titulo": "Mistérios do Outro Lado — Parte 2 (Recompensas Paranormais, Itens de Lugares Amaldiçoados, Relíquias, Variantes de Criaturas, Parasitas e Ameaças Inéditas)",
+    "autor": "Pedro Luiz Santos",
+    "source": "misterios_do_outro_lado"
+  },
+  "itensAmaldicoadosERecompensas": [
+    {
+      "id": "mol_rec_manto_espinhento",
+      "nome": "Manto Espinhento",
+      "origemCriatura": "Aniquilação",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Vestimenta)",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece +5 em Intimidação, RD 10 (exceto Morte) e resistência a Sangue 10. 1x/cena, como reação, gasta 4 PE para lançar espinhos em raio de 10m causando 4d6+6 dano de Sangue (Reflexos DT 25 reduz à metade)."
+    },
+    {
+      "id": "mol_rec_ferrao_mortal",
+      "nome": "Ferrão Mortal",
+      "origemCriatura": "Carente",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Arma / Maldição)",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Conta como maldição de Sangue. Gasta 3 PE (ação livre) para invocar um ferrão de sangue (arma simples corpo a corpo, 1d8 Sangue). 1x/cena aplica um efeito: Sugar Doença (Fortitude DT 20: causa 1d6 Sangue e remove 1 doença do alvo; falha transfere a doença para você) ou Apodrecer Corpo (alvo testa Fortitude DT 25: falha sofre 2d8 Sangue e fica Sangrando; sucesso fica Enjoado 2 rodadas)."
+    },
+    {
+      "id": "mol_rec_flores_escarlate",
+      "nome": "Flores Escarlate",
+      "origemCriatura": "Dama de Sangue",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Consumível)",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Até 4 flores por criatura (uso único). Ação padrão espreme próxima a um alvo (Vontade DT 25): sucesso fica Enjoado 1 rodada; falha rola 1d3: (1) atitude melhora 1 passo; (2) fica Apavorado fugindo de você; (3) fica Confuso por até 2 rodadas."
+    },
+    {
+      "id": "mol_rec_fortalecer_pela_dor",
+      "nome": "Fortalecer pela Dor (Maldição Sádica)",
+      "origemCriatura": "Enpap-X",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Proteção, +1 Cat)",
+      "elemento": "Sangue",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Sádica na proteção de quem eliminou o Enpap-X (ou do aliado com proteção mais próximo), aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_correntes_furiosas",
+      "nome": "Correntes Furiosas",
+      "origemCriatura": "Enpap-X",
+      "tipo": "arma",
+      "subtipo": "Recompensa Paranormal (Tática, Corpo a Corpo, Uma Mão)",
+      "elemento": "Sangue",
+      "dano": "1d8+2",
+      "tipoDano": "Sangue",
+      "critico": "20/x2",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Cada ataque acertado na cena concede +2 cumulativo no dano do próximo ataque (+2 no 2º, +4 no 3º...). Errar um ataque zera o acúmulo."
+    },
+    {
+      "id": "mol_rec_cabeca_sangrenta",
+      "nome": "Cabeça Sangrenta",
+      "origemCriatura": "Kerberos",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "A cada 20 PV perdidos acumula 1 ataque extra. Pode gastar 3 PE por ataque acumulado para executá-los como ação livre. Recuperar mais de 20 PV de uma vez perde 1 ataque acumulado."
+    },
+    {
+      "id": "mol_rec_machado_corrompido",
+      "nome": "Machado Corrompido",
+      "origemCriatura": "Minotauro",
+      "tipo": "arma",
+      "subtipo": "Recompensa Paranormal (Tática, Corpo a Corpo, Duas Mãos)",
+      "elemento": "Sangue",
+      "dano": "2d4+3",
+      "tipoDano": "Sangue",
+      "critico": "20/x3",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Em investidas, gasta 5 PE para ter sucesso automático em manobras de atropelar e ganhar +1 dado de dano a cada 6m percorridos."
+    },
+    {
+      "id": "mol_rec_sangue_atormentado",
+      "nome": "Sangue Atormentado (Maldição Sanguinária)",
+      "origemCriatura": "Mulher Afogada",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Arma, +1 Cat)",
+      "elemento": "Sangue",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Sanguinária na arma de quem eliminou a Mulher Afogada (ou do aliado mais próximo com arma), aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_sangue_fluido",
+      "nome": "Sangue Fluído",
+      "origemCriatura": "Mulher Afogada",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Arremessado em um alvo: deixa Enjoado e Asfixiado (Fortitude DT 20 evita; DT 25 por rodada para expelir). No último turno de asfixia, deixa Inconsciente em vez de Morrendo e pode ser recolhido. Em criaturas de Sangue, cura 15 PV."
+    },
+    {
+      "id": "mol_rec_cabeca_monstruosa",
+      "nome": "Cabeça Monstruosa",
+      "origemCriatura": "Titã de Sangue",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "1x/cena, gasta 3 PE para saber a localização de todos os seres Machucados ou Sangrando em alcance longo até o fim da cena (+2 PE concede +2 na margem de ameaça contra eles na cena)."
+    },
+    {
+      "id": "mol_rec_dentes_sanguinarios",
+      "nome": "Dentes Sanguinários",
+      "origemCriatura": "Zumbi de Sangue Bestial",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Acessório)",
+      "elemento": "Sangue",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Estando furtivo, gasta 4 PE para converter o dano de um ataque contra alvo desprevenido em dano de Sangue. Após usar, testa Ocultismo (DT 10 + 2 por uso anterior) ou o item se desfaz."
+    },
+    {
+      "id": "mol_rec_instinto_predador",
+      "nome": "Instinto Predador (Maldição Predadora)",
+      "origemCriatura": "Zumbi de Sangue Bestial",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Arma, +1 Cat)",
+      "elemento": "Sangue",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Predadora na arma de quem eliminou o Zumbi Bestial (ou do aliado mais próximo com arma), aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_aranha_de_lodo",
+      "nome": "Aranha de Lodo",
+      "origemCriatura": "Aracnasita",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "1x/cena, gasta 3 PE para a aranha (1 PV, Defesa 20, desl. 9m) picar um alvo: 1d6 dano de Morte por 1d6 rodadas e Lento (Fortitude DT 25 reduz para 1d3 rodadas e evita Lento). Se morta, Ocultismo DT 15 (+2 por morte) revive. Até 3 por Aracnasita."
+    },
+    {
+      "id": "mol_rec_mascara_hipnotica",
+      "nome": "Máscara Hipnótica",
+      "origemCriatura": "Carniçal Preto da Morte",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Vestimenta)",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "1x/cena, gasta 3 PE para hipnotizar uma pessoa (Vontade DT 25 anula) e receber +10 em testes de persuasão ou mudar atitude até o fim da cena."
+    },
+    {
+      "id": "mol_rec_corpo_de_lodo",
+      "nome": "Corpo de Lodo (Maldição Letárgica)",
+      "origemCriatura": "Carniçal Preto da Morte",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Proteção, +1 Cat)",
+      "elemento": "Morte",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Letárgica na proteção de quem eliminou o Carniçal, aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_cranio_sensitivo",
+      "nome": "Crânio Sensitivo",
+      "origemCriatura": "Escutado",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Deixado em um local, gasta 1 PE para ouvir através dele a até 1km (+2 PE para falar através dele). Enquanto usa, fica Desprevenido."
+    },
+    {
+      "id": "mol_rec_foice_do_fim",
+      "nome": "Foice do Fim",
+      "origemCriatura": "Ceifador Espiral",
+      "tipo": "arma",
+      "subtipo": "Recompensa Paranormal (Tática, Corpo a Corpo, Duas Mãos)",
+      "elemento": "Morte",
+      "dano": "1d12+2",
+      "tipoDano": "Morte",
+      "critico": "20/x3",
+      "categoria": 2,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "1x/combate, gasta 3 PE ao atacar para +5 no teste; se acertar, alvo testa Fortitude (DT 30): falha perde 1 ponto em VIG, FOR ou AGI na cena e fica Indefeso 1 rodada; sucesso fica Enjoado na cena."
+    },
+    {
+      "id": "mol_rec_raiz_consumida",
+      "nome": "Raiz Consumida",
+      "origemCriatura": "Enraizado",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "A cada 5 pontos de dano mental sofridos, acumula 1 PE (máx. 10 PE). Ação de movimento + Vontade (DT 15 + PE acumulados): sucesso recebe todos como PE temporários; falha recebe metade e fica Fraco 1 rodada."
+    },
+    {
+      "id": "mol_rec_veneno_da_morte",
+      "nome": "Veneno da Morte (Maldição Erosiva)",
+      "origemCriatura": "Enraizado",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Arma, +1 Cat)",
+      "elemento": "Morte",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Erosiva na arma de quem eliminou o Enraizado, aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_foice_amarrada",
+      "nome": "Foice Amarrada",
+      "origemCriatura": "Marionete",
+      "tipo": "arma",
+      "subtipo": "Recompensa Paranormal (Simples, Corpo a Corpo)",
+      "elemento": "Morte",
+      "dano": "1d10",
+      "tipoDano": "Morte",
+      "critico": "20/x2",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta 1 PE para estender do braço. Ao sofrer dano paranormal >= 10, gasta 3 PE para reduzi-lo à metade e somar +1d6 de dano de Morte no próximo ataque com a foice para cada 10 de dano evitado."
+    },
+    {
+      "id": "mol_rec_garra_entrelacada",
+      "nome": "Garra Entrelaçada",
+      "origemCriatura": "Múmia Xipófaga",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação de movimento e 4 PE para lançar até um cadáver em alcance curto e receber 2d6+6 PV temporários."
+    },
+    {
+      "id": "mol_rec_pele_lobo_invertido",
+      "nome": "Pele de Lobo Invertido",
+      "origemCriatura": "Nidere",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Vestimenta)",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Imune a penalidades por frio extremo, chuva ou granizo. Ao atacar um alvo desprevenido estando furtivo, ele testa Vontade (DT PRE) ou fica Apavorado por 1 rodada."
+    },
+    {
+      "id": "mol_rec_aura_atemporal",
+      "nome": "Aura Atemporal",
+      "origemCriatura": "Sempiternal",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição Corporal)",
+      "elemento": "Morte",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Conta como maldição de Morte. Fornece +5 Defesa e RD Morte 10. 1x/dia, ao tocar um alvo, gasta 6 PE (Vontade DT 30): falha reduz 1 atributo à escolha para 0 por 4 rodadas e envelhece 1d4 anos; sucesso fica Debilitado na cena (afinidade com Morte é imune)."
+    },
+    {
+      "id": "mol_rec_aureola_julgamento",
+      "nome": "Auréola do Julgamento",
+      "origemCriatura": "Anjo",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Vestimenta)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece +5 em Intuição, -5 em Enganação e RD Conhecimento 10. Ao perceber uma mentira, gasta 2 PE para causar 2d8 dano de Conhecimento ao mentiroso (se tentar mentir de novo e você descobrir, +2 PE causa o dano e deixa Pasmo 1 rodada)."
+    },
+    {
+      "id": "mol_rec_capuz_disforme",
+      "nome": "Capuz Disforme",
+      "origemCriatura": "Bicho-Papão",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Vestimenta)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece RD Conhecimento 5. Gasta 3 PE para mudar seu tamanho para qualquer categoria (exceto Colossal) por 1 rodada (só realiza ações de movimento e livres enquanto transformado)."
+    },
+    {
+      "id": "mol_rec_garras_douradas",
+      "nome": "Garras Douradas",
+      "origemCriatura": "Bicho-Papão",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Acessório)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ataques desarmados causam +2d8 dano de Conhecimento. Ao acertar golpe desarmado furtivo, pode gastar 3 PE para deixar o alvo Paralisado por 1 rodada."
+    },
+    {
+      "id": "mol_rec_olho_contemplador",
+      "nome": "Olho Contemplador",
+      "origemCriatura": "Espreitador",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Deixado em um local, gasta 1 PE para observar através dele a até 1km (fica Desprevenido enquanto observa)."
+    },
+    {
+      "id": "mol_rec_cranio_desesperado",
+      "nome": "Crânio Desesperado",
+      "origemCriatura": "Lembrado",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Componente)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Funciona como componente de Conhecimento. Ao conjurar rituais com ele, pode gastar +2 PE para gerar aura que causa 1d6+2 dano de Conhecimento em todos em alcance curto até a próxima rodada."
+    },
+    {
+      "id": "mol_rec_bracelete_indecifravel",
+      "nome": "Bracelete Indecifrável",
+      "origemCriatura": "Estrangeiro",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Acessório)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta 2 PE na cena para que apenas você e pessoas escolhidas entendam o que falam (todos os outros ouvem idioma sem sentido). Também gasta 2 PE para criptografar um documento em idioma indecifrável (1 PE para restaurar)."
+    },
+    {
+      "id": "mol_rec_cabeca_distorcida",
+      "nome": "Cabeça Distorcida",
+      "origemCriatura": "Ocioso",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece +10 em Intimidação e +10 em Defesa. Ao usar reação para contra-atacar, pode gastar 3 PE para +1 dado de dano adicional."
+    },
+    {
+      "id": "mol_rec_mente_expandida",
+      "nome": "Mente Expandida",
+      "origemCriatura": "Parasita de Culpa",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição Corporal)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Conta como maldição de Conhecimento. Ao Relaxar em interlúdio, recuperação dobrada e pode gastar 2 PE para conceder +1 SAN a todos os aliados que dormirem ou relaxarem na mesma cena."
+    },
+    {
+      "id": "mol_rec_casaco_perseguidor",
+      "nome": "Casaco Perseguidor",
+      "origemCriatura": "Rastejador Sombrio",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Vestimenta)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Vestido fornece RD 5 e +5 Defesa. Gasta 2 PE (+1 PE/rodada livre) para enviá-lo furtivamente (desl. 9m) perseguir um alvo e agarrá-lo (Reflexos DT 25 evita), podendo causar 2d6 dano de Conhecimento no fim do turno."
+    },
+    {
+      "id": "mol_rec_toque_saber_puro",
+      "nome": "Toque do Saber Puro",
+      "origemCriatura": "Silhueta",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição Corporal)",
+      "elemento": "Conhecimento",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Conta como maldição de Conhecimento. Gasta 10 PE (até INT vezes por missão) para transformar um item de até 2 espaços em outro item qualquer de mesmo tamanho."
+    },
+    {
+      "id": "mol_rec_memorias_consciencia",
+      "nome": "Memórias da Consciência (Maldição Senciente)",
+      "origemCriatura": "Silhueta",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Arma, +1 Cat)",
+      "elemento": "Conhecimento",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Senciente na arma de quem eliminou a Silhueta, aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_polarizacao",
+      "nome": "Polarização (Maldição Voltaica)",
+      "origemCriatura": "Anárquico Descontrolado",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Proteção, +1 Cat)",
+      "elemento": "Energia",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Voltaica na proteção de quem eliminou o Anárquico Descontrolado, aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_coracao_acelerado",
+      "nome": "Coração Acelerado",
+      "origemCriatura": "Anárquico Descontrolado",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Componente)",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Componente de Energia. Ao conjurar um ritual com ele, gasta +2 PE para reduzir o tempo de execução em 1 passo (cena -> 2 rodadas -> completa -> padrão -> movimento -> livre)."
+    },
+    {
+      "id": "mol_rec_realidade_paralela",
+      "nome": "Realidade Paralela",
+      "origemCriatura": "Anomalia",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Energia",
+      "categoria": 4,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta 4 PE para acessar esfera paralela de 3m de raio: seres dentro ficam invisíveis e imunes a dano (exceto mental) e condições de fora, mas perdem 2 SAN/rodada (2 PE para sair; criaturas de Energia entram/saem livremente)."
+    },
+    {
+      "id": "mol_rec_fagulha_energia_pura",
+      "nome": "Fagulha de Energia Pura (Maldição Energética)",
+      "origemCriatura": "Anomiático",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição de Arma, +1 Cat)",
+      "elemento": "Energia",
+      "categoria": 1,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplica a maldição Energética na arma de quem eliminou o Anomiático, aumentando a categoria em apenas I."
+    },
+    {
+      "id": "mol_rec_forca_do_caos",
+      "nome": "Força do Caos",
+      "origemCriatura": "Anomiático",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição Corporal)",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Conta como maldição de Energia. Seus ataques desarmados causam +1d6 de dano de Energia."
+    },
+    {
+      "id": "mol_rec_nucleo_transformador",
+      "nome": "Núcleo Transformador",
+      "origemCriatura": "Ciborgue",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação padrão e 4 PE: transfere 1 ponto de um atributo para outro até o fim da cena (recarga: 2 cenas)."
+    },
+    {
+      "id": "mol_rec_dispositivo_purificador",
+      "nome": "Dispositivo Purificador",
+      "origemCriatura": "Infecticídio",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Imunidade ao vírus do Infecticídio e +10 em Fortitude contra doenças. Criaturas de Energia adjacentes testam Vontade (DT 30) ou usam a próxima ação para se afastar."
+    },
+    {
+      "id": "mol_rec_grito_incessante",
+      "nome": "Grito Incessante",
+      "origemCriatura": "Sukkalgir",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Maldição Corporal)",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Conta como maldição de Energia. Ao sofrer 15+ dano mental (antes de RD), gasta 2 PE para gritar deixando seres em 6m Apavorados por 1 rodada (Vontade DT 25 evita)."
+    },
+    {
+      "id": "mol_rec_televisao_possuida",
+      "nome": "Televisão Possuída",
+      "origemCriatura": "Telopsia",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 4,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação padrão e 4 PE: aprisiona a criatura de Energia (até VD 120) ou pessoa (NEX < 65% com afinidade em Energia) mais próxima em 3m que falhar em Vontade (DT 20). Olhar o prisioneiro causa 1d4 mental. Ação padrão liberta."
+    },
+    {
+      "id": "mol_rec_tempestade_contida",
+      "nome": "Tempestade Contida",
+      "origemCriatura": "Tempestuoso",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 5,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação padrão e 3 PE (ativa após 1 turno; 1x/dia): cria tempestade em 12m de raio até o fim da cena (todos ficam Ofuscados e sofrem 4d8+5 Energia/turno; Fortitude DT 30 metade). Ação completa + 3 PE desativa."
+    },
+    {
+      "id": "mol_rec_polaroide_opaca",
+      "nome": "Polaroide Opaca",
+      "origemCriatura": "Viajante",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal",
+      "elemento": "Energia",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta 5 PE para projetar um personagem na foto por 1 cena: quem olhar testa Vontade (DT 25); falha esquece tudo sobre o personagem por 1d4 cenas; sucesso lembra dele mas atribui suas ações a outra pessoa."
+    },
+    {
+      "id": "mol_rec_experienciar_o_medo",
+      "nome": "Experienciar o Medo",
+      "origemCriatura": "Degolificada",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Poder / Maldição)",
+      "elemento": "Medo",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Concede 1 poder paranormal à escolha (do elemento da metamorfose, se houve), mas reduz 2 SAN permanentemente. Conta como maldição do elemento do poder."
+    },
+    {
+      "id": "mol_rec_amuleto_protetor",
+      "nome": "Amuleto Protetor",
+      "origemCriatura": "Líder de Culto",
+      "tipo": "amaldicoado",
+      "subtipo": "Recompensa Paranormal (Componente)",
+      "elemento": "Variável",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Componente de um elemento específico: fornece +2 na DT de rituais, RD 5 ao elemento e +1 dado de dano ou cura ao conjurar rituais com ele."
+    },
+    {
+      "id": "mol_rec_componente_fraco",
+      "nome": "Componente Fraco",
+      "origemCriatura": "Criaturas VD <= 20 / Cultistas",
+      "tipo": "paranormal",
+      "subtipo": "Componente Ritualístico",
+      "elemento": "Variável",
+      "categoria": 0,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Funciona como componente ritualístico de um elemento específico; desfaz-se após 1d4+2 rituais conjurados."
+    },
+    {
+      "id": "mol_item_manto_vermelho",
+      "nome": "Manto Vermelho",
+      "tipo": "amaldicoado",
+      "subtipo": "Item do Labirinto",
+      "elemento": "Sangue",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Exposto a criatura de Sangue (Vontade DT 30): sucesso faz ela atacar apenas você na cena; falha deixa Fascinada 2 rodadas. Contra o Minotauro, força-o a soltar quem estiver agarrado nos chifres."
+    },
+    {
+      "id": "mol_item_la_da_perdicao",
+      "nome": "Lã da Perdição",
+      "tipo": "amaldicoado",
+      "subtipo": "Item do Labirinto",
+      "elemento": "Conhecimento",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Largar o fio no chão faz criaturas que o vejam testarem Vontade (DT 28) ou seguirem o rastro ficando Desprevenidas. O Minotauro não usa Dono do Labirinto enquanto segue a lã."
+    },
+    {
+      "id": "mol_item_adaga_opaca",
+      "nome": "Adaga Opaca",
+      "tipo": "arma",
+      "subtipo": "Item do Labirinto (Corpo a Corpo, Leve)",
+      "elemento": "Morte",
+      "dano": "1d6",
+      "tipoDano": "Perfuração",
+      "critico": "20/x2",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ao atingir criatura de Sangue pela 1ª vez, reduz suas RD em 10 por 4 rodadas (Fortitude DT 35 reduz para 2). Após cada uso testa Ocultismo (DT 25 + 1/uso) ou se desfaz. Anula Infecção Sangrenta do Minotauro."
+    },
+    {
+      "id": "mol_item_ataduras",
+      "nome": "Ataduras",
+      "tipo": "medicamento",
+      "subtipo": "Item da Masmorra",
+      "categoria": 0,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Uso único (ação padrão + Medicina DT 20): sucesso cura 2d6+2 PV; falha cura 1d6 PV. Pode ser usado como kit de perícia (1 uso)."
+    },
+    {
+      "id": "mol_item_algemas_controladoras",
+      "nome": "Algemas Controladoras",
+      "tipo": "amaldicoado",
+      "subtipo": "Item da Masmorra",
+      "elemento": "Medo",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Alvo algemado não pode conjurar rituais ou usar habilidades. Gasta 3 PE para controlar suas ações por 1 rodada. Qualquer dano sofrido pelo algemado causa o mesmo valor em dano mental em você."
+    },
+    {
+      "id": "mol_item_espada_decrepita",
+      "nome": "Espada Decrépita",
+      "tipo": "arma",
+      "subtipo": "Item da Masmorra (Tática, Uma/Duas Mãos)",
+      "elemento": "Morte",
+      "dano": "1d8/1d10+2",
+      "tipoDano": "Corte",
+      "critico": "19/x2",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ao acertar pela 1ª vez, gasta 3 PE para causar ferida de lodo por 3 rodadas: qualquer ser que gastar ação Mirar e atingir o alvo converte o dano em Morte."
+    },
+    {
+      "id": "mol_item_pergaminho_do_destino",
+      "nome": "Pergaminho do Destino",
+      "tipo": "amaldicoado",
+      "subtipo": "Item da Masmorra (Consumível)",
+      "elemento": "Conhecimento",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação livre (uso único): sucesso automático em um teste baseado em INT ou PRE na rodada, sofrendo 3d6+5 dano mental (Vontade DT 28 metade)."
+    },
+    {
+      "id": "mol_item_colete_energizado",
+      "nome": "Colete Energizado",
+      "tipo": "protecao",
+      "subtipo": "Item da Usina (Proteção Amaldiçoada)",
+      "elemento": "Energia",
+      "categoria": 3,
+      "espacos": 3,
+      "rd": "Energia 10",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece RD Energia 10. A cada 15 de dano sofrido acumula 1d8 de dano de Energia (máx. 6d8). Gasta 4 PE para descarregar o dano acumulado em um alvo em alcance médio (Fortitude DT 30 metade)."
+    },
+    {
+      "id": "mol_item_elmo_atemporal",
+      "nome": "Elmo Atemporal",
+      "tipo": "amaldicoado",
+      "subtipo": "Item da Usina (Vestimenta)",
+      "elemento": "Morte",
+      "categoria": 3,
+      "espacos": 2,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação padrão e 5 PE: aumenta o tempo de execução de uma habilidade ou ritual inimigo em 1 passo por 4 rodadas (Vontade DT 30 evita; se o alvo passar, você sofre 2d8+8 dano mental)."
+    },
+    {
+      "id": "mol_item_cranio_putrefato",
+      "nome": "Crânio Putrefato",
+      "tipo": "amaldicoado",
+      "subtipo": "Item da Usina",
+      "elemento": "Morte",
+      "categoria": 3,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta 3 PE (ativa após 1 rodada, dura 3 rodadas): área média vira terreno difícil causando 3d12 dano de Morte/turno e reduz curas de PV pela metade (você recebe em PE a cura reduzida). Testa Fortitude (DT 25 + 2/uso) ou se desfaz."
+    }
+  ],
+  "reliquias": [
+    {
+      "id": "mol_rel_trono_de_sangue",
+      "nome": "Trono de Sangue (O Diabo)",
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "efeitoObjeto": "Tamanho Médio, imune a dano, Membrana Arruinada. Em alcance longo, seres de Sangue/afinidade recebem +15 em testes de FOR/VIG e rituais de Conhecimento não funcionam. Pessoas com histórias trágicas testam Vontade (DT 30; -2d20 se afinidade em Sangue); 2 falhas seguidas transformam no Diabo. Seres não dignos que se aproximam sofrem 3d8+20 Sangue (Fortitude DT 35 metade).",
+      "relacaoPortador": "Divide o corpo com a consciência do portador, interferindo em decisões a critério do mestre.",
+      "aliado": {
+        "geral": "Expansão Elemental: recebe 1 maldição à escolha em arma ou proteção na cena (sem subir categoria).",
+        "bonus": "Força do Sangue: +1d20 em testes de ataque.",
+        "habilidade": "Renovar Carne (1x/cena, 7 PE): Cura Acelerada 15/Morte e +5 Defesa por 3 rodadas."
+      },
+      "habilidadesOpcionais": [
+        {
+          "nome": "Admirador do Sofrimento (Passiva)",
+          "descricao": "Enquanto alguém estiver Morrendo na presença do Diabo, todos em alcance médio sofrem 1d12 mental no início do turno dele."
+        },
+        {
+          "nome": "Sentimentos Intensos (Padrão)",
+          "descricao": "Alvo em alcance médio testa Vontade (DT 35) ou rola 1d4 por 6 rodadas (Diplomacia DT 40 encerra): (1) Fúria contra alvo do Diabo; (2) Obsessão recebendo ataques por alguém; (3) Tristeza: Esmorecido, Indefeso, sem ações completas; (4) Medo: Apavorado, sem atacar criaturas."
+        },
+        {
+          "nome": "Maldição do Diabo (Reação)",
+          "descricao": "Ao sofrer ataque corpo a corpo, amaldiçoa a arma para causar metade do dano de Sangue (conta como maldição sem subir categoria)."
+        },
+        {
+          "nome": "Tentação (Padrão, 1x/cena)",
+          "descricao": "Assume forma de pessoa importante (Vontade DT 35): falha fica Fascinado e, se tocar, sofre 4d8+15 mental e fica Apavorado na cena."
+        },
+        {
+          "nome": "Traumatizar (Completa)",
+          "descricao": "Ao surgir sem Presença Perturbadora, toca o alvo causando 4d8 mental, impedindo dormir/relaxar no próximo interlúdio e bloqueando rituais de Sangue por 1d6 cenas (Vontade DT 40 metade e evita penalidade de interlúdio)."
+        }
+      ]
+    },
+    {
+      "id": "mol_rel_parasita_dimensoes",
+      "nome": "Parasita de Dimensões (O Deus da Morte)",
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "efeitoObjeto": "Imune a dano; cresce 1 categoria de tamanho a cada 1d4 dias (até Colossal). Na área (médio até extremo), rituais de Sangue não funcionam; início de cena todos perdem 1d6 PE e SAN e testam Vontade (DT 27: falha -1 ação de movimento; sucesso +1 ação padrão na cena). Seres fracos testam Vontade DT 30 (2 falhas viram o Deus da Morte; tocar voluntariamente também).",
+      "relacaoPortador": "Controle parcial sobre a entidade, desde que siga rigorosamente as regras da Morte.",
+      "aliado": {
+        "geral": "Expansão Elemental: recebe 1 maldição à escolha em arma ou proteção na cena.",
+        "bonus": "Vantagem do Tempo: +1 ação de movimento por rodada.",
+        "habilidade": "Reverter Potencial (1x/cena, 7 PE): encerra todas as condições negativas (exceto Morrendo/Enlouquecendo) e ganha 1 ação padrão por efeito anulado."
+      },
+      "habilidadesOpcionais": [
+        {
+          "nome": "Prolongar o Fim (Livre)",
+          "descricao": "Mantém um ser Morrendo preso em lodo pelo tempo que desejar (apenas fala, sem ações)."
+        },
+        {
+          "nome": "Centro da Espiral (Padrão)",
+          "descricao": "Puxa 9m todos em alcance médio e envelhece 1d8 anos (Vontade DT 30: 3m e metade); fica Alquebrado 1 rodada por ano envelhecido."
+        },
+        {
+          "nome": "Extremo da Espiral (Padrão)",
+          "descricao": "Usado após Centro da Espiral: afasta 12m seres em alcance curto causando 3d10+10 Morte e Paralisado 1 rodada (Vontade DT 40: 6m, metade e Lento; quem sofreu Centro da Espiral não resiste)."
+        },
+        {
+          "nome": "Mestre da Natureza (Passiva)",
+          "descricao": "Controla animais selvagens em alcance longo (eles recebem RD Morte 10)."
+        },
+        {
+          "nome": "Chuva Temporal (Padrão)",
+          "descricao": "Por 3 turnos em alcance longo, chuva preta envelhece 1 ano e causa 1d10+5 Morte/turno em quem não estiver coberto."
+        }
+      ]
+    },
+    {
+      "id": "mol_rel_mascara_desespero",
+      "nome": "Máscara do Desespero (A Magistrada)",
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "efeitoObjeto": "Imune a dano, 1 espaço. Em alcance curto: +2d20 em INT e PRE, mas rituais de Energia não funcionam; criaturas de Conhecimento não atacam o portador. Início de cena: Vontade DT 30 ou sofre 1d6 mental; 2 falhas forçam a vestir a máscara virando a Magistrada.",
+      "relacaoPortador": "A entidade assume controle total e inexistência da consciência do portador (mestre controla o personagem).",
+      "aliado": {
+        "geral": "Expansão Elemental: recebe 1 maldição à escolha em arma ou proteção na cena.",
+        "bonus": "Conhecimento Protetor: +5 em testes de resistência contra efeitos paranormais (exceto Conhecimento).",
+        "habilidade": "Muralha Mental (1x/cena, 7 PE): RD mental 10 e imunidade a condições mentais e de sentidos por 3 rodadas."
+      },
+      "habilidadesOpcionais": [
+        {
+          "nome": "Limitar Mente (Livre, 1x/cena)",
+          "descricao": "Se Reescrever Realidade causar 30+ dano mental/Conhecimento, aplica lesão permanente (1d3: 1 Surdo, 2 Cego, 3 Mudo) reversível à vontade dela."
+        },
+        {
+          "nome": "Acordo das Máscaras (Livre)",
+          "descricao": "Se um jogador acertar 3+ ataques seguidos nela, pode propor acordo: aceitar causa 3d10+10 mental e controle total por 1d10+5 cenas (enlouquecer vira Máscara)."
+        },
+        {
+          "nome": "Sombras do Infinito (Completa)",
+          "descricao": "Transporta todos na visão para dimensão vazia (Vontade DT 40 evita): ficam Paralisados e imunes a dano/condições (podem falar e fazer acordos)."
+        },
+        {
+          "nome": "Visão do Impossível (Passiva)",
+          "descricao": "Quem enlouquece na presença vira Existido (ou Lembrado se NEX 80%+); morto por Inexistir vira Silhueta no próximo turno."
+        },
+        {
+          "nome": "Esquecer (Movimento, 1x/alvo)",
+          "descricao": "Alvo em alcance longo esquece 1 habilidade/poder/ritual com custo de PE até o fim da cena (Vontade DT 40 evita)."
+        }
+      ]
+    },
+    {
+      "id": "mol_rel_chama_anarquica",
+      "nome": "Chama Anárquica (O Anfitrião)",
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "efeitoObjeto": "Funde-se a objeto metálico (torna-o imune a dano e inutilizável). Em alcance médio: eletrônicos falham, todos ganham Afortunado (Afinidade, não vale contra ela), 50% de chance de entrar Em Chamas no início da cena (100% se usar Morte). Início de cena: Vontade DT 25 ou fica Fascinado e entra no sorteio de dado para virar o Anfitrião.",
+      "relacaoPortador": "Uma consciência entre milhares: no início da cena rola 1d8 indicando quantos turnos o jogador pode influenciar as decisões.",
+      "aliado": {
+        "geral": "Expansão Elemental: recebe 1 maldição à escolha em arma ou proteção na cena.",
+        "bonus": "Barreira Energética: +5 na Defesa.",
+        "habilidade": "Reflexos Caóticos (1x/cena, 7 PE): pode executar reações especiais de defesa contra todos os ataques até seu próximo turno."
+      },
+      "habilidadesOpcionais": [
+        {
+          "nome": "Rajada de Raios (Padrão)",
+          "descricao": "Alcance médio x2 | Teste 7d20+30 | Dano 2d12+15 Energia."
+        },
+        {
+          "nome": "Corrente Contínua (Livre)",
+          "descricao": "Ao acertar Rajada de Raios, seres em alcance curto do alvo sofrem 1d12+3 Energia (Fortitude DT 30 evita)."
+        },
+        {
+          "nome": "Armadilha (Movimento, 1x/cena)",
+          "descricao": "Infecta eletrônico em alcance longo: todos no alcance do Anfitrião sofrem 2d8+4 Energia/turno até ser encontrado e quebrado (ação padrão)."
+        },
+        {
+          "nome": "Falta de Criatividade (Reação)",
+          "descricao": "Ao ser atingido 2x pela mesma arma ou ritual até seu próximo turno, sofre metade do dano no segundo."
+        },
+        {
+          "nome": "Jogos do Anfitrião (Padrão)",
+          "descricao": "Propõe uma ação para alvos em alcance médio; quem não cumprir sofre 3d12+10 Energia no fim do turno."
+        },
+        {
+          "nome": "Caos Natural (Passiva) & Ambiente Imprevisível (Completa)",
+          "descricao": "Altera temperaturas e anula Sopro do Caos / Transfigurar Água e Terra; cria qualquer precipitação ou vento por 3 rodadas."
+        }
+      ]
+    }
+  ],
+  "variantesCriaturas": [
+    {
+      "id": "mol_var_aberracao_asquerosa",
+      "nome": "Aberração de Carne — Asquerosa",
+      "base": "Aberração de Carne",
+      "vd": 40,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "RD Sangue e Químico 15; Abocanhar causa dano químico.",
+      "habilidades": [
+        "Indigestão (Padrão, após 15+ dano em Abocanhar): cone médio 2d6+2 químico (Ref DT 15 evita).",
+        "Cuspir Gosma (Completa): poça 3x3m em alcance médio por 3 rodadas (terreno difícil, 1d6+4 químico/turno, Fort DT 13 metade)."
+      ]
+    },
+    {
+      "id": "mol_var_aberracao_assimiladora",
+      "nome": "Aberração de Carne — Assimiladora",
+      "base": "Aberração de Carne",
+      "vd": 40,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Pancada 1d6+6; RD Sangue 15; Abocanhar causa dano de Sangue.",
+      "habilidades": [
+        "Criação de Sangue (Completa, após acumular 15 dano com Abocanhar): perde 10 PV e cospe 1 Zumbi de Sangue com 35 PV."
+      ]
+    },
+    {
+      "id": "mol_var_mulher_afogada_pelagica",
+      "nome": "Mulher Afogada — Pelágica",
+      "base": "Mulher Afogada",
+      "vd": 140,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Habita lagos/oceanos; Enigma de Medo exige isolá-la/drenar a água.",
+      "habilidades": [
+        "Tentáculo de Sangue (Padrão): agarrar em alcance médio (3d20+10) e puxa para curto.",
+        "Manifestar Afogado (Completa, máx 2): reanima cadáver como Zumbi de Sangue que só agarra (2d20+5) e explode ao morrer causando 2d6+4 Sangue e Enjoado 3 rodadas (Fort DT 25 metade/evita)."
+      ]
+    },
+    {
+      "id": "mol_var_zumbi_espinhento",
+      "nome": "Zumbi de Sangue — Espinhento",
+      "base": "Zumbi de Sangue",
+      "vd": 20,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "RD Sangue 15; Garras causam 1d8+5 perfuração.",
+      "habilidades": [
+        "Revidar (Reação, até 2x/rodada): ao desviar de um ataque, lança espinhos causando 2d4 Sangue em alcance curto."
+      ]
+    },
+    {
+      "id": "mol_var_zumbi_transformado",
+      "nome": "Zumbi de Sangue — Transformado",
+      "base": "Zumbi de Sangue",
+      "vd": 20,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "35 PV, RD Sangue 5, Cura Acelerada 5/Morte.",
+      "habilidades": [
+        "Sangue Contaminado (Livre): ao acertar garras, alvo tem curas reduzidas à metade por 3 rodadas (Vontade DT 15 evita)."
+      ]
+    },
+    {
+      "id": "mol_var_zumbi_corrompido",
+      "nome": "Zumbi de Sangue — Corrompido",
+      "base": "Zumbi de Sangue",
+      "vd": 20,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Desl. 0m, Defesa 15, RD Balístico 10.",
+      "habilidades": [
+        "Lançar Tentáculos (Movimento): alvo em alcance curto fica Enredado (Ref DT 15 evita) e é puxado adjacente (Luta DT 15 solta).",
+        "Debilitar Alvo (Livre): garras contra enredado deixam Lento e Sangrando 2 rodadas (Fort DT 17 apenas Lento 1 rodada)."
+      ]
+    },
+    {
+      "id": "mol_var_zumbi_robusto",
+      "nome": "Zumbi de Sangue — Robusto",
+      "base": "Zumbi de Sangue",
+      "vd": 20,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "RD Balístico/Impacto/Perfuração 7; Desl. 6m.",
+      "habilidades": [
+        "Investida Feroz (Completa): avança 12m em linha reta causando 1d6 e Caído (Ref DT 15 evita); bater em parede causa 1d6 no zumbi."
+      ]
+    },
+    {
+      "id": "mol_var_bestial_controlador",
+      "nome": "Zumbi de Sangue Bestial — Controlador",
+      "base": "Zumbi de Sangue Bestial",
+      "vd": 100,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "INT 1, Médio, sem Furtivo e Letal.",
+      "habilidades": [
+        "Controle Forçado (Completa): agarra alvo desprevenido (3d20+10) e usa a arma dele para atacar no turno do alvo e no seu (sofre -5 Defesa enquanto agarra)."
+      ]
+    },
+    {
+      "id": "mol_var_bestial_traicoeiro",
+      "nome": "Zumbi de Sangue Bestial — Traiçoeiro",
+      "base": "Zumbi de Sangue Bestial",
+      "vd": 100,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "180 PV, +10 Vontade, anda em paredes/tetos.",
+      "habilidades": [
+        "Ferrão de Sangue (Padrão): Médio x2, 3d20+10, 1d6+5 perfuração.",
+        "Emboscar (Livre): puxa alvo atingido em 9m (For DT 23 metade; desprevenido não resiste).",
+        "Armadilha (Movimento): poça de gosma por 3 rodadas deixa Lento e -5 Defesa."
+      ]
+    },
+    {
+      "id": "mol_var_minotauro_labirinto",
+      "nome": "Minotauro — Dono do Labirinto",
+      "base": "Minotauro",
+      "vd": 280,
+      "elemento": "Sangue",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Arredores: -2d20 Perc/Von, desl 9m; Interiores: normal; Proximidades: +1d20 Perc/Von e ataques causam dano de Sangue.",
+      "habilidades": [
+        "Dono do Labirinto: mortes/destruições exigem Vontade DT 30 ou revela posição.",
+        "Atravessar pelo Sangue (Livre): atravessa paredes durante investidas.",
+        "Infecção Sangrenta (Padrão): pústula (40 PV) agarra adjacentes (Ref DT 28) dando vulnerabilidade a Sangue e revelando posição."
+      ]
+    },
+    {
+      "id": "mol_var_enraizado_nauseante",
+      "nome": "Enraizado — Nauseante",
+      "base": "Enraizado",
+      "vd": 120,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "120 PV, sem Imortalidade, desl. 6m.",
+      "habilidades": [
+        "Esporos Alucinógenos (Padrão): alcance curto Fascinado e 2d6 mental por 3 rodadas (Fort DT 21 Enjoado 2 rodadas; item de Energia encerra).",
+        "Lodo Hipnótico (Completa): alvos em curto usam habilidade que beneficie o Enraizado (Von DT 23 evita)."
+      ]
+    },
+    {
+      "id": "mol_var_enraizado_entrelacado",
+      "nome": "Enraizado — Entrelaçado",
+      "base": "Enraizado",
+      "vd": 120,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "150 PV, Defesa 25, desl. 0m, Punho Espinhento em alcance curto (3d8+8 Morte).",
+      "habilidades": [
+        "Estacas Subterrâneas (Completa): até 2 alvos em médio sofrem 3d8+4 perfuração e ficam Agarrados (Ref DT 22; raízes 40 PV).",
+        "Sugar Potencial (Movimento): alvo agarrado perde 2d8 PE; ganha 1 ação padrão a cada 6 PE sugados."
+      ]
+    },
+    {
+      "id": "mol_var_esqueleto_gosmento",
+      "nome": "Esqueleto de Lodo — Gosmento",
+      "base": "Esqueleto de Lodo",
+      "vd": 20,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "RD Morte 15; Garras causam dano de Morte.",
+      "habilidades": [
+        "Englobar (Padrão): agarra adjacente (2d20+5) causando 1d8 Morte/turno.",
+        "União da Morte (Completa): absorve esqueletos caídos/<=10 PV em médio (+15 PV; 2 vira Grande; 4 vira Enorme com garras 2d8+2 Morte)."
+      ]
+    },
+    {
+      "id": "mol_var_esqueleto_curandeiro",
+      "nome": "Esqueleto de Lodo — Curandeiro",
+      "base": "Esqueleto de Lodo",
+      "vd": 20,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "50 PV, sem Imortalidade, garras perfuração em alcance curto.",
+      "habilidades": [
+        "Transferir Lodo (Padrão/Movimento conectado): cura 15 PV de criatura de Morte em curto perdendo 5 PV (Energia desconecta).",
+        "Sugar Potencial (Livre): garras exigem Fort DT 12 ou Alquebrado 2 rodadas."
+      ]
+    },
+    {
+      "id": "mol_var_esqueleto_ardente",
+      "nome": "Esqueleto de Lodo — Ardente",
+      "base": "Esqueleto de Lodo",
+      "vd": 20,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Defesa 12, +10 Fortitude, sem Imortalidade, danos de habilidades persistem +1 rodada.",
+      "habilidades": [
+        "Derreter (Completa, <=10 PV): explode causando 2d8 Morte em curto (Ref DT 15 metade) e cria poça 4,5x4,5m (1d6+4 Morte)."
+      ]
+    },
+    {
+      "id": "mol_var_esqueleto_dissolvido",
+      "nome": "Esqueleto de Lodo — Dissolvido",
+      "base": "Esqueleto de Lodo",
+      "vd": 20,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Desl. 0m (move via Espiral de Lodo), ocupa área 4,5m (terreno difícil).",
+      "habilidades": [
+        "Mãos Envolventes (Movimento): agarra todos na área (2d20+5) confiscando 1d3 itens do inventário."
+      ]
+    },
+    {
+      "id": "mol_var_marionete_acolhedora",
+      "nome": "Marionete — Acolhedora",
+      "base": "Marionete",
+      "vd": 280,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Assume aparência de falecido querido.",
+      "habilidades": [
+        "Ilusão da Esperança: início de cena Von DT 30 ou -1d20 Vontade e incapaz de atacá-la (Diplomacia DT 30 encerra).",
+        "Conflito de Emoções (Reação): ao ser acertada, alvo em curto sofre metade do dano como mental (Von DT 28 evita).",
+        "Negação (Padrão): após sofrer crítico, alvo iludido ataca o agressor (Von DT 32 evita)."
+      ]
+    },
+    {
+      "id": "mol_var_nidere_errante",
+      "nome": "Nidere — Errante",
+      "base": "Nidere",
+      "vd": 320,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Nômade atrás de objeto/alvo específico (destruir objetivo resolve Enigma de Medo).",
+      "habilidades": [
+        "Agarrar Presa (Livre): Mordida Invertida prende nas costelas (Fort DT 33; 2d12+15 perfuração/turno).",
+        "Tática Primitiva (Completa): arremessa objetos/seres no caminho causando 3d12 (+5/+10/+15 por tamanho) impacto (Ref DT 32 evita)."
+      ]
+    },
+    {
+      "id": "mol_var_sempiternal_infinito",
+      "nome": "Sempiternal — Infinito",
+      "base": "Sempiternal",
+      "vd": 360,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Correntes de Lodo; Toque Acelerador envelhece 1d6 anos.",
+      "habilidades": [
+        "Ditador Temporal (Completa, 1x/cena): todos em médio refazem Iniciativa; quem ficar abaixo do Sempiternal sofre 10d6 Morte (Fort DT 40 metade).",
+        "Deslocar o Tempo (Reação): ao sofrer crítico, age imediatamente adiantando seu turno (-10 Defesa até próximo turno)."
+      ]
+    },
+    {
+      "id": "mol_var_sempiternal_conjurado",
+      "nome": "Sempiternal — Conjurado",
+      "base": "Sempiternal",
+      "vd": 360,
+      "elemento": "Morte",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Toque Acelerador; 2 ataques de Dedos Alongados; Correntes de Lodo Completa 1x/cena.",
+      "habilidades": [
+        "Eco Decadente (Completa): quem já foi atacado na cena sofre 4d12 Morte e envelhece 2d10 anos (Von DT 38 metade).",
+        "Âncora da Podridão (Padrão): até 3 seres em médio (Von DT 40): falha Imóvel 3 rodadas + envelhece 2d12 anos; sucesso Lento 3 rodadas; curas viram dano de Morte."
+      ]
+    },
+    {
+      "id": "mol_var_existido_amnesico",
+      "nome": "Existido — Amnésico",
+      "base": "Existido",
+      "vd": 20,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Rouba memórias e perícias.",
+      "habilidades": [
+        "Memória Roubada (Livre): Pancada rouba bônus de treino de 1 perícia aleatória por 3 rodadas (Von DT 15 evita)."
+      ]
+    },
+    {
+      "id": "mol_var_existido_fortalecedor",
+      "nome": "Existido — Fortalecedor",
+      "base": "Existido",
+      "vd": 20,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Fortalecimento Paranormal; Pancada causa dano de Conhecimento.",
+      "habilidades": [
+        "Transferência (Padrão): transfere 1 condição negativa de criatura em curto para si.",
+        "Expandir Poder (Padrão, após Brilho Enlouquecedor): dá +1d20 ataque e +5 resistência paranormal por 2 rodadas a criatura de Conhecimento adjacente."
+      ]
+    },
+    {
+      "id": "mol_var_lembrado_aterrorizado",
+      "nome": "Lembrado — Aterrorizado",
+      "base": "Lembrado",
+      "vd": 100,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Expandir Aura, desl. 6m; Aura Manifestada causa 1d6+5 Conhecimento/turno.",
+      "habilidades": [
+        "Espalhar Terror (Padrão): cone médio Pasmo 1 rodada e 2d6+5 mental por 4 rodadas (Von DT 18 Abalado e 2 rodadas).",
+        "Danificar Membrana (Completa): alcance médio 3d6+5 Conhecimento + vulnerabilidade a Conhecimento na cena (Von DT 20 metade/evita)."
+      ]
+    },
+    {
+      "id": "mol_var_lembrado_vagante",
+      "nome": "Lembrado — Vagante",
+      "base": "Lembrado",
+      "vd": 100,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Desl. 3m, sem Pancada.",
+      "habilidades": [
+        "Vozes Destruidoras (Completa): alvo em longo + curto dele sofrem 3d6+10 Conhecimento (Von DT 19 metade).",
+        "Repelir (Movimento): curto sofre -5 resistências e Lento 3 rodadas (Von DT 21 evita)."
+      ]
+    },
+    {
+      "id": "mol_var_lembrado_feiticeiro",
+      "nome": "Lembrado — Feiticeiro",
+      "base": "Lembrado",
+      "vd": 100,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Controla e reflete rituais.",
+      "habilidades": [
+        "Dissipar Paranormal (Completa, 2x/cena): seres com rituais testam Von DT 20 ou dissipam (+1d6 Conhecimento em Pancada por ritual anulado por 2 rodadas).",
+        "Reflexão (Reação, 1x/rodada): reflete ritual de volta ao conjurador."
+      ]
+    },
+    {
+      "id": "mol_var_estrangeiro_impostor",
+      "nome": "Estrangeiro — Impostor",
+      "base": "Estrangeiro",
+      "vd": 340,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem imunidade geral a dano (mantém imune a Conhecimento), sem Oblívio; Rajada Psíquica causa dano mental.",
+      "habilidades": [
+        "Alterar Forma (Completa): disfarça-se de humano (Intuição DT 35 detecta; ataca com Ocultismo).",
+        "Absorção Mental (Completa): aprende 1 habilidade/ritual (exceto Sangue) de cada ser em médio e deixa Alquebrado 5 rodadas (Von DT 30 2 rodadas e evita)."
+      ]
+    },
+    {
+      "id": "mol_var_estrangeiro_invasor",
+      "nome": "Estrangeiro — Invasor",
+      "base": "Estrangeiro",
+      "vd": 340,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Incubar e Oblívio; Enigma de Medo exige destruir as cápsulas incubadoras.",
+      "habilidades": [
+        "Larvas Vigilantes (Padrão): até 3 larvas (50 PV, Def 25, desl 6m) que explodem causando 3d8+10 químico e Lento 3 rodadas (Ref DT 32).",
+        "Abdução (Completa): captura ser Morrendo em cápsula (Fort DT 30 evita; Tec DT 30 ou Von DT 35 liberta; após sair perde 1d8 SAN/cena em Fort DT 32 até virar Estrangeiro)."
+      ]
+    },
+    {
+      "id": "mol_var_rastejador_aprisionador",
+      "nome": "Rastejador Sombrio — Aprisionador",
+      "base": "Rastejador Sombrio",
+      "vd": 220,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Tentáculo das Sombras; luz impõe -10 Defesa e metade do desl.",
+      "habilidades": [
+        "Prisão Tenebrosa: tentáculos ocultos causam 3d8+10 (perfuração/mental) por turno (Fort DT 26 solta).",
+        "Aprisionar (Livre): ao deixar Machucado, agarra (3d20+10).",
+        "O Chamado (Completa): médio de preso sofre 4d8 mental e Imóvel 1 rodada (Von DT 28).",
+        "Sem Escapatória (Padrão): bloqueia passagem (35 PV, vuln. Sangue; 5d8 Conhecimento em adjacentes, Ref DT 26)."
+      ]
+    },
+    {
+      "id": "mol_var_rastejador_abissal",
+      "nome": "Rastejador Sombrio — Abissal",
+      "base": "Rastejador Sombrio",
+      "vd": 220,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Enorme, sem Desespero/Vulnerabilidade a Luz, Furtividade 4d20+10. Luz em curto deixa Fascinado (-10 Defesa).",
+      "habilidades": [
+        "Isca Ilusória (Movimento): médio Fascinado e Vulnerável (Von DT 28).",
+        "Turbilhão (Completa): 3 cones longos 2d8+5 impacto e empurra 9m.",
+        "Predador Silencioso (Livre): desprevenido sofre +3d6 mental e Enjoado (Von DT 25)."
+      ]
+    },
+    {
+      "id": "mol_var_vulto_possessor",
+      "nome": "Vulto — Possessor",
+      "base": "Vulto",
+      "vd": 40,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Domina corpos humanos.",
+      "habilidades": [
+        "Possessão (Completa): possui adjacente deixando Inconsciente (Von DT 17 Abalado 2 rodadas); usa ficha do alvo e causa 2d6 mental/rodada (repete Von/turno)."
+      ]
+    },
+    {
+      "id": "mol_var_vulto_transmissor",
+      "nome": "Vulto — Transmissor",
+      "base": "Vulto",
+      "vd": 40,
+      "elemento": "Conhecimento",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Plantar Paranoia.",
+      "habilidades": [
+        "Assombrar Aparelho (Padrão): até 2 eletrônicos em médio causam 1d6+5 mental, Fascinado e Vulnerável 2 rodadas em curto (Von DT 15; falha por 5+ Esmorecido)."
+      ]
+    },
+    {
+      "id": "mol_var_anarquico_ciberpsicopata",
+      "nome": "Anárquico — Ciberpsicopata",
+      "base": "Anárquico",
+      "vd": 20,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Substitui opções 1, 2 e 6 do Comportamento Errático.",
+      "habilidades": [
+        "Tiro Errático (Padrão): Médio x2, 3d20+5, 2d6+10 (balístico/Energia); resultado 6 atira em cone longo (+1d20, -10 Defesa).",
+        "Ataque Extra (Reação, 1x/rodada): contra-ataca erro corpo a corpo com Pancada Errática."
+      ]
+    },
+    {
+      "id": "mol_var_ciborgue_exterminador",
+      "nome": "Ciborgue — Exterminador",
+      "base": "Ciborgue",
+      "vd": 80,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Estado Delta e sem imunidade a paralisia; perde Regeneração com 2+ estados perdidos.",
+      "habilidades": [
+        "Alpha — Soco Terremoto (Padrão): curto Debilitado e afastado 6m (Fort DT 18).",
+        "Beta — Bomba Paralisadora (Padrão): 3 pontos 3m raio Enredado (Ref DT 20 Lento 3 rodadas).",
+        "Gama — Perfurar Barreira (Completa): 60 dano em cobertura + 3d8+5 impacto em curto (Ref DT 16 metade)."
+      ]
+    },
+    {
+      "id": "mol_var_ciborgue_guardiao",
+      "nome": "Ciborgue — Guardião",
+      "base": "Ciborgue",
+      "vd": 80,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Estado Beta e Desorientar; desl. 0m; Braço Laminado curto; flanquear ignora RD não elemental.",
+      "habilidades": [
+        "Alpha — Isolar (Movimento): agarra (3d20+10) e arremessa 24m (2d12 impacto se bater).",
+        "Gama — Artilharia (Completa): 6m raio em longo 3d12 impacto + Em Chamas (Ref DT 18).",
+        "Delta — Fumaça Elétrica (Completa): 6m raio em médio 1d12 Energia/turno por 3 rodadas (Fort DT 16).",
+        "Desarmar (Livre): 14+ dano de Raio Energético desarma (2d20+10)."
+      ]
+    },
+    {
+      "id": "mol_var_infecticidio_interconectado",
+      "nome": "Infecticídio — Interconectado",
+      "base": "Infecticídio",
+      "vd": 240,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Divide-se em 3 Amálgamas (100 PV, RD 10, Grande) e recompõe com 300 PV ao serem derrotados.",
+      "habilidades": [
+        "Soco Deformado (Padrão): corpo a corpo x2, 5d20+10, 1d12+10 Energia.",
+        "Consumir Tecnologia (Completa): explode eletrônicos em curto causando 2d12 Energia (Ref DT 30 metade; sofre -4d20/-15 Fort).",
+        "Agarrão Coordenado (Reação): aliado em curto agarra alvo machucado (3d20+15)."
+      ]
+    },
+    {
+      "id": "mol_var_perturbado_delirante",
+      "nome": "Perturbado de Energia — Delirante",
+      "base": "Perturbado de Energia",
+      "vd": 120,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Cria ilusões e teleporta entre elas.",
+      "habilidades": [
+        "Ilusão Caótica (Completa): cria 4 cópias (Def 13, 1 acerto destrói, duram 3 rodadas; Intuição DT 15 identifica).",
+        "Teleporte Caótico (Reação, 2x/rodada): ao ser acertado troca de lugar com uma ilusão."
+      ]
+    },
+    {
+      "id": "mol_var_sukkalgir_ecoante",
+      "nome": "Sukkalgir — Ecoante",
+      "base": "Sukkalgir",
+      "vd": 160,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Cega, Percepção 1d20+10, sem Visão no Escuro e sem Grito de Desespero.",
+      "habilidades": [
+        "Ecolocalização (Livre): início do turno alvos em médio testam Furtividade DT 20 ou são percebidos.",
+        "Eco Atormentador (Padrão): cone médio 3d12 mental e Abalado 2 rodadas (Von DT 22)."
+      ]
+    },
+    {
+      "id": "mol_var_telopsia_sadico",
+      "nome": "Telopsia — Sádico",
+      "base": "Telopsia",
+      "vd": 280,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Tela Zumbificadora e Prender na Tela; 1 ataque de Toque Desintegrador. Enigma de Medo: destruir todos os CDs.",
+      "habilidades": [
+        "Evento Macabro: a cada 100 PV perdidos rola 1d4 (1 nada; 2 eletrônicos deixam Surdo; 3 armas em fogo 2d12+5 Energia; 4 tempo distorcido 3d12+10 Energia).",
+        "Exibição Paranormal: presos na tela respondem perguntas (erro 2d12 mental; 3 acertos Von DT 30 liberta).",
+        "Roleta do Terror (Padrão): rola 1d6 (1-2 prende tela Von DT 32; 3 3d12+5 mental + Imóvel; 4 perde 4 itens Ref DT 30; 5 chamar todos de Telopsia ou 1d12 mental; 6 liberta alguém)."
+      ]
+    },
+    {
+      "id": "mol_var_tempestuoso_reativo",
+      "nome": "Tempestuoso — Reativo",
+      "base": "Tempestuoso",
+      "vd": 360,
+      "elemento": "Energia",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Desl. 9m, Aura Radioativa 3d20+20 Energia; sem Espectro/Garras/Raio/Expandir.",
+      "habilidades": [
+        "Atração Gravitacional (Livre): puxa 6m todos em longo (Fort DT 38 Lento 2 rodadas).",
+        "Energizar (Padrão): drena 4d6 PE em médio (Fort DT 40 metade; +5 dano na Aura a cada 8 PE).",
+        "Núcleo Energético (Padrão): após sofrer 80+ dano, Aura alcança Médio por 1 rodada."
+      ]
+    },
+    {
+      "id": "mol_var_cultista_amaldicoado",
+      "nome": "Cultista Investido — Amaldiçoado",
+      "base": "Cultista Investido",
+      "vd": 40,
+      "elemento": "Realidade",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "30 PV; Conjurador dá 1 ritual de 1º e 1 de 2º círculo.",
+      "habilidades": [
+        "Transformar (Completa, ao ficar Machucado, 1x): transforma-se em criatura paranormal de VD 20 mantendo os PV atuais."
+      ]
+    },
+    {
+      "id": "mol_var_lider_culto_poderoso",
+      "nome": "Líder de Culto — Poderoso",
+      "base": "Líder de Culto",
+      "vd": 120,
+      "elemento": "Realidade",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "170 PV; Conjurador dá 2 rituais de 1º, 1 de 2º e 1 de 3º círculo.",
+      "habilidades": [
+        "Ritual Proibido (Completa, 1x): por 3 rodadas causa 3d6 elemental em médio (Ref DT 22 metade) e ao fim vira criatura VD 120 (se >= 85 PV) ou VD 40 (se < 85 PV)."
+      ]
+    },
+    {
+      "id": "mol_var_soldado_franco_atirador",
+      "nome": "Soldado de Aluguel — Franco-Atirador",
+      "base": "Soldado de Aluguel",
+      "vd": 40,
+      "elemento": "Realidade",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Sem Fuzil de Assalto e Ataque em Movimento.",
+      "habilidades": [
+        "Rifle de Precisão (Completa): Longo, 2d20+10, 2d10+2 Balístico, crítico 18/x3.",
+        "Tiro Letal (Livre): 18+ dano deixa Vulnerável (Fort DT 20).",
+        "Mestre da Fuga (Livre): acertar Machete dá +6m deslocamento."
+      ]
+    },
+    {
+      "id": "mol_var_comandante_esquadrao",
+      "nome": "Comandante Mercenário — Líder de Esquadrão",
+      "base": "Comandante Mercenário",
+      "vd": 120,
+      "elemento": "Realidade",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "Grande (caminhonete com 4 atiradores), RD física 10, desl. 24m, Ordens vale para si.",
+      "habilidades": [
+        "Espírito de Equipe: a cada 20 PV perdidos morre 1 atirador (-1 ataque em Rajada); em 65 PV entra em Lobo Solitário (desl. 9m, sem RD).",
+        "Veículo de Combate: +20 atropelar livre (1d8/3m).",
+        "Rajada de Tiros (Padrão): Médio x4, 3d20+17, 1d10+5 Balístico.",
+        "Tiro Sinalizador (Padrão): curto Ofuscado 2 rodadas (Fort DT 23).",
+        "Pistola Aprimorada (Padrão): Curto x3, 3d20+17, 1d12+10 Balístico (19/x2)."
+      ]
+    },
+    {
+      "id": "mol_var_policial_tropa_choque",
+      "nome": "Policial de Elite — Tropa de Choque",
+      "base": "Policial de Elite",
+      "vd": 60,
+      "elemento": "Realidade",
+      "source": "misterios_do_outro_lado",
+      "alteracoes": "+5 Força e Luta; sem Fuzil, Lança-Granadas e Empurrar e Atirar. Sem escudo sofre -5 Defesa.",
+      "habilidades": [
+        "Spray de Pimenta (Padrão): adjacente Cego 2 rodadas (Fort DT 18 1 rodada; 3 falhas Fraco na cena).",
+        "Rebater (Reação, 1x/rodada): rebate granada em curto para ponto em médio.",
+        "Imobilização (Padrão): empurra 3m, derruba e desarma (Fort DT 20 evita)."
+      ]
+    }
+  ],
+  "ameacasIneditas": [
+    {
+      "id": "mol_larva_incubada",
+      "nome": "Larva Incubada (Parasita do Estrangeiro)",
+      "vd": 180,
+      "elemento": "Conhecimento",
+      "elementosSecundarios": [
+        "Energia",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Pequeno",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 25,
+        "dano": "6d6 mental",
+        "imuneNex": 60
+      },
+      "sentidos": {
+        "percepcao": "3d20+15",
+        "iniciativa": "3d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 35,
+      "resistenciasTestes": {
+        "fortitude": "1d20+10",
+        "reflexos": "3d20+15",
+        "vontade": "3d20+15"
+      },
+      "pv": 310,
+      "resistenciasDano": "Químico, Balístico e Impacto 10; Conhecimento 20",
+      "vulnerabilidades": "Sangue",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 2,
+        "INT": 4,
+        "PRE": 3,
+        "VIG": 1
+      },
+      "pericias": [
+        "Ocultismo 4d20+10",
+        "Intuição 3d20+10",
+        "Furtividade 3d20+15"
+      ],
+      "deslocamento": "9m",
+      "habilidades": [
+        {
+          "nome": "Parasitismo",
+          "descricao": "Hospedeiro perde 1d6 SAN no início de cada cena. Ao zerar SAN ou resolver Enigma de Medo, eclode."
+        },
+        {
+          "nome": "Evolução",
+          "descricao": "Após 5 dias fora de um hospedeiro, pode evoluir para um Estrangeiro (sem Incubar)."
+        },
+        {
+          "nome": "Variante 1 — Centomorfo",
+          "descricao": "Vulnerabilidade a Luz (-5 Def, -1d20 ataque). Rajada de Plasma (Curto x2, 3d20+15, 5d8+5 Químico); Divisão Biológica (50+ dano Sangue divide em 2, até 4); Grito Sintético (Curto 4d6 mental + Esmorecido 3 rodadas, Von DT 25). Enigma: Fort DT 28 expele (sofre 3d6+10); luz piscando mata hospedeiro."
+        },
+        {
+          "nome": "Variante 2 — Fetilapo",
+          "descricao": "Braços Disformes (CaC x3, 2d20+20, 4d8+5 Impacto); Hóspede Indesejado (Fort DT 26 entra pela boca); Inchar (água dá +30 PV temp, +5 ataque/dano, +1 tamanho por 3 rodadas). Enigma: 20+ dano na região expele (sofre 2d6+5); mergulhar em água mata hospedeiro."
+        },
+        {
+          "nome": "Variante 3 — Interflorado",
+          "descricao": "Controla cadáveres (Pancada CaC x2, 2d20+20, 5d8+5 Impacto). Dedos Estranhos (CaC x2, 3d20+15, 4d8 Conhecimento); Invasor de Corpos (Ref DT 28 agarra cabeça, Cego, 4d8+5 perf/mental); Olhos Penetrantes (Longo 4d6+5 mental + Pasmo 2 rodadas, Von DT 25). Enigma: choque térmico expele (3d6+5); se hospedeiro descobrir, Intuição DT 25 explode cabeça."
+        },
+        {
+          "nome": "Variante 4 — Omatídeo",
+          "descricao": "Levitação. Olhar Destruidor (Médio, 3d20+20, 5d6+5 Conhecimento); Tentáculos (CaC x3, 3d20+20, 3d8+5 Químico); Sinais Paranormais (Von DT 28, 2d8 mental x4 rodadas; zerar SAN Fort DT 25 explode 3d8 químico); Controlar Memória (4d6+5 mental + esquece poder 3 rodadas, Von DT 28). Enigma: luz forte expele (2d6+10); 20+ dano no hospedeiro mata com explosão 4d8+5 químico."
+        }
+      ]
+    },
+    {
+      "id": "mol_zumbi_prisioneiro",
+      "nome": "Zumbi de Sangue Prisioneiro",
+      "vd": 60,
+      "elemento": "Sangue",
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 18,
+        "dano": "3d6 mental",
+        "imuneNex": 65
+      },
+      "sentidos": {
+        "percepcao": "2d20+10",
+        "iniciativa": "2d20+10",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 20,
+      "resistenciasTestes": {
+        "fortitude": "3d20+5",
+        "reflexos": "2d20+10",
+        "vontade": "2d20+5"
+      },
+      "pv": 100,
+      "resistenciasDano": "Balístico, Impacto e Perfuração 10; Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 2,
+        "FOR": 3,
+        "INT": 0,
+        "PRE": 2,
+        "VIG": 3
+      },
+      "deslocamento": "12m",
+      "ataques": [
+        {
+          "nome": "Garras",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+10",
+          "dano": "2d6+5 corte"
+        },
+        {
+          "nome": "Correntes",
+          "alcance": "Curto",
+          "teste": "2d20+10",
+          "dano": "3d8+5 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Enfraquecer (Livre)",
+          "descricao": "Acertar 2 ataques seguidos de Correntes deixa o alvo Fraco (Fortitude DT 20 evita)."
+        }
+      ]
+    },
+    {
+      "id": "mol_guardiao_esculpido",
+      "nome": "Guardião Esculpido",
+      "vd": 90,
+      "elemento": "Sangue",
+      "elementosSecundarios": [
+        "Conhecimento"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 22,
+        "dano": "3d6 mental"
+      },
+      "sentidos": {
+        "percepcao": "3d20+10",
+        "iniciativa": "1d20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 26,
+      "resistenciasTestes": {
+        "fortitude": "4d20+10",
+        "reflexos": "1d20+5",
+        "vontade": "3d20+5"
+      },
+      "pv": 150,
+      "imunidades": "Condições de paralisia",
+      "resistenciasDano": "Corte e Perfuração 10; Sangue 20",
+      "vulnerabilidades": "Morte",
+      "atributos": {
+        "AGI": 0,
+        "FOR": 3,
+        "INT": 2,
+        "PRE": 3,
+        "VIG": 4
+      },
+      "deslocamento": "6m",
+      "ataques": [
+        {
+          "nome": "Mão de Pedra",
+          "alcance": "Corpo a corpo",
+          "teste": "3d20+10",
+          "dano": "2d10+5 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Vulnerável (Passiva)",
+          "descricao": "Ficar a alcance longo ou mais de outro Guardião impõe -5 na Defesa."
+        },
+        {
+          "nome": "Lançar Destroço (Padrão)",
+          "descricao": "Ponto em médio: adjacentes sofrem 1d12+5 impacto, afastados 9m e Caídos (Ref DT 25 metade, 3m e evita)."
+        },
+        {
+          "nome": "Tremor (Completa)",
+          "descricao": "Alcance longo Lento e Vulnerável (Fort DT 22 evita Vulnerável); Guardião fica Imóvel e -5 Defesa."
+        },
+        {
+          "nome": "Petrificar (Completa)",
+          "descricao": "Alvo em médio fica Imóvel e -1d20 ataques (Fort DT 23 evita penalidade; pedras têm 20 PV)."
+        },
+        {
+          "nome": "Fortalecimento Sangrento (Padrão)",
+          "descricao": "Recebe (ou dá a outro Guardião em médio) +1d20 ataque e +2 DT por 3 rodadas (acumula até 2x)."
+        }
+      ]
+    },
+    {
+      "id": "mol_vigilante_sombrio",
+      "nome": "Vigilante Sombrio",
+      "vd": 180,
+      "elemento": "Conhecimento",
+      "elementosSecundarios": [
+        "Sangue",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 25,
+        "dano": "6d6 mental"
+      },
+      "sentidos": {
+        "percepcao": "4d20+10",
+        "iniciativa": "3d20+15",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 38,
+      "resistenciasTestes": {
+        "fortitude": "2d20+5",
+        "reflexos": "3d20+10",
+        "vontade": "4d20+15"
+      },
+      "pv": 310,
+      "imunidades": "Dano (até resolver Enigma) e Condições de paralisia",
+      "resistenciasDano": "Balístico, Impacto e Perfuração 10; Sangue 20",
+      "vulnerabilidades": "Sangue",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 1,
+        "INT": 4,
+        "PRE": 4,
+        "VIG": 2
+      },
+      "deslocamento": "Voo 15m",
+      "ataques": [
+        {
+          "nome": "Toque Translúcido",
+          "alcance": "Corpo a corpo x2",
+          "teste": "3d20+5",
+          "dano": "4d6+10 conhecimento"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Levitação",
+          "descricao": "Ignora terreno difícil e efeitos de chão."
+        },
+        {
+          "nome": "Criar Fenda de Sangue (Completa)",
+          "descricao": "Cria fenda de sangue (máx. 4 na masmorra)."
+        },
+        {
+          "nome": "Invocar Horda (Livre)",
+          "descricao": "Inicia evento Horda de Zumbis de Sangue e foge para sala adjacente."
+        },
+        {
+          "nome": "Vulto Alucinante (Movimento)",
+          "descricao": "Percorre 20m intangível atravessando seres (3d6 mental, Von DT 26 evita)."
+        },
+        {
+          "nome": "Ofuscar (Movimento)",
+          "descricao": "Cone médio 2d6+5 mental e Ofuscado 3 rodadas (Von DT 23 metade/evita)."
+        }
+      ],
+      "enigmaDeMedo": "Destruir todas as fendas de sangue (causando 50+ dano de Morte em cada). Resolvido: perde imunidade a dano, sofre -10 Defesa, perde Criar Fenda/Invocar Horda e ativa Estado de Fúria (+1d20 ataque e Toque causa metade mental/Conhecimento)."
+    },
+    {
+      "id": "mol_remanescente",
+      "nome": "Remanescente",
+      "vd": 120,
+      "elemento": "Morte",
+      "elementosSecundarios": [
+        "Conhecimento"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Médio",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 22,
+        "dano": "4d6 mental"
+      },
+      "sentidos": {
+        "percepcao": "3d20+10",
+        "iniciativa": "1d20+5"
+      },
+      "defesa": 29,
+      "resistenciasTestes": {
+        "fortitude": "2d20+10",
+        "reflexos": "1d20+5",
+        "vontade": "4d20+10"
+      },
+      "pv": 140,
+      "resistenciasDano": "Corte, Impacto e Perfuração 10; Morte 20",
+      "vulnerabilidades": "Energia",
+      "atributos": {
+        "AGI": 1,
+        "FOR": 1,
+        "INT": 3,
+        "PRE": 4,
+        "VIG": 2
+      },
+      "pericias": [
+        "Diplomacia 4d20+10",
+        "Profissão 3d20+10"
+      ],
+      "deslocamento": "9m",
+      "ataques": [
+        {
+          "nome": "Soco Esquelético",
+          "alcance": "Corpo a corpo x2",
+          "teste": "1d20+15",
+          "dano": "2d12+10 impacto"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Aproximação Cautelosa",
+          "descricao": "Pacífico inicialmente (não aplica Presença Perturbadora); ao sofrer dano pela 1ª vez ganha +2d20 em AGI por 3 rodadas e ativa Presença Perturbadora."
+        },
+        {
+          "nome": "Momento Passivo",
+          "descricao": "Ignora terreno difícil e efeitos de chão."
+        },
+        {
+          "nome": "Grito Interminável (Reação)",
+          "descricao": "Ao sofrer crítico, alcance médio sofre 2d8 mental e Alquebrado 1 rodada (Von DT 25 metade/evita)."
+        }
+      ],
+      "enigmaDeMedo": "Conversar pacificamente revela seu segredo/pista; atacá-lo após revelar dá +1 dado de dano mental em Presença Perturbadora e Grito por 3 rodadas."
+    },
+    {
+      "id": "mol_remanescente_energizado",
+      "nome": "Remanescente Energizado",
+      "vd": 240,
+      "elemento": "Energia",
+      "elementosSecundarios": [
+        "Morte"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 30,
+        "dano": "6d8 mental"
+      },
+      "sentidos": {
+        "percepcao": "1d20+10",
+        "iniciativa": "3d20+15",
+        "especiais": [
+          "Visão no escuro"
+        ]
+      },
+      "defesa": 32,
+      "resistenciasTestes": {
+        "fortitude": "4d20+15",
+        "reflexos": "3d20+10",
+        "vontade": "3d20+10"
+      },
+      "pv": 450,
+      "resistenciasDano": "Balístico, Corte e Perfuração 10; Energia 20",
+      "vulnerabilidades": "Conhecimento",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 4,
+        "INT": 1,
+        "PRE": 4,
+        "VIG": 3
+      },
+      "deslocamento": "6m",
+      "ataques": [
+        {
+          "nome": "Garras Ácidas",
+          "alcance": "Corpo a corpo x2",
+          "teste": "4d20+25",
+          "dano": "4d10+20 metade impacto e metade energia"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Rajada Elétrica (Padrão)",
+          "descricao": "Por 2 rodadas, terminar turno em médio causa 2d8+15 Energia e Confuso 2 rodadas (Fort DT 30 metade/evita); área de condição ruim para rituais."
+        },
+        {
+          "nome": "Explosão Corrosiva (Completa)",
+          "descricao": "Gosma de 3m de raio em médio por 3 rodadas (terreno difícil, 3d10+20 Morte; dobro em objetos; expande +1,5m e +1 rodada a cada 30 dano causado)."
+        }
+      ]
+    },
+    {
+      "id": "mol_inteligencia_alterada",
+      "nome": "Inteligência Alterada (S.A.M.)",
+      "vd": 300,
+      "elemento": "Energia",
+      "elementosSecundarios": [
+        "Morte",
+        "Medo"
+      ],
+      "tipo": "Criatura",
+      "tamanho": "Grande",
+      "source": "misterios_do_outro_lado",
+      "presencaPerturbadora": {
+        "dt": 35,
+        "dano": "7d8 mental"
+      },
+      "sentidos": {
+        "percepcao": "5d20+20",
+        "iniciativa": "3d20+20",
+        "especiais": [
+          "Percepção às cegas"
+        ]
+      },
+      "defesa": 40,
+      "resistenciasTestes": {
+        "fortitude": "4d20+25",
+        "reflexos": "4d20+15",
+        "vontade": "5d20+20"
+      },
+      "pv": 100,
+      "resistenciasDano": "Corte, Impacto, Perfuração e Energia 20",
+      "vulnerabilidades": "Conhecimento",
+      "atributos": {
+        "AGI": 3,
+        "FOR": 3,
+        "INT": 5,
+        "PRE": 5,
+        "VIG": 4
+      },
+      "pericias": [
+        "Ciências 5d20+20",
+        "Ocultismo 5d20+15",
+        "Tecnologia 5d20+25"
+      ],
+      "deslocamento": "0m",
+      "ataques": [
+        {
+          "nome": "Tentáculos",
+          "alcance": "Corpo a corpo (até Médio) x3",
+          "teste": "3d20+35",
+          "dano": "3d12+10 impacto"
+        },
+        {
+          "nome": "Raio Energizado",
+          "alcance": "Longo",
+          "teste": "3d20+30",
+          "dano": "4d10+15 energia"
+        }
+      ],
+      "habilidades": [
+        {
+          "nome": "Conexão Paranormal",
+          "descricao": "Controla aparelhos tecnológicos em alcance longo (Von DT 35 evita se em uso) e pode disparar Som Desorientador por eles."
+        },
+        {
+          "nome": "Esmagar Ameaça (Livre)",
+          "descricao": "Acertar 2+ tentáculos agarra (3d20+30; 2d10 Energia/turno; máx. 3 presos; ao prender 3 solta após 2 rodadas perdendo 10 RD por 1 turno)."
+        },
+        {
+          "nome": "Choque Múltiplo (Completa)",
+          "descricao": "Médio sofre 2d12+5 Energia, empurrado 3m e derruba até 2 itens (Ref DT 32 metade/evita); perde 10 RD por 1 rodada."
+        },
+        {
+          "nome": "Som Desorientador (Movimento, 5x/cena)",
+          "descricao": "Longo fica Surdo e Vulnerável 1 rodada (Von DT 35 evita)."
+        }
+      ],
+      "enigmaDeMedo": "Depurar dispositivos da rede neural com Tecnologia (DT 32) impede seu uso e reduz a Defesa da criatura em -2 permanentemente por dispositivo."
+    }
+  ]
+}

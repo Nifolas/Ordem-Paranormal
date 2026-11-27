@@ -1,9 +1,15 @@
-import type { OrganizationId } from "@/types/ordem";
+import type { ContentSource, OrganizationId } from "@/types/ordem";
+import { ENTREGA2_ORGANIZATIONS } from "@/data/supplements/entrega2Loader";
 
 export interface OrganizationDefinition {
   id: OrganizationId;
+  jsonId: string;
   name: string;
+  source: ContentSource;
   summary: string;
+  equipmentRules: string;
+  creditRules: string;
+  prestigeTable: { evento: string; pp: number }[];
   abilityName: string;
   abilityDescription: string;
   rules: string[];
@@ -11,65 +17,45 @@ export interface OrganizationDefinition {
 
 export const DEFAULT_ORGANIZATION: OrganizationId = "ordo_realitas";
 
-export const ORGANIZATIONS: OrganizationDefinition[] = [
-  {
-    id: "ordo_realitas",
-    name: "Ordo Realitas",
-    summary: "Regras padrão do Livro Básico.",
-    abilityName: "—",
-    abilityDescription: "Sem habilidade adicional.",
-    rules: ["Regras padrão do Livro Básico."],
-  },
-  {
-    id: "hell_hunters",
-    name: "Hell Hunters",
-    summary: "Armas com categoria -1; sem itens paranormais fornecidos.",
-    abilityName: "Arsenal de Qualidade",
-    abilityDescription:
-      "+3 de dano com armas; +5 a partir da patente Oficial de Operações.",
+export function normalizeOrganizationId(
+  id: OrganizationId | string | undefined
+): "ordo_realitas" | "hell_hunters" | "famiglia_leone" | "obscurite" | "ordo_calamitas" {
+  if (!id) return "ordo_realitas";
+  const stripped = id.replace(/^mol_org_/, "");
+  if (
+    stripped === "ordo_realitas" ||
+    stripped === "hell_hunters" ||
+    stripped === "famiglia_leone" ||
+    stripped === "obscurite" ||
+    stripped === "ordo_calamitas"
+  ) {
+    return stripped;
+  }
+  return "ordo_realitas";
+}
+
+export const ORGANIZATIONS: OrganizationDefinition[] =
+  ENTREGA2_ORGANIZATIONS.map((org) => ({
+    id: org.id,
+    jsonId: org.jsonId,
+    name: org.name,
+    source: org.source,
+    summary: org.equipmentRules,
+    equipmentRules: org.equipmentRules,
+    creditRules: org.creditRules,
+    prestigeTable: org.prestigeTable,
+    abilityName: org.abilityName,
+    abilityDescription: org.abilityDescription,
     rules: [
-      "Todas as armas têm categoria -1.",
-      "Proíbe itens paranormais/amaldiçoados fornecidos pela organização.",
-      "Possui tabela própria de PP/Crédito (consulte o suplemento).",
+      `Equipamentos: ${org.equipmentRules}`,
+      `Crédito: ${org.creditRules}`,
     ],
-  },
-  {
-    id: "famiglia_leone",
-    name: "Famiglia Leone",
-    summary: "Recruta com Crédito Médio; paranormais com categoria +1.",
-    abilityName: "Contrabando Leone",
-    abilityDescription:
-      "1x por missão, solicita equipamentos/veículos conforme a patente.",
-    rules: [
-      "Recruta começa com Crédito Médio.",
-      "Itens paranormais/amaldiçoados têm categoria +1.",
-    ],
-  },
-  {
-    id: "obscurite",
-    name: "Obscurité",
-    summary: "Sem armas pesadas fornecidas; paranormais com categoria -1.",
-    abilityName: "Treinamento da Obscurité",
-    abilityDescription:
-      "Aprende 1 ritual extra em NEX 10% e a cada +15% de NEX.",
-    rules: [
-      "Proíbe armas pesadas fornecidas.",
-      "Itens paranormais/amaldiçoados têm categoria -1.",
-    ],
-  },
-  {
-    id: "ordo_calamitas",
-    name: "Ordo Calamitas",
-    summary: "Créditos elevados e Transcender amenizado.",
-    abilityName: "Guerreiro da Calamidade",
-    abilityDescription:
-      "Ao Transcender, perde apenas 2 pontos da SAN daquele nível em vez de zerar o ganho.",
-    rules: [
-      "Recruta com Crédito Médio; Agente Especial com Crédito Alto.",
-    ],
-  },
-];
+  }));
 
 export function getOrganization(id: OrganizationId | undefined) {
-  return ORGANIZATIONS.find((o) => o.id === id) ?? ORGANIZATIONS[0];
+  const canonical = normalizeOrganizationId(id);
+  return (
+    ORGANIZATIONS.find((o) => o.id === canonical || o.jsonId === id) ??
+    ORGANIZATIONS[0]
+  );
 }

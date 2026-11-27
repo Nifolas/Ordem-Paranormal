@@ -21,7 +21,12 @@ export type OrganizationId =
   | "hell_hunters"
   | "famiglia_leone"
   | "obscurite"
-  | "ordo_calamitas";
+  | "ordo_calamitas"
+  | "mol_org_ordo_realitas"
+  | "mol_org_hell_hunters"
+  | "mol_org_famiglia_leone"
+  | "mol_org_obscurite"
+  | "mol_org_ordo_calamitas";
 
 export type AttributeKey = "AGI" | "FOR" | "INT" | "PRE" | "VIG";
 
@@ -93,7 +98,9 @@ export type OptionalRuleId =
   // Arquivos Secretos
   | "reter_ritual"
   | "transcender_itens"
-  | "evolucao_modular";
+  | "evolucao_modular"
+  // Suplementos da Comunidade
+  | "rs_regra_rituais_superiores";
 
 export interface OptionalRuleDefinition {
   id: OptionalRuleId;
@@ -101,6 +108,14 @@ export interface OptionalRuleDefinition {
   source: ContentSource;
   summary: string;
   mechanicalEffect: string;
+}
+
+export interface ConditionDefinition {
+  id: string;
+  name: string;
+  kind: string;
+  source: ContentSource;
+  description: string;
 }
 
 export type SkillKey =
@@ -198,6 +213,12 @@ export interface OriginPassiveEffects {
   defesa?: number;
   rdMentalPorInt?: number;
   rdGeral?: number;
+  rodadasMorrendoExtra?: number;
+  rdSangueEscalonavel?: {
+    base: number;
+    nex25?: number;
+    afinidade: number;
+  };
   periciaBonus?: Partial<Record<SkillKey, number>>;
   penalidadeDados?: Partial<Record<SkillKey, number>>;
 }
@@ -207,6 +228,7 @@ export interface OriginDefinition {
   name: string;
   source: ContentSource;
   description: string;
+  prerequisites?: string;
   trainedSkills: SkillKey[];
   trainedSkillNotes?: string[];
   powerName: string;
@@ -305,10 +327,13 @@ export interface AgentAbility {
 export type RitualVersion = "Normal" | "Discente" | "Verdadeira" | "Superior";
 
 export interface SuperiorRitualInfo {
-  conjuracao: string;
-  consequencias: string;
+  id?: string;
+  execution?: string;
+  conjuracao?: string;
+  consequencias?: string;
   efeitoSuperior?: string;
   peCost?: number;
+  source?: ContentSource;
 }
 
 export interface AgentRitual {
@@ -331,6 +356,7 @@ export interface AgentRitual {
   verdadeiraPrereq?: string;
   isSuperior?: boolean;
   superiorInfo?: SuperiorRitualInfo;
+  exclusiveTrail?: string;
   isCorrentesDaRealidade?: boolean;
   source?: ContentSource;
 }
@@ -413,6 +439,8 @@ export interface InventoryItem {
   modifications?: AppliedModification[];
   curses?: AppliedCurse[];
   element?: ParanormalElement;
+  subtype?: string;
+  wearable?: boolean;
   source?: ContentSource;
   /** Remaining shots in current ammunition pack when Contagem de Munição is used */
   ammoShotsRemaining?: number;
@@ -446,12 +474,23 @@ export interface AgentAttack {
 
 export type RestCondition = "precaria" | "normal" | "confortavel" | "luxuosa";
 
-export type InterludeDish = "favorito" | "nutritivo" | "energetico" | "rapido";
+export type ParanormalFoodId =
+  | "mol_alimento_sangue"
+  | "mol_alimento_morte"
+  | "mol_alimento_conhecimento"
+  | "mol_alimento_energia";
+
+export type InterludeDish =
+  | "favorito"
+  | "nutritivo"
+  | "energetico"
+  | "rapido"
+  | ParanormalFoodId;
 
 export interface InterludeBonusDie {
   id: string;
   source: "exercitar" | "ler";
-  dieFormula: "1d6" | "2d6" | "1d8";
+  dieFormula: "1d6" | "2d6" | "1d8" | "1d10" | "1d12";
   appliesTo: AttributeKey[];
   label: string;
   createdAt: string;
@@ -618,8 +657,29 @@ export interface Threat {
   attacks: ThreatAttack[];
   abilities: ThreatAbility[];
   description: string;
+  isVariant?: boolean;
+  baseCreatureName?: string;
+  variantAlterations?: string;
   source?: ContentSource;
   isHomebrew?: boolean;
+}
+
+export interface RelicDefinition {
+  id: string;
+  name: string;
+  element: ParanormalElement;
+  source: ContentSource;
+  objectEffect: string;
+  bearerRelation: string;
+  ally: {
+    general: string;
+    bonus: string;
+    ability: string;
+  };
+  optionalAbilities: {
+    name: string;
+    description: string;
+  }[];
 }
 
 export interface InitiativeEntry {

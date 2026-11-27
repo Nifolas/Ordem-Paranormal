@@ -1,0 +1,1013 @@
+{
+  "meta": {
+    "entrega": 2,
+    "titulo": "Mistérios do Outro Lado — Parte 1 (Poderes, Trilhas, Equipamentos, Modificações, Maldições, Alimentos, Organizações e Rituais)",
+    "autor": "Pedro Luiz Santos",
+    "fontes_incluidas": [
+      {
+        "id": "misterios_do_outro_lado",
+        "nome": "Mistérios do Outro Lado",
+        "tipo": "comunidade"
+      }
+    ]
+  },
+  "poderesClasse": [
+    {
+      "id": "mol_reflexos_rapidos",
+      "nome": "Reflexos Rápidos",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "NEX 50%, AGI 4",
+      "descricao": "Você passa a ter duas reações especiais de defesa por rodada."
+    },
+    {
+      "id": "mol_um_por_um",
+      "nome": "Um por um",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "FOR 3",
+      "custoPe": 3,
+      "descricao": "Ao matar um inimigo, pode gastar 3 PE para receber +1d20 e +2 na margem de ameaça no seu próximo ataque contra outro inimigo em alcance curto."
+    },
+    {
+      "id": "mol_vinganca",
+      "nome": "Vingança",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "NEX 15%, FOR 3",
+      "custoPe": 4,
+      "descricao": "Ao sofrer um acerto crítico de um inimigo, pode gastar 4 PE e uma ação completa na sua próxima rodada para fazer uma investida com +2 na margem de ameaça e a possibilidade de empurrar e atacar o mesmo alvo."
+    },
+    {
+      "id": "mol_em_guarda",
+      "nome": "Em Guarda",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "custoPe": 3,
+      "descricao": "Em combate, gasta ação de movimento e 3 PE para proteger um aliado adjacente: todos os ataques contra ele têm 75% de chance (1 a 3 em 1d4) de serem redirecionados para você. Enquanto estiver em guarda, recebe RD 10. Afastar-se do aliado ou sofrer condição de paralisia cancela a guarda."
+    },
+    {
+      "id": "mol_manter_foco",
+      "nome": "Manter Foco",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Após uma cena de combate, você recebe +5 em Iniciativa e Percepção até o fim da próxima cena."
+    },
+    {
+      "id": "mol_resoluto",
+      "nome": "Resoluto",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "PRE 3, treinado em Diplomacia ou Religião",
+      "descricao": "Ao curar alguém do estado de Enlouquecendo, o aliado recupera +1d8 SAN e recebe resistência mental 5 até o fim da cena (1x por cena para cada aliado)."
+    },
+    {
+      "id": "mol_mecanico",
+      "nome": "Mecânico",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ao realizar a ação Manutenção em um interlúdio, o item consertado tem sua RD e PV dobrados. Além disso, pode usar esta ação gastando 4 PE para adicionar ou alterar uma modificação em um acessório."
+    },
+    {
+      "id": "mol_metodo_didatico",
+      "nome": "Método Didático",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "NEX 30%",
+      "custoPe": 3,
+      "descricao": "Em cenas de investigação, gasta ação completa e 3 PE para ensinar a um aliado uma perícia somente treinada na qual você seja treinado (como Crime ou Pilotagem). Ele pode usá-la pelo resto da cena com bônus de +2."
+    },
+    {
+      "id": "mol_espirito_de_lideranca",
+      "nome": "Espírito de Liderança",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "PRE 4",
+      "descricao": "Você pode receber ajuda de até dois aliados ao mesmo tempo, e todos os bônus de aliados são dobrados para você (Acólito e Guerrilheiro dão +2d20; Faz-Tudo e Socorrista fazem você contar como Veterano nas perícias)."
+    },
+    {
+      "id": "mol_sempre_alerta",
+      "nome": "Sempre Alerta",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "custoPe": 3,
+      "descricao": "Recebe +2 em Iniciativa. Além disso, ao desviar de um ataque, pode gastar uma reação e 3 PE para conceder bônus igual ao dobro do seu Intelecto na Defesa de um aliado adjacente."
+    },
+    {
+      "id": "mol_dedicacao",
+      "nome": "Dedicação",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "INT 3",
+      "descricao": "Em cenas de investigação, o seu limite de PE por turno aumenta em +2."
+    },
+    {
+      "id": "mol_familiaridade_paranormal",
+      "nome": "Familiaridade Paranormal",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "NEX 50%",
+      "descricao": "Ao encontrar criaturas do elemento com o qual tem afinidade e passar no teste de Presença Perturbadora, você não sofre nenhum dano mental (em vez de metade)."
+    },
+    {
+      "id": "mol_conjurador_aplicado",
+      "nome": "Conjurador Aplicado",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "PRE 3",
+      "descricao": "Seu limite de PE por turno aumenta permanentemente em +3 (não afeta a DT de testes)."
+    },
+    {
+      "id": "mol_fortalecer_ritual",
+      "nome": "Fortalecer Ritual",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta reação e 1 PE + custo da forma avançada para aprimorar o ritual de um aliado para Discente ou Verdadeiro (precisa cumprir os pré-requisitos). Você faz o teste de O Custo do Paranormal referente ao gasto de PE da melhoria."
+    },
+    {
+      "id": "mol_imbuir_paranormal",
+      "nome": "Imbuir Paranormal",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "NEX 45%",
+      "descricao": "Ao sofrer uma condição mental, você recebe resistência a dano paranormal 10 até o fim da condição."
+    },
+    {
+      "id": "mol_tratamento_oculto",
+      "nome": "Tratamento Oculto",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Pode usar Ocultismo no lugar de Medicina para testes de primeiros socorros. Ao estabilizar um alvo, ele recupera 1d6 + PRE pontos de esforço e a DT para estabilizá-lo novamente na mesma cena sobe apenas +2 (em vez de +5)."
+    },
+    {
+      "id": "mol_resiliente",
+      "nome": "Resiliente",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "preRequisito": "Veterano em Ocultismo, INT 4",
+      "descricao": "Ao passar em um teste de Presença Perturbadora contra uma criatura, recebe bônus igual ao seu grau de treinamento em Ocultismo na DT dos seus rituais contra ela até o fim da cena."
+    }
+  ],
+  "trilhas": [
+    {
+      "id": "mol_cacador",
+      "nome": "Caçador (MoL)",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Lutador Eficaz",
+          "descricao": "Recebe +1d20 em testes de manobras de combate. Ao realizar uma manobra com sucesso, pode gastar 3 PE para ganhar uma ação de movimento adicional na próxima rodada."
+        },
+        {
+          "marco": "40%",
+          "nome": "Explorar Fraqueza",
+          "descricao": "Recebe +1 na margem de ameaça contra inimigos que estejam Em Chamas, Envenenados ou Sangrando. Ao realizar um golpe de misericórdia, ganha PE temporários iguais à metade do seu limite de PE."
+        },
+        {
+          "marco": "65%",
+          "nome": "Fragilizar",
+          "descricao": "Ao atacar um alvo fintado ou flanqueado, gasta 5 PE; se acertar, o alvo testa Fortitude (DT FOR) ou tem sua RD correspondente ao tipo de dano da arma (não paranormal) reduzida em 10 pelas próximas 3 rodadas."
+        },
+        {
+          "marco": "99%",
+          "nome": "Instinto de Caça",
+          "descricao": "Enquanto furtivo, recupera 1d4 PE por rodada. Quando um inimigo ficar Machucado, o custo em PE de suas habilidades (exceto rituais e poderes paranormais) diminui em -1 PE (mínimo 1 PE) pelas próximas 2 rodadas."
+        }
+      ]
+    },
+    {
+      "id": "mol_investigador_tatico",
+      "nome": "Investigador Tático",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Ponto Fraco",
+          "descricao": "Em combate, gasta 3 PE para testar Investigação (DT INT) em um inimigo; se passar, pode atacar esse ponto vulnerável com +2 na margem de ameaça, mas -1d20 até o fim da cena."
+        },
+        {
+          "marco": "40%",
+          "nome": "Adaptação Rápida",
+          "descricao": "Ao encontrar um mesmo tipo de criatura já enfrentado anteriormente, recebe resistência mental 5 na cena e +5 em Vontade e Defesa no primeiro turno."
+        },
+        {
+          "marco": "65%",
+          "nome": "Aproveitar Momento",
+          "descricao": "Enquanto um inimigo estiver sob condição de paralisia, pode gastar 4 PE para receber 1 ação padrão adicional no seu turno (1x por rodada)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Expor Alvo",
+          "descricao": "Ao realizar a manobra derrubar com sucesso, gasta 5 PE para que você e todos os aliados recebam +1 no multiplicador de crítico e +2 na margem de ameaça contra o alvo até ele se levantar."
+        }
+      ]
+    },
+    {
+      "id": "mol_versatil",
+      "nome": "Versátil",
+      "classe": "combatente",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Posicionamento Tático",
+          "descricao": "O bônus de cobertura na Defesa aumenta para +7. Também pode gastar 2 PE para ganhar +1d20 ao flanquear ou atacar de posição elevada."
+        },
+        {
+          "marco": "40%",
+          "nome": "Esforço Extra",
+          "descricao": "Pode gastar 3 PE para ignorar a penalidade de carga em um teste ou no deslocamento por 1 turno (mantém -5 na Defesa por sobrecarga)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Arma Caseira",
+          "descricao": "Não sofre penalidade de -1d20 com armas improvisadas. Pode gastar ação completa e 3 PE (+2 PE por categoria) para produzir uma arma corpo a corpo temporária até o fim da cena."
+        },
+        {
+          "marco": "99%",
+          "nome": "Corpo Robusto",
+          "descricao": "Pode gastar 2 PE por condição para ignorar por 1 rodada os efeitos de: Asfixiado, Debilitado, Enjoado, Fatigado, Fraco, Indefeso, Lento, Ofuscado e Vulnerável."
+        }
+      ]
+    },
+    {
+      "id": "mol_armeiro",
+      "nome": "Armeiro",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "especial": "Requer treinamento em Tática.",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Engenheiro",
+          "descricao": "Soma seu bônus de Tática na capacidade de carga (ex.: FOR 2 + Tática Veterano [+10] = 20 espaços). Pode gastar 1 cena, 2 PE e 2 peças de metal (Cat 0, 1 espaço) com teste de Tática (DT INT) para produzir granadas."
+        },
+        {
+          "marco": "40%",
+          "nome": "Mestre de Armamento",
+          "descricao": "Pode produzir e instalar modificações de armas e proteções seguindo as mesmas regras de granadas (modificação guardada ocupa 1 espaço, Cat 0). Pode gastar 2 ações completas e 3 PE para trocar uma modificação de arma ou proteção."
+        },
+        {
+          "marco": "65%",
+          "nome": "Atirador Profissional",
+          "descricao": "Recebe proficiência com proteções pesadas, todas as armas e proteções contam como 1 categoria abaixo e todas as munições duram 1 cena a mais."
+        },
+        {
+          "marco": "99%",
+          "nome": "Explosão Aprimorada",
+          "descricao": "Ao lançar um explosivo, gasta 3 PE para lançar outro como ação livre (1x/rodada). Tempo para fabricar granadas cai para 2 ações completas; resultado natural 18–20 no teste de Tática dobra o dano do explosivo."
+        }
+      ]
+    },
+    {
+      "id": "mol_detetive",
+      "nome": "Detetive (MoL)",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "especial": "Requer treinamento em Investigação.",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Examinador",
+          "descricao": "O bônus da ação de interlúdio Ler aumenta para +1d8 (+1d10 em NEX 40%, +1d12 em NEX 65%). Ao usar Revisar Caso, pode gastar 3 PE para analisar uma cena adicional."
+        },
+        {
+          "marco": "40%",
+          "nome": "Língua de Prata",
+          "descricao": "Sempre que descobrir uma pista usando Investigação (interrogar), Diplomacia, Enganação ou Intuição, recebe PE temporários iguais ao seu Intelecto."
+        },
+        {
+          "marco": "65%",
+          "nome": "Cauteloso",
+          "descricao": "Ao se esconder ou seguir alguém com Furtividade, pode gastar 4 PE para receber +5 em Percepção e Investigação enquanto sustentar a ação."
+        },
+        {
+          "marco": "99%",
+          "nome": "Caso Solucionado",
+          "descricao": "Ao resolver ou presenciar a solução do Enigma de Medo de uma criatura, recebe PE temporários iguais ao seu limite de PE e +10 em testes de ataque e resistência contra ela até ser derrotada."
+        }
+      ]
+    },
+    {
+      "id": "mol_virtuoso",
+      "nome": "Virtuoso",
+      "classe": "especialista",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Tratamento Psicológico",
+          "descricao": "Em interlúdio, gasta 1 ação e 2 PE para remover 1 efeito de insanidade de um aliado perturbado (sem gastar ação dele) e ambos recuperam SAN igual ao limite de PE. Ao Relaxar, pode remover 1 efeito de insanidade seu recuperando metade do limite de PE em SAN."
+        },
+        {
+          "marco": "40%",
+          "nome": "Presença Motivadora",
+          "descricao": "Ação completa e 4 PE (usos/cena = PRE) para dar a um aliado imunidade a condições mentais/medo e +5 em Vontade por 2 rodadas."
+        },
+        {
+          "marco": "65%",
+          "nome": "Mente Blindada",
+          "descricao": "Leva 4 rodadas para enlouquecer (em vez de 3). Ao falhar em teste para tirar alguém de Enlouquecendo, a DT diminui em -2 para todos."
+        },
+        {
+          "marco": "99%",
+          "nome": "Última Motivação",
+          "descricao": "Na 1ª vez na cena em que ficar abaixo de 25% da SAN máxima (ou ao tirar alguém de Enlouquecendo, 1x/alvo), gasta 6 PE para conceder uma condição: Focado (+10 em 1 perícia na cena), Revigorado (cura 2d4+6 PV), Esperançoso (RD mental 10 na cena) ou Atento (+10 Defesa na cena)."
+        }
+      ]
+    },
+    {
+      "id": "mol_flagelador_v2",
+      "nome": "Flagelador (Nova Versão — MoL)",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "O Poder do Flagelo",
+          "descricao": "Ao Dormir no interlúdio, pode optar por não recuperar PV para receber o dobro de PE (ou o dobro de SAN se usar a outra ação para Relaxar). Além disso, 1x/cena ao ficar Machucado, recebe 3x VIG em PE temporários."
+        },
+        {
+          "marco": "40%",
+          "nome": "Abraçar a Dor",
+          "descricao": "Ao sofrer dano não paranormal, pode gastar 2 PE a cada 5 de dano para absorvê-lo. Em NEX 65%, funciona contra dano paranormal e passa para 2 PE a cada 10 de dano evitado."
+        },
+        {
+          "marco": "65%",
+          "nome": "Sacrificar Vitalidade",
+          "descricao": "Gasta 4 PE e 20 PV (só recuperados com descanso) para não sofrer os efeitos de O Custo do Paranormal por uma cena."
+        },
+        {
+          "marco": "99%",
+          "nome": "Medo Tangível",
+          "descricao": "Você aprende o ritual Medo Tangível."
+        }
+      ]
+    },
+    {
+      "id": "mol_lamina_paranormal_v2",
+      "nome": "Lâmina Paranormal (Nova Versão — MoL)",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Lâmina Maldita",
+          "descricao": "Recebe proficiência com armas táticas e aprende Amaldiçoar Arma (-1 PE se já conhece). Ao conjurar esse ritual, pode usar Ocultismo em vez de Luta/Pontaria para atacar com a arma."
+        },
+        {
+          "marco": "40%",
+          "nome": "Fúria Paranormal",
+          "descricao": "Sempre que acerta um acerto crítico em um inimigo, recebe PE temporários iguais a 2x PRE (duram até o fim da cena)."
+        },
+        {
+          "marco": "65%",
+          "nome": "Retaliação Ocultista",
+          "descricao": "Ao ser alvo de um ataque, gasta reação especial e 3 PE para somar sua Vontade à Defesa. Se o inimigo errar, pode conjurar um ritual como contra-ataque (os 3 PE contam no limite de PE)."
+        },
+        {
+          "marco": "99%",
+          "nome": "Lâmina do Medo",
+          "descricao": "Você aprende o ritual Lâmina do Medo."
+        }
+      ]
+    },
+    {
+      "id": "mol_protetor",
+      "nome": "Protetor",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Último Esforço",
+          "descricao": "Enquanto Machucado, recebe RD paranormal 2 (5 em NEX 30%, 10 em NEX 60%), +5 em Vontade e ganha 1 PE toda vez que desviar de um ataque."
+        },
+        {
+          "marco": "40%",
+          "nome": "Atrair Rituais",
+          "descricao": "No momento da conjuração de um ritual (exceto Medo) de alvo 1 ser ou seres escolhidos, gasta 2 PE + 2 PE por círculo e testa Ocultismo (+5) vs. DT do conjurador para redirecionar os efeitos para você."
+        },
+        {
+          "marco": "65%",
+          "nome": "Protegido pelo Paranormal",
+          "descricao": "Enquanto sustentar um ritual, pode gastar 3 PE no início do turno para receber +10 na Defesa até o fim do ritual."
+        },
+        {
+          "marco": "99%",
+          "nome": "Barreira do Medo",
+          "descricao": "Você aprende o ritual Barreira do Medo."
+        }
+      ]
+    },
+    {
+      "id": "mol_fortalecido",
+      "nome": "Fortalecido",
+      "classe": "ocultista",
+      "source": "misterios_do_outro_lado",
+      "habilidades": [
+        {
+          "marco": "10%",
+          "nome": "Meditação Paranormal",
+          "descricao": "Em interlúdio, gasta 1 ação para acumular +1d6 na DT de rituais por uma cena (máximo acumulado igual a PRE; uso de 1 por cena)."
+        },
+        {
+          "marco": "40%",
+          "nome": "Amaldiçoar",
+          "descricao": "Você aprende o ritual Corrupção Maldita."
+        },
+        {
+          "marco": "65%",
+          "nome": "Reaproveitar Potencial",
+          "descricao": "Não perde PE se falhar ao conjurar em condições ruins. Além disso, quando um inimigo resistir a um ritual seu, você recupera metade dos PE gastos."
+        },
+        {
+          "marco": "99%",
+          "nome": "O Poder do Medo",
+          "descricao": "Você aprende o ritual Poder do Medo."
+        }
+      ]
+    }
+  ],
+  "equipamentos": [
+    {
+      "id": "mol_capacete",
+      "nome": "Capacete Militar",
+      "tipo": "protecao",
+      "subtipo": "Proteção Leve (Cabeça)",
+      "categoria": 2,
+      "espacos": 1,
+      "defesa": 2,
+      "rd": "Balístico 5",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Proteção leve que fornece +2 em Defesa e RD balístico 5. Acumula com outras proteções e escudos. Não pode receber modificações."
+    },
+    {
+      "id": "mol_capa_de_chuva",
+      "nome": "Capa de Chuva",
+      "tipo": "operacional",
+      "categoria": 1,
+      "espacos": 2,
+      "vestivel": true,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Anula penalidades em testes de Percepção causadas por chuvas e tempestades e fornece +5 em testes para ocultar itens."
+    },
+    {
+      "id": "mol_estimulante",
+      "nome": "Estimulante",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Injeção de adrenalina (ação padrão em si ou ser adjacente): concede 2d6+2 PE temporários até o fim da cena e +2 em Reflexos por 1d4 rodadas."
+    },
+    {
+      "id": "mol_pilulas_calmantes",
+      "nome": "Pílulas Calmantes",
+      "tipo": "medicamento",
+      "categoria": 1,
+      "espacos": 1,
+      "usos": 3,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Frasco com 3 usos (ação padrão): recupera 1d8 SAN. Usar mais de 1x na mesma cena exige Fortitude (DT 20 + 2 por uso anterior) ou perde 1d6 PV e fica Enjoado até o fim da cena."
+    },
+    {
+      "id": "mol_radar_portatil",
+      "nome": "Radar Portátil",
+      "tipo": "operacional",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Exibe a localização de seres em alcance longo e impede ficar Desprevenido contra seres detectados. Criaturas de Conhecimento e Energia não são detectadas."
+    },
+    {
+      "id": "mol_capacete_manipulacao_memoria",
+      "nome": "Capacete de Manipulação de Memória",
+      "tipo": "paranormal",
+      "categoria": 3,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Gasta 3 PE e deve ser mantido vestido no alvo por 2 rodadas. Faz o alvo esquecer para sempre encontros com criaturas ou manifestações paranormais e recuperar 1d6 SAN (só recupera as memórias se enlouquecer)."
+    },
+    {
+      "id": "mol_fone_deteccao_inconsciente",
+      "nome": "Fone de Detecção Inconsciente",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ativação 2 PE + 1 PE/rodada para manter. Enquanto dorme, sente os arredores, pode fazer reações (acordando ao reagir) e detecta ações próximas e manifestações paranormais (e seus elementos) em alcance curto. Se estiver Cego, remove a penalidade de Desprevenido contra inimigos no alcance."
+    },
+    {
+      "id": "mol_armazenador_paranormal",
+      "nome": "Armazenador Paranormal de (Elemento)",
+      "tipo": "paranormal",
+      "categoria": 2,
+      "espacos": 0,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Não ocupa espaço e aumenta a capacidade de carga em +3 espaços apenas para itens amaldiçoados. Se for do elemento opressor ao item guardado, contém o objeto anulando seus efeitos e preços de maldição (retirá-lo exige 2 cenas para recuperar poderes; Relíquias ativam imediatamente). Versão de Medo (contém todos os elementos exceto Medo) tem Categoria III."
+    },
+    {
+      "id": "mol_alimento_sangue",
+      "nome": "Alimento Paranormal — Sangue",
+      "tipo": "amaldicoado",
+      "subtipo": "Alimento Paranormal",
+      "elemento": "Sangue",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Uso único (ação completa ou Alimentar-se no interlúdio; perde SAN igual ao Vigor). Efeito de cena: +5 em resistência contra fadiga, fraqueza, venenos e doenças e RD 5 até o fim da cena. Interlúdio: se Exercitar-se, o bônus vale para todos os testes de AGI, FOR ou VIG (escolha um) durante toda a cena em que for usado."
+    },
+    {
+      "id": "mol_alimento_morte",
+      "nome": "Alimento Paranormal — Morte",
+      "tipo": "amaldicoado",
+      "subtipo": "Alimento Paranormal",
+      "elemento": "Morte",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Uso único (ação completa ou Alimentar-se no interlúdio; perde SAN igual ao Vigor). Efeito de cena: qualquer ação completa (exceto rituais) tem execução reduzida para padrão até o fim da cena. Interlúdio: se Dormir, todas as habilidades e rituais custam -1 PE até o fim da próxima cena."
+    },
+    {
+      "id": "mol_alimento_conhecimento",
+      "nome": "Alimento Paranormal — Conhecimento",
+      "tipo": "amaldicoado",
+      "subtipo": "Alimento Paranormal",
+      "elemento": "Conhecimento",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Uso único (ação completa ou Alimentar-se no interlúdio; perde SAN igual ao Vigor). Efeito de cena: +5 em Vontade e pode usar perícias sem kits ou mesmo sem treinamento até o fim da cena. Interlúdio: se Ler, o bônus vale para todos os testes de INT ou PRE (escolha um) durante toda a cena em que for usado."
+    },
+    {
+      "id": "mol_alimento_energia",
+      "nome": "Alimento Paranormal — Energia",
+      "tipo": "amaldicoado",
+      "subtipo": "Alimento Paranormal",
+      "elemento": "Energia",
+      "categoria": 1,
+      "espacos": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Uso único (ação completa ou Alimentar-se no interlúdio; perde SAN igual ao Vigor). Efeito de cena: +5 em Reflexos e +6m de deslocamento até o fim da cena. Interlúdio: se fizer Manutenção, conserta até 3 itens em uma única ação."
+    }
+  ],
+  "modificacoes": [
+    {
+      "id": "mol_mod_municao_marcada",
+      "nome": "Munição Marcada com (Elemento)",
+      "alvo": "municao",
+      "categoriaBonus": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Aplicável a qualquer munição exceto foguetes e combustíveis (não acumula com outras modificações; flechas perdem o efeito após 4 cenas). O dano causado torna-se metade do elemento escolhido e metade do tipo da arma."
+    },
+    {
+      "id": "mol_mod_lancador_granadas",
+      "nome": "Lançador de Granadas",
+      "alvo": "arma_fogo",
+      "restricao": "Apenas Fuzis de Assalto ou Espingardas",
+      "categoriaBonus": 1,
+      "espacosBonus": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Empunha granadas como ação livre e permite arremessá-las segurando a arma em até alcance longo."
+    },
+    {
+      "id": "mol_mod_isolante",
+      "nome": "Isolante",
+      "alvo": "protecao",
+      "restricao": "Incompatível com Discreta",
+      "categoriaBonus": 1,
+      "espacosBonus": 1,
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece resistência 5 contra dano de frio (até -30°C), fogo e eletricidade."
+    }
+  ],
+  "maldicoes": [
+    {
+      "id": "mol_mald_crescente",
+      "nome": "Crescente",
+      "alvo": "arma",
+      "elemento": "Medo",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Causa dano adicional de Medo (ignora RD) conforme a Membrana: Estável +1d4; Danificada +1d8; Arruinada +2d8. Para cada arma com esta maldição, sofre -1d20 em testes de resistência contra efeitos paranormais em Membrana danificada e -2d20 em arruinada."
+    },
+    {
+      "id": "mol_mald_intangivel",
+      "nome": "Intangível",
+      "alvo": "arma",
+      "elemento": "Medo",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ao atacar, pode gastar 4 PE para a arma ou projétil atravessar cobertura parcial ou total. Contudo, toda vez que errar um ataque com ela, perde 2 SAN e fica Alquebrado por 1 rodada."
+    },
+    {
+      "id": "mol_mald_incerta",
+      "nome": "Incerta",
+      "alvo": "protecao",
+      "elemento": "Medo",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Fornece +5 em testes de resistência contra rituais. Sempre que resistir a um ritual, recupera 2 PE por círculo do ritual; se falhar na resistência, perde 2 SAN por círculo do ritual."
+    },
+    {
+      "id": "mol_mald_ilogica",
+      "nome": "Ilógica",
+      "alvo": "protecao",
+      "elemento": "Medo",
+      "source": "misterios_do_outro_lado",
+      "descricao": "Ação de movimento e 4 PE reduzem a proteção a um objeto de 0 espaço (sem bônus); quem segurá-la e gastar 2 PE veste-a imediatamente. Pode comandá-la para agarrar quem a vestir (proteções pesadas +5). Enquanto reduzida, perde 3 SAN sempre que for atingido por ataque ou falhar em teste de resistência."
+    }
+  ],
+  "organizacoes": [
+    {
+      "id": "mol_org_ordo_realitas",
+      "nome": "Ordo Realitas",
+      "source": "misterios_do_outro_lado",
+      "regrasEquipamento": "Segue as regras padrão do Livro de Regras.",
+      "regrasCredito": "Segue a Tabela 3.1 padrão.",
+      "habilidade": {
+        "nome": "Estrutura Padrão",
+        "descricao": "Acesso equilibrado a equipamentos mundanos, paranormais e amaldiçoados conforme patente."
+      }
+    },
+    {
+      "id": "mol_org_hell_hunters",
+      "nome": "Hell Hunters",
+      "source": "misterios_do_outro_lado",
+      "regrasEquipamento": "Todas as armas têm categoria reduzida em I. Não fornece itens paranormais ou amaldiçoados (qualquer objeto amaldiçoado mantido após missão é confiscado e destruído).",
+      "regrasCredito": "Definido pelo PP obtido na última missão: 0–10 PP Baixo; 10–14 PP Médio; 14–18 PP Alto; 18+ PP Ilimitado.",
+      "tabelaPrestigio": [
+        {
+          "evento": "Solução do caso",
+          "pp": 10
+        },
+        {
+          "evento": "Morte de inocente",
+          "pp": -3
+        },
+        {
+          "evento": "Morte de membro do grupo",
+          "pp": -5
+        },
+        {
+          "evento": "Eliminou criatura VD 0–40 (golpe final, por tipo)",
+          "pp": 1
+        },
+        {
+          "evento": "Eliminou criatura VD 45–100 (golpe final, por tipo)",
+          "pp": 2
+        },
+        {
+          "evento": "Eliminou criatura VD 105–300 (golpe final, por tipo)",
+          "pp": 4
+        },
+        {
+          "evento": "Eliminou criatura VD 300+ (golpe final, por tipo)",
+          "pp": 6
+        },
+        {
+          "evento": "Eliminou cultistas (golpe final)",
+          "pp": 2
+        }
+      ],
+      "habilidade": {
+        "nome": "Arsenal de Qualidade",
+        "descricao": "Todas as armas que você possui causam +3 pontos de dano (+5 a partir de Oficial de Operações)."
+      }
+    },
+    {
+      "id": "mol_org_famiglia_leone",
+      "nome": "Famiglia Leone",
+      "source": "misterios_do_outro_lado",
+      "regrasEquipamento": "Qualquer item paranormal ou amaldiçoado tem categoria aumentada em I.",
+      "regrasCredito": "Recrutas iniciam com limite de crédito Médio (cai 1 nível na próxima missão se um aliado morrer).",
+      "tabelaPrestigio": [
+        {
+          "evento": "Solução do caso",
+          "pp": 10
+        },
+        {
+          "evento": "Curou aliado de morrendo ou enlouquecendo",
+          "pp": 3
+        },
+        {
+          "evento": "Pista adicional encontrada",
+          "pp": 3
+        },
+        {
+          "evento": "Morte de inocente",
+          "pp": -2
+        },
+        {
+          "evento": "Morte de membro do grupo",
+          "pp": -6
+        },
+        {
+          "evento": "Perdeu item de categoria II",
+          "pp": -1
+        },
+        {
+          "evento": "Perdeu item de categoria III ou mais",
+          "pp": -2
+        }
+      ],
+      "habilidade": {
+        "nome": "Contrabando Leone",
+        "descricao": "1x por missão aciona a família para receber equipamentos/veículos (2x se tiver Eu Conheço um Cara): Recruta (até Cat 0, 3 espaços); Operador (até Cat I + armas, 5 espaços); Agente Especial (até Cat II + explosivos/proteções + carros/motos, 10 espaços); Oficial de Operações (até Cat III + vans/lanchas, 15 espaços); Agente de Elite (até Cat IV + caminhões/aviões pequenos, 20 espaços)."
+      }
+    },
+    {
+      "id": "mol_org_obscurite",
+      "nome": "Obscurité",
+      "source": "misterios_do_outro_lado",
+      "regrasEquipamento": "Não fornece armas pesadas. Todos os itens paranormais ou amaldiçoados têm categoria reduzida em I.",
+      "regrasCredito": "Segue as regras padrão de limite de crédito.",
+      "tabelaPrestigio": [
+        {
+          "evento": "Solução do caso",
+          "pp": 10
+        },
+        {
+          "evento": "Morte de inocente",
+          "pp": -3
+        },
+        {
+          "evento": "Inocente enlouqueceu",
+          "pp": -1
+        },
+        {
+          "evento": "Morte de membro do grupo",
+          "pp": -5
+        },
+        {
+          "evento": "Você enlouqueceu",
+          "pp": -1
+        },
+        {
+          "evento": "Item paranormal ou amaldiçoado novo obtido",
+          "pp": 2
+        },
+        {
+          "evento": "Sobreviveu a criatura VD 0–100 (por tipo)",
+          "pp": 1
+        },
+        {
+          "evento": "Sobreviveu a criatura VD 105–300 (por tipo)",
+          "pp": 3
+        },
+        {
+          "evento": "Sobreviveu a criatura VD 300+ (por tipo)",
+          "pp": 5
+        }
+      ],
+      "habilidade": {
+        "nome": "Treinamento da Obscurité",
+        "descricao": "Em NEX 10%, e novamente a cada +15% de NEX (25%, 40%, 55%, 70%, 85%), aprende 1 ritual de um círculo que possa lançar (não conta no limite e conta como poder paranormal do elemento escolhido)."
+      }
+    },
+    {
+      "id": "mol_org_ordo_calamitas",
+      "nome": "Ordo Calamitas",
+      "source": "misterios_do_outro_lado",
+      "regrasEquipamento": "Segue regras padrão adaptadas à época do Império Romano a critério do mestre.",
+      "regrasCredito": "Recrutas têm limite de crédito Médio e Agentes Especiais têm limite Alto.",
+      "tabelaPrestigio": [
+        {
+          "evento": "Solução do caso",
+          "pp": 10
+        },
+        {
+          "evento": "Pista adicional encontrada",
+          "pp": 3
+        },
+        {
+          "evento": "Evitou diretamente a morte de um inocente",
+          "pp": 2
+        },
+        {
+          "evento": "Morte de inocente",
+          "pp": -2
+        },
+        {
+          "evento": "Morte de membro do grupo",
+          "pp": -5
+        },
+        {
+          "evento": "Item paranormal ou amaldiçoado novo obtido",
+          "pp": 1
+        },
+        {
+          "evento": "Curou aliado de morrendo ou enlouquecendo",
+          "pp": 3
+        }
+      ],
+      "habilidade": {
+        "nome": "Guerreiro da Calamidade",
+        "descricao": "Ao Transcender, perde apenas 2 pontos do ganho de Sanidade daquele aumento de NEX em vez de zerar (Combatente +1 SAN, Especialista +2 SAN, Ocultista +3 SAN)."
+      }
+    }
+  ],
+  "rituais": [
+    {
+      "id": "mol_barreira_do_medo",
+      "nome": "Barreira do Medo",
+      "elemento": "Medo",
+      "circulo": 4,
+      "source": "misterios_do_outro_lado",
+      "exclusivoTrilha": "Protetor",
+      "execucao": "Completa",
+      "alcance": "Longo",
+      "alvo": "Você e 1 pessoa",
+      "duracao": "Sustentada",
+      "resistencia": "Veja texto",
+      "efeitoPadrao": "Todos os ataques (exceto dano mental) contra o protegido são transferidos para você (usando suas defesas/RD). Ao sofrer dano, faça teste de resistência contra sua DT de rituais: se passar, sofre metade do dano e 1d10 mental. Pode ser conjurado invertido (outro ser te protege).",
+      "discente": "(+2 PE): Aumenta o alvo para você e até 3 seres."
+    },
+    {
+      "id": "mol_poder_do_medo",
+      "nome": "Poder do Medo",
+      "elemento": "Medo",
+      "circulo": 4,
+      "source": "misterios_do_outro_lado",
+      "exclusivoTrilha": "Fortalecido",
+      "execucao": "Completa",
+      "alcance": "Veja texto",
+      "alvo": "Veja texto",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Escolha: Fortalecer Rituais (todos os seus rituais na cena causam dano de Medo ignorando RD, mas custam +2 PE) ou Fortalecer Arma (toca 1 arma que passa a causar dano de Medo ignorando RD na cena, mas errar ataque faz perder 2 SAN; falha por 10+ perde 1 SAN permanente)."
+    },
+    {
+      "id": "mol_invocacao_amaldicoada",
+      "nome": "Invocação Amaldiçoada",
+      "elemento": "Variável (Sangue, Energia, Conhecimento ou Morte)",
+      "circulo": 2,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 corpo",
+      "duracao": "Instantânea",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Escolha um elemento ao aprender. Converte um cadáver em uma criatura desse elemento de até VD 20 (leva 1 rodada para levantar, age após o invocador e ataca o ser mais próximo ou do elemento que oprime).",
+      "discente": "(+2 PE): Alcance médio e a criatura surge avançando imediatamente. Requer 3º círculo.",
+      "verdadeiro": "(+7 PE): Alcance longo, até 3 corpos; criaturas ganham +4d8+8 PV e +10 Defesa. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "mol_corrupcao_maldita",
+      "nome": "Corrupção Maldita",
+      "elemento": "Variável (Sangue, Energia, Conhecimento ou Morte)",
+      "circulo": 2,
+      "source": "misterios_do_outro_lado",
+      "exclusivoTrilha": "Fortalecido",
+      "execucao": "Cena",
+      "alcance": "Toque",
+      "alvo": "1 acessório, proteção ou arma",
+      "duracao": "2 cenas",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Escolha um elemento ao aprender. Concentrando-se por uma cena segurando o objeto, aplica uma maldição desse elemento nele por 2 cenas (segue regras normais de categoria e preço).",
+      "discente": "(+3 PE): A maldição dura permanentemente (só desfaz se os PV do item zerarem). Requer 3º círculo e afinidade.",
+      "verdadeiro": "(+5 PE): Como Discente, mas alvo muda para até 3 itens e alcance para curto. Requer 4º círculo e afinidade."
+    },
+    {
+      "id": "mol_aposta_insana",
+      "nome": "Aposta Insana",
+      "elemento": "Energia",
+      "circulo": 1,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Padrão",
+      "alcance": "Pessoal",
+      "alvo": "Você",
+      "duracao": "Cena",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Declare um evento relevante que ocorrerá até o fim da cena. Se acontecer, todos os seus rituais custam -1 PE (mínimo 1 PE) até o fim da cena. Se não ocorrer, você fica Alquebrado pelo resto da cena e sofre 1d6 dano mental."
+    },
+    {
+      "id": "mol_onda_de_choque",
+      "nome": "Onda de Choque",
+      "elemento": "Energia",
+      "circulo": 1,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Reação especial",
+      "alcance": "Pessoal",
+      "alvo": "Área de 3m ao seu redor",
+      "duracao": "Instantânea",
+      "resistencia": "Fortitude parcial",
+      "efeitoPadrao": "Afasta todos os alvos próximos em 6m e os deixa Debilitados por 1 rodada (Fortitude reduz para 3m e evita a condição).",
+      "discente": "(+3 PE): Afasta 9m e causa 2d8 dano de Energia (resistência metade). Requer 2º círculo.",
+      "verdadeiro": "(+5 PE): Área 6m, execução movimento, afasta 12m, deixa Atordoado por 1 rodada e causa 4d8 dano de Energia (resistência afasta 6m, evita condição e metade do dano). Requer 3º círculo."
+    },
+    {
+      "id": "mol_mente_caotica",
+      "nome": "Mente Caótica",
+      "elemento": "Energia",
+      "circulo": 2,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Padrão",
+      "alcance": "Toque",
+      "alvo": "1 pessoa",
+      "duracao": "3 rodadas",
+      "resistencia": "Vontade parcial",
+      "efeitoPadrao": "No início de cada turno o alvo testa Vontade; se falhar, rola 1d4: (1) não consegue mentir e sofre -10 em Enganação e Diplomacia; (2) eufórico, recebe +10 Defesa, Atletismo e Acrobacia; (3) alucinações, não consegue usar perícias de INT e PRE; (4) acredita em tudo que você diz e sofre -10 em Intuição."
+    },
+    {
+      "id": "mol_fluxo_mental",
+      "nome": "Fluxo Mental",
+      "elemento": "Conhecimento",
+      "circulo": 2,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "Seres escolhidos",
+      "duracao": "Sustentada",
+      "resistencia": "Vontade anula",
+      "efeitoPadrao": "Escolhe até 3 alvos para drenar (-1d20 em testes baseados em PRE); para cada alvo drenado, escolhe 1 ser para receber +5 em testes baseados em INT. Quem passa fica imune na cena.",
+      "discente": "(+3 PE): Até 5 alvos (-2d20 em PRE e -5 Defesa) e concede +10 em testes baseados em INT. Requer afinidade."
+    },
+    {
+      "id": "mol_armadilha_mortal",
+      "nome": "Armadilha Mortal",
+      "elemento": "Morte",
+      "circulo": 2,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Padrão",
+      "alcance": "Médio",
+      "alvo": "Até 4 quadrados (terreno difícil)",
+      "duracao": "Cena",
+      "resistencia": "Reflexos anula",
+      "efeitoPadrao": "Cria até 4 poças de lodo com espinhos. Se alguém (exceto você) ficar adjacente, a poça explode causando 2d8 dano de Morte em todos os espaços adjacentes (Reflexos anula).",
+      "discente": "(+3 PE): Poças ficam invisíveis (alvos ficam desprevenidos sofrendo -1d20 em Reflexos; Percepção vs. DT do ritual detecta) e dano sobe para 3d8.",
+      "verdadeiro": "(+6 PE): Como Discente, dano 4d8, alcance longo, 6 poças e você escolhe quando explodem. Requer afinidade."
+    },
+    {
+      "id": "mol_acordo_de_sangue",
+      "nome": "Acordo de Sangue",
+      "elemento": "Sangue",
+      "circulo": 4,
+      "isCorrentesDaRealidade": true,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Completa",
+      "alcance": "Longo",
+      "alvo": "Seres escolhidos",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Ritual das Correntes da Realidade (requer afinidade com Sangue e segue Invocando o Medo). Enquanto sustentado (+2 PE de sustentação por ser protegido), qualquer ataque que deixaria um protegido Morrendo ou Enlouquecendo é completamente anulado, mas você perde 1d4 SAN cada vez que isso ocorre. Ao encerrar, sofre 6d6+20 dano de Sangue (Fortitude vs. sua DT reduz à metade) e atrai a atenção do Diabo."
+    },
+    {
+      "id": "mol_reescrever_destino",
+      "nome": "Reescrever Destino",
+      "elemento": "Conhecimento",
+      "circulo": 4,
+      "isCorrentesDaRealidade": true,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Completa",
+      "alcance": "Longo",
+      "alvo": "Área de alcance longo",
+      "duracao": "Sustentada",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Ritual das Correntes da Realidade (requer afinidade com Conhecimento e segue Invocando o Medo). Enquanto sustentado, você decide automaticamente sucesso ou fracasso de qualquer teste no alcance que não envolva você (perde 2 SAN por teste alterado). Ao encerrar, sofre 4d6+15 dano mental (Vontade vs. sua DT metade) e -3d20 em testes por 1d4+2 rodadas; atrai a Máscara do Desespero."
+    },
+    {
+      "id": "mol_manipular_as_regras",
+      "nome": "Manipular as Regras",
+      "elemento": "Energia",
+      "circulo": 4,
+      "isCorrentesDaRealidade": true,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Completa",
+      "alcance": "Médio",
+      "alvo": "1 ser",
+      "duracao": "Sustentada (1d3 PE/turno)",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Ritual das Correntes da Realidade (requer afinidade com Energia e segue Invocando o Medo). Escolha 1 efeito (pode trocar por rodada): Desfazer (elimina RD ou imunidades à escolha; sofre 1d8+6 dano de Energia/rodada); Aniquilar (vulnerabilidades do alvo triplicam dano; sofre 1d8+6 dano mental/rodada); Reestruturar (reorganiza atributos do alvo; sustentação muda para 1d8 PE). Ao encerrar, fica Em Chamas e Confuso; atrai o Anfitrião."
+    },
+    {
+      "id": "mol_vida_eterna",
+      "nome": "Vida Eterna",
+      "elemento": "Morte",
+      "circulo": 4,
+      "isCorrentesDaRealidade": true,
+      "source": "misterios_do_outro_lado",
+      "execucao": "Completa",
+      "alcance": "Toque",
+      "alvo": "1 corpo morto há no máximo 2 cenas (exceto dano massivo)",
+      "duracao": "Sustentada (3 PE/rodada)",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Ritual das Correntes da Realidade (requer afinidade com Morte e segue Invocando o Medo). Revive o alvo: ao conjurar e no início de cada turno sustentando, você perde 2d6+6 PV e 2d4+4 SAN (só recuperados com descanso) e o alvo recupera o mesmo valor. Ao encerrar, você fica Exausto na cena; o revivido não recupera PE em interlúdios nem conjura rituais por 1 dia; enfurece o Deus da Morte."
+    },
+    {
+      "id": "mol_controlar_membrana",
+      "nome": "Controlar Membrana",
+      "elemento": "Medo",
+      "circulo": 4,
+      "isCorrentesDaRealidade": true,
+      "source": "misterios_do_outro_lado",
+      "execucao": "2 ações completas",
+      "alcance": "Longo",
+      "alvo": "Raio de 36m a partir de você",
+      "duracao": "Instantânea / Permanente",
+      "resistencia": "Nenhuma",
+      "efeitoPadrao": "Ritual das Correntes da Realidade (segue Invocando o Medo). Detecta e altera permanentemente o estado da Membrana em 1 nível (exceto Intacta ou Rompida). Melhorar: criaturas afastam-se e manifestações paranormais não funcionam por 1 rodada. Piorar: atrai criaturas próximas e manifestações custam -1 PE por 1 rodada. Ao conjurar, sofre 4d6+30 dano mental e fica Inconsciente por 1d3+1 rodadas (Vontade vs. sua DT reduz dano à metade e deixa Esmorecido e Alquebrado na cena)."
+    }
+  ]
+}
